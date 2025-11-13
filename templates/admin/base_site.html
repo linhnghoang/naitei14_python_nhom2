@@ -1,0 +1,30 @@
+{% extends "admin/base_site.html" %}
+
+{% block title %}{{ title }} | Library Management System{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <i class="fa-solid fa-book-open"></i>
+        Library Management System
+    </a>
+</h1>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    #site-name a {
+        text-decoration: none;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    #site-name i {
+        font-size: 24px;
+    }
+</style>
+{% endblock %}

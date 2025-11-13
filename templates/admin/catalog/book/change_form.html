@@ -1,0 +1,163 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    .book-form-enhancements {
+        margin: 10px 0;
+    }
+    
+    .book-form-help {
+        background: #e7f3ff;
+        border-left: 4px solid #007cba;
+        padding: 10px 15px;
+        margin: 10px 0;
+        border-radius: 0 4px 4px 0;
+    }
+    
+    .book-form-help h4 {
+        margin-top: 0;
+        color: #007cba;
+    }
+    
+    .form-section {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 15px;
+        margin: 15px 0;
+    }
+    
+    .inline-tips {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+        color: #856404;
+    }
+    
+    .cover-preview {
+        max-width: 200px;
+        max-height: 300px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin: 10px 0;
+    }
+    
+    .isbn-help {
+        font-size: 0.9em;
+        color: #666;
+        font-style: italic;
+    }
+</style>
+
+<script>
+// Add some helpful JavaScript for the form
+document.addEventListener('DOMContentLoaded', function() {
+    // ISBN-13 validation
+    const isbnField = document.querySelector('input[name="isbn13"]');
+    if (isbnField) {
+        isbnField.addEventListener('blur', function() {
+            const isbn = this.value.replace(/[-\s]/g, '');
+            if (isbn && (isbn.length !== 13 || !/^\d+$/.test(isbn))) {
+                this.style.borderColor = '#dc3545';
+                this.title = 'ISBN-13 should be exactly 13 digits';
+            } else {
+                this.style.borderColor = '';
+                this.title = '';
+            }
+        });
+    }
+    
+    // Cover URL preview
+    const coverUrlField = document.querySelector('input[name="cover_url"]');
+    if (coverUrlField) {
+        const previewDiv = document.createElement('div');
+        previewDiv.innerHTML = '<img id="cover-preview" class="cover-preview" style="display:none;">';
+        coverUrlField.parentNode.appendChild(previewDiv);
+        
+        coverUrlField.addEventListener('blur', function() {
+            const preview = document.getElementById('cover-preview');
+            if (this.value) {
+                preview.src = this.value;
+                preview.style.display = 'block';
+                preview.onerror = function() {
+                    this.style.display = 'none';
+                };
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+        
+        // Trigger on page load if there's already a value
+        if (coverUrlField.value) {
+            coverUrlField.dispatchEvent(new Event('blur'));
+        }
+    }
+    
+    // Page count validation
+    const pagesField = document.querySelector('input[name="pages"]');
+    if (pagesField) {
+        pagesField.addEventListener('blur', function() {
+            const pages = parseInt(this.value);
+            if (pages && pages <= 0) {
+                this.style.borderColor = '#dc3545';
+                this.title = 'Number of pages must be positive';
+            } else {
+                this.style.borderColor = '';
+                this.title = '';
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
+
+{% block content_title %}
+    
+        {% if add %}
+             {% trans "Add new book" %}
+        {% else %}
+             {% trans "Edit book:" %} {{ original.title }}
+        {% endif %}
+    
+    <div class="book-form-enhancements">
+        {% if add %}
+        <div class="book-form-help">
+            <h4>➕ Adding a New Book</h4>
+            <p><strong>Step 1:</strong> Fill in the basic book information below</p>
+            <p><strong>Step 2:</strong> After saving, you can add authors and categories using the sections below</p>
+            <p><strong>Step 3:</strong> Create physical book items with barcodes in the "Book Items" section</p>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block after_field_sets %}
+    {% if not add and original %}
+    <div class="form-section">
+        <h3>📊 Book Statistics</h3>
+        <p><strong>Created:</strong> {{ original.created_at|date:"F d, Y \a\t g:i A" }}</p>
+        <p><strong>Last Updated:</strong> {{ original.updated_at|date:"F d, Y \a\t g:i A" }}</p>
+        <p><strong>ISBN-13:</strong> {{ original.isbn13|default:"Not specified" }}</p>
+        <p><strong>Total Physical Items:</strong> {{ original.items.count }}</p>
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block after_related_objects %}
+    {% if not add %}
+    <div class="inline-tips">
+        <h4>💡 Tips for Managing Book Relationships</h4>
+        <ul>
+            <li><strong>Authors:</strong> Use the "Author order" field to specify the sequence for multiple authors</li>
+            <li><strong>Categories:</strong> You can assign multiple categories to help organize books</li>
+            <li><strong>Book Items:</strong> Each physical copy needs a unique barcode for tracking</li>
+            <li><strong>Search:</strong> Use autocomplete fields to quickly find existing authors, categories, and publishers</li>
+        </ul>
+    </div>
+    {% endif %}
+{{ block.super }}
+{% endblock %}

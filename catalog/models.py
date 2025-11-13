@@ -1,5 +1,8 @@
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+from datetime import timedelta
 
 # =========================
 #  AUTHORS / PUBLISHERS / CATEGORIES
@@ -146,3 +149,406 @@ class BookItem(models.Model):
 
     def __str__(self):
         return f"{self.book.title} - {self.barcode}"
+
+
+# =========================
+#  SOCIAL (FAVORITES, FOLLOW, COMMENTS, RATINGS)
+# =========================
+
+
+class UserFavorite(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="favorite_books",
+    )
+    book = models.ForeignKey(
+        Book,
+        on_delete=models.CASCADE,
+        related_name="favorited_by",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "user_favorites"
+        unique_together = ("user", "book")
+
+    def __str__(self):
+        return f"{self.user} ❤ {self.book}"
+
+
+class FollowAuthor(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="followed_authors",
+    )
+    author = models.ForeignKey(
+        Author,
+        on_delete=models.CASCADE,
+        related_name="followers",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "follow_authors"
+        unique_together = ("user", "author")
+
+    def __str__(self):
+        return f"{self.user} follows {self.author}"
+
+
+class FollowPublisher(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="followed_publishers",
+    )
+    publisher = models.ForeignKey(
+        Publisher,
+        on_delete=models.CASCADE,
+        related_name="followers",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "follow_publishers"
+        unique_together = ("user", "publisher")
+
+    def __str__(self):
+        return f"{self.user} follows {self.publisher}"
+
+
+class BookComment(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="book_comments",
+    )
+    book = models.ForeignKey(
+        Book,
+        on_delete=models.CASCADE,
+        related_name="comments",
+    )
+    content = models.TextField()
+    is_deleted = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "book_comments"
+
+    def __str__(self):
+        return f"Comment by {self.user} on {self.book}"
+
+
+class BookRating(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="book_ratings",
+    )
+    book = models.ForeignKey(
+        Book,
+        on_delete=models.CASCADE,
+        related_name="ratings",
+    )
+    rating = models.PositiveSmallIntegerField()  # TINYINT
+    review = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "book_ratings"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "book"],
+                name="uq_user_book_rating",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.user} rated {self.book} = {self.rating}"
+
+
+# =========================
+#  BORROW REQUESTS & LOANS
+# =========================
+
+
+class BorrowRequest(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "PENDING", "Pending"
+        APPROVED = "APPROVED", "Approved"
+        REJECTED = "REJECTED", "Rejected"
+        RETURNED = "RETURNED", "Returned"
+        LOST = "LOST", "Lost"
+        OVERDUE = "OVERDUE", "Overdue"
+
+    class Duration(models.IntegerChoices):
+        ONE_WEEK = 7, "1 Week"
+        TWO_WEEKS = 14, "2 Weeks"
+        ONE_MONTH = 30, "1 Month"
+        THREE_MONTHS = 90, "3 Months"
+        SIX_MONTHS = 180, "6 Months"
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="borrow_requests",
+    )
+    book_item = models.ForeignKey(
+        BookItem,
+        on_delete=models.CASCADE,
+        related_name="borrow_requests",
+        null=True,
+        blank=True,
+    )
+    requested_from = models.DateField(default=timezone.now)
+    duration = models.IntegerField(choices=Duration.choices, default=Duration.ONE_WEEK)
+    requested_to = models.DateField(blank=True, null=True)
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.PENDING,
+    )
+    admin = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="processed_requests",
+    )
+    decision_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "borrow_requests"
+
+    def __str__(self):
+        return f"Request #{self.id} by {self.user}"
+
+    def clean(self):
+        if not self.pk:
+            if self.status not in [
+                self.Status.PENDING,
+                self.Status.APPROVED,
+                self.Status.REJECTED,
+            ]:
+                raise ValidationError(
+                    "New requests can only be Pending, Approved, or Rejected."
+                )
+
+        if self.pk:
+            old_instance = BorrowRequest.objects.get(pk=self.pk)
+
+            # Prevent editing if already returned
+            if old_instance.status == self.Status.RETURNED:
+                raise ValidationError(
+                    "Cannot edit a request that has already been returned."
+                )
+
+            # If status was APPROVED, only allow transition to
+            # RETURNED, LOST, or OVERDUE
+            if old_instance.status == self.Status.APPROVED:
+                if self.status not in [
+                    self.Status.APPROVED,
+                    self.Status.RETURNED,
+                    self.Status.LOST,
+                    self.Status.OVERDUE,
+                ]:
+                    raise ValidationError(
+                        "Approved requests can only be changed to "
+                        "Returned, Lost, or Overdue."
+                    )
+
+        if self.status == self.Status.APPROVED:
+            if not self.book_item:
+                raise ValidationError("Book item is required for approval.")
+
+            if self.pk:
+                old_instance = BorrowRequest.objects.get(pk=self.pk)
+                if old_instance.status != self.Status.APPROVED:
+                    if self.book_item.status != BookItem.Status.AVAILABLE:
+                        raise ValidationError(
+                            f"Book item {self.book_item.barcode} is not available "
+                            f"(Status: {self.book_item.get_status_display()})."
+                        )
+            else:
+                if (
+                    self.book_item
+                    and self.book_item.status != BookItem.Status.AVAILABLE
+                ):
+                    raise ValidationError(
+                        f"Book item {self.book_item.barcode} is not available "
+                        f"(Status: {self.book_item.get_status_display()})."
+                    )
+
+        if self.status == self.Status.RETURNED:
+            if self.pk:
+                old_instance = BorrowRequest.objects.get(pk=self.pk)
+                if old_instance.status not in [
+                    self.Status.APPROVED,
+                    self.Status.OVERDUE,
+                    self.Status.LOST,
+                ]:
+                    raise ValidationError(
+                        "Only approved, overdue, or lost requests can be returned."
+                    )
+
+    def save(self, *args, **kwargs):
+        old_status = None
+        if self.pk:
+            try:
+                old_instance = BorrowRequest.objects.get(pk=self.pk)
+                old_status = old_instance.status
+            except BorrowRequest.DoesNotExist:
+                pass
+
+        if not self.requested_from:
+            self.requested_from = timezone.now().date()
+
+        if self.duration:
+            self.requested_to = self.requested_from + timedelta(days=self.duration)
+
+        if self.status == self.Status.APPROVED and (
+            not old_status or old_status != self.Status.APPROVED
+        ):
+            self.decision_at = timezone.now()
+
+        super().save(*args, **kwargs)
+
+        if self.book_item:
+            if (
+                self.status == self.Status.APPROVED
+                and old_status != self.Status.APPROVED
+            ):
+                self.book_item.status = BookItem.Status.LOANED
+                self.book_item.save()
+
+            elif (
+                self.status == self.Status.RETURNED
+                and old_status != self.Status.RETURNED
+            ):
+                self.book_item.status = BookItem.Status.AVAILABLE
+                self.book_item.save()
+
+            elif self.status == self.Status.LOST and old_status != self.Status.LOST:
+                self.book_item.status = BookItem.Status.LOST
+                self.book_item.save()
+
+
+class BorrowRequestItem(models.Model):
+    request = models.ForeignKey(
+        BorrowRequest,
+        on_delete=models.CASCADE,
+        related_name="items",
+    )
+    book = models.ForeignKey(
+        Book,
+        on_delete=models.CASCADE,
+        related_name="requested_items",
+    )
+    quantity = models.SmallIntegerField(default=1)
+
+    class Meta:
+        db_table = "borrow_request_items"
+
+    def __str__(self):
+        return f"{self.book} x{self.quantity} (req #{self.request_id})"
+
+
+class Loan(models.Model):
+    class Status(models.TextChoices):
+        BORROWED = "BORROWED", "Borrowed"
+        RETURNED = "RETURNED", "Returned"
+        OVERDUE = "OVERDUE", "Overdue"
+
+    request = models.ForeignKey(
+        BorrowRequest,
+        on_delete=models.CASCADE,
+        related_name="loans",
+    )
+    request_item = models.ForeignKey(
+        BorrowRequestItem,
+        on_delete=models.CASCADE,
+        related_name="loans",
+    )
+    book_item = models.ForeignKey(
+        BookItem,
+        on_delete=models.PROTECT,  # tương đương NO ACTION
+        related_name="loans",
+    )
+    approved_from = models.DateField()
+    due_date = models.DateField()
+    returned_at = models.DateField(blank=True, null=True)
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.BORROWED,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "loans"
+
+    def __str__(self):
+        return f"Loan #{self.id} - {self.book_item}"
+
+
+# =========================
+#  MAIL QUEUE
+# =========================
+
+
+class MailQueue(models.Model):
+    class MailType(models.TextChoices):
+        BORROW_ACCEPTED = "BORROW_ACCEPTED", "Borrow accepted"
+        BORROW_REJECTED = "BORROW_REJECTED", "Borrow rejected"
+        ACCOUNT_ACTIVATION = "ACCOUNT_ACTIVATION", "Account activation"
+        RETURN_REMINDER_ADMIN = "RETURN_REMINDER_ADMIN", "Return reminder admin"
+
+    class MailStatus(models.TextChoices):
+        QUEUED = "QUEUED", "Queued"
+        SENT = "SENT", "Sent"
+        FAILED = "FAILED", "Failed"
+        CANCELLED = "CANCELLED", "Cancelled"
+
+    type = models.CharField(
+        max_length=50,
+        choices=MailType.choices,
+    )
+    to_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="mail_user_targets",
+    )
+    to_admin = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="mail_admin_targets",
+    )
+    to_email = models.CharField(max_length=255, blank=True, null=True)
+    subject = models.CharField(max_length=255)
+    body = models.TextField()
+    reference_type = models.CharField(max_length=50, blank=True, null=True)
+    reference_id = models.BigIntegerField(blank=True, null=True)
+    scheduled_at = models.DateTimeField(auto_now_add=True)
+    sent_at = models.DateTimeField(blank=True, null=True)
+    status = models.CharField(
+        max_length=20,
+        choices=MailStatus.choices,
+        default=MailStatus.QUEUED,
+    )
+    error = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = "mail_queue"
+
+    def __str__(self):
+        return f"[{self.type}] {self.subject}"
