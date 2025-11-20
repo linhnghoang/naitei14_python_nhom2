@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans "Mượn sách" %}: {{ book.title }}</h1>
+
+{% if errors %}
+<ul style="color: red;">
+    {% for e in errors %}
+    <li>{{ e }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+
+    <!-- tạm thời truyền user_id, sau này thay bằng request.user -->
+    <input type="hidden" name="user_id" value="{{ old_data.user_id|default:'' }}">
+
+    <div>
+        <label>{% trans "Ngày mượn" %}:</label>
+        <input type="date" name="requested_from" value="{{ old_data.requested_from|default:'' }}">
+    </div>
+
+    <div>
+        <label>{% trans "Ngày trả" %}:</label>
+        <input type="date" name="requested_to" value="{{ old_data.requested_to|default:'' }}">
+    </div>
+
+    <div>
+        <label>{% trans "Số lượng" %}:</label>
+        <input type="number" name="quantity" min="1" value="{{ old_data.quantity|default:'1' }}">
+    </div>
+
+    <button type="submit">{% trans "Gửi yêu cầu" %}</button>
+</form>
+{% endblock %}

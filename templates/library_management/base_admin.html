@@ -1,0 +1,178 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}{% trans "Library Admin" %}{% endblock %}</title>
+
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="bg-slate-50 text-slate-900 antialiased">
+  <div class="min-h-screen flex flex-col">
+
+    <header class="border-b border-blue-100 bg-white/90 backdrop-blur">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
+            AD
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-slate-900">{% trans "Library Admin" %}</p>
+            <p class="text-xs text-slate-500">{% trans "Bảng điều khiển quản lý thư viện" %}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs">
+          <a href="{% url 'library_management:home' %}"
+            class="px-3 py-1.5 rounded-full border border-blue-100 text-blue-700 bg-blue-50 hover:bg-blue-100">
+            ← {% trans "Về trang người dùng" %}
+          </a>
+
+          <span class="hidden sm:inline text-slate-500">
+            {{ user.get_full_name|default:user.username }}
+          </span>
+
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="px-3 py-1.5 rounded-full bg-blue-600 text-white hover:bg-blue-700 font-medium">
+              {% trans "Đăng xuất" %}
+            </button>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <div class="flex-1 bg-gradient-to-br from-blue-50 via-slate-50 to-blue-50">
+      <div class="max-w-6xl mx-auto px-4 py-8 flex gap-6">
+        {% with active_section|default:'dashboard' as active %}
+
+        <aside class="flex flex-col w-72 shrink-0 bg-white/95 border border-blue-100 rounded-3xl shadow-lg">
+
+          <div class="flex items-center gap-3 px-4 pt-4 pb-6 border-b border-slate-100">
+            <div class="w-9 h-9 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
+              {{ user.username|first|upper }}
+            </div>
+            <div>
+              <p class="text-[11px] uppercase tracking-wide text-blue-500 font-semibold">
+                {% trans "Admin" %}
+              </p>
+              <p class="text-sm font-semibold text-slate-800 truncate max-w-[9rem]">
+                {{ user.get_full_name|default:user.username }}
+              </p>
+            </div>
+          </div>
+
+          <nav class="space-y-1 text-sm px-3 py-4">
+
+            <a href="{% url 'library_management:admin_dashboard' %}" class="flex items-center gap-3 px-3 py-2 rounded-xl
+                    {% if active == 'dashboard' %}
+                      bg-blue-600 text-white font-medium shadow-sm
+                    {% else %}
+                      text-slate-700 hover:bg-blue-50
+                    {% endif %}">
+              <span class="w-2.5 h-2.5 rounded-full
+                         {% if active == 'dashboard' %}
+                           bg-white
+                         {% else %}
+                           bg-slate-300
+                         {% endif %}"></span>
+              <span>{% trans "Tổng quan" %}</span>
+            </a>
+
+            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl
+                    {% if active == 'users' %}
+                      bg-blue-600 text-white font-medium shadow-sm
+                    {% else %}
+                      text-slate-700 hover:bg-blue-50
+                    {% endif %}">
+              <span class="w-2.5 h-2.5 rounded-full
+                         {% if active == 'users' %}
+                           bg-white
+                         {% else %}
+                           bg-slate-300
+                         {% endif %}"></span>
+              <span>{% trans "Người dùng" %}</span>
+            </a>
+
+            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl
+                    {% if active == 'books' %}
+                      bg-blue-600 text-white font-medium shadow-sm
+                    {% else %}
+                      text-slate-700 hover:bg-blue-50
+                    {% endif %}">
+              <span class="w-2.5 h-2.5 rounded-full
+                         {% if active == 'books' %}
+                           bg-white
+                         {% else %}
+                           bg-slate-300
+                         {% endif %}"></span>
+              <span>{% trans "Sách" %}</span>
+            </a>
+
+            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl
+                    {% if active == 'catalog' %}
+                      bg-blue-600 text-white font-medium shadow-sm
+                    {% else %}
+                      text-slate-700 hover:bg-blue-50
+                    {% endif %}">
+              <span class="w-2.5 h-2.5 rounded-full
+                         {% if active == 'catalog' %}
+                           bg-white
+                         {% else %}
+                           bg-slate-300
+                         {% endif %}"></span>
+              <span>{% trans "Danh mục" %}</span>
+            </a>
+
+            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl
+                    {% if active == 'borrows' %}
+                      bg-blue-600 text-white font-medium shadow-sm
+                    {% else %}
+                      text-slate-700 hover:bg-blue-50
+                    {% endif %}">
+              <span class="w-2.5 h-2.5 rounded-full
+                         {% if active == 'borrows' %}
+                           bg-white
+                         {% else %}
+                           bg-slate-300
+                         {% endif %}"></span>
+              <span>{% trans "Yêu cầu mượn" %}</span>
+            </a>
+
+            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl
+                    {% if active == 'stats' %}
+                      bg-blue-600 text-white font-medium shadow-sm
+                    {% else %}
+                      text-slate-700 hover:bg-blue-50
+                    {% endif %}">
+              <span class="w-2.5 h-2.5 rounded-full
+                         {% if active == 'stats' %}
+                           bg-white
+                         {% else %}
+                           bg-slate-300
+                         {% endif %}"></span>
+              <span>{% trans "Thống kê" %}</span>
+            </a>
+          </nav>
+
+          <div class="mt-auto px-4 py-4 border-t border-slate-100 text-[11px] text-slate-400">
+            &copy; 2025 {% trans "Library Management" %}
+          </div>
+        </aside>
+
+        {% endwith %}
+
+        <main class="flex-1">
+          {% block content %}{% endblock %}
+        </main>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>

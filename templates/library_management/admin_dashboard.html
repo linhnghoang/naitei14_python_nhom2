@@ -1,7 +1,9 @@
-{% extends "base.html" %}
+{% extends "library_management/base_admin.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "Trang chủ | Library" %}{% endblock %}
+{% block title %}
+{% trans "Admin – Tổng quan | Library" %}
+{% endblock %}
 
 {% block content %}
 <!-- HERO -->
@@ -12,17 +14,17 @@
     </h1>
     <p class="text-sm md:text-base text-slate-600 max-w-xl">
       {% trans "Quản lý sách, độc giả và phiếu mượn." %}
-      {% trans "Dashboard demo cho hệ thống quản lý thư viện." %}
+      {% trans "Dashboard admin cho hệ thống quản lý thư viện." %}
     </p>
   </div>
 
   <div class="flex flex-wrap gap-2 mt-4 md:mt-0">
-    <button
-      class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">
+    <button class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg
+               bg-blue-600 text-white hover:bg-blue-700 transition shadow-sm">
       <span>{% trans "+ Thêm sách mới" %}</span>
     </button>
-    <button
-      class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition">
+    <button class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg
+               border border-blue-200 text-blue-700 bg-white hover:bg-blue-50 transition">
       <span>{% trans "+ Thêm độc giả" %}</span>
     </button>
   </div>
@@ -30,25 +32,25 @@
 
 <!-- STATS CARDS -->
 <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+  <div class="bg-white rounded-2xl shadow-sm border border-blue-100 p-4">
     <p class="text-xs font-medium text-slate-500 mb-1">{% trans "Tổng số sách" %}</p>
-    <p class="text-2xl font-semibold text-slate-900">123</p>
+    <p class="text-2xl font-semibold text-slate-900">120</p>
     <p class="text-xs text-emerald-600 mt-1">{% trans "+8 so với tuần trước" %}</p>
   </div>
 
-  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+  <div class="bg-white rounded-2xl shadow-sm border border-blue-50 p-4">
     <p class="text-xs font-medium text-slate-500 mb-1">{% trans "Số độc giả" %}</p>
     <p class="text-2xl font-semibold text-slate-900">45</p>
     <p class="text-xs text-slate-500 mt-1">{% trans "Đang hoạt động" %}</p>
   </div>
 
-  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+  <div class="bg-white rounded-2xl shadow-sm border border-orange-100 p-4">
     <p class="text-xs font-medium text-slate-500 mb-1">{% trans "Sách đang được mượn" %}</p>
     <p class="text-2xl font-semibold text-slate-900">27</p>
     <p class="text-xs text-orange-500 mt-1">{% trans "2 quyển quá hạn" %}</p>
   </div>
 
-  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
     <p class="text-xs font-medium text-slate-500 mb-1">{% trans "Phiếu mượn hôm nay" %}</p>
     <p class="text-2xl font-semibold text-slate-900">5</p>
     <p class="text-xs text-slate-500 mt-1">{% trans "Cập nhật theo ngày" %}</p>
@@ -57,12 +59,13 @@
 
 <!-- LATEST SECTION -->
 <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
   <!-- Sách mới thêm -->
-  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
     <div class="flex items-center justify-between mb-3">
       <h2 class="text-sm font-semibold text-slate-800">{% trans "Sách mới thêm" %}</h2>
-      <button class="text-xs text-blue-600 hover:underline">{% trans "Xem tất cả" %}</button>
+      <button class="text-xs text-blue-600 hover:text-blue-700 hover:underline">
+        {% trans "Xem tất cả" %}
+      </button>
     </div>
     <ul class="space-y-2 text-sm">
       <li class="flex justify-between">
@@ -81,12 +84,13 @@
   </div>
 
   <!-- Phiếu mượn gần đây -->
-  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
     <div class="flex items-center justify-between mb-3">
       <h2 class="text-sm font-semibold text-slate-800">{% trans "Phiếu mượn gần đây" %}</h2>
-      <button class="text-xs text-blue-600 hover:underline">{% trans "Xem chi tiết" %}</button>
+      <button class="text-xs text-blue-600 hover:text-blue-700 hover:underline">
+        {% trans "Xem chi tiết" %}
+      </button>
     </div>
-
     <div class="space-y-2 text-sm">
       <div class="flex justify-between">
         <div>
@@ -97,7 +101,6 @@
           {% trans "Đang mượn" %}
         </span>
       </div>
-
       <div class="flex justify-between">
         <div>
           <p class="text-slate-700">Trần Thị B</p>
@@ -107,7 +110,6 @@
           {% trans "Gần tới hạn" %}
         </span>
       </div>
-
       <div class="flex justify-between">
         <div>
           <p class="text-slate-700">Lê Văn C</p>
@@ -119,6 +121,5 @@
       </div>
     </div>
   </div>
-
 </section>
 {% endblock %}

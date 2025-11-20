@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Kích hoạt thành công | Library Management" %}
+{% endblock %}
+
+{% block content %}
+<div class="space-y-4 max-w-xl">
+
+  <h1 class="text-xl sm:text-2xl font-semibold text-slate-900">
+    {% trans "Tài khoản đã được kích hoạt" %}
+  </h1>
+
+  <p class="text-sm sm:text-base text-slate-600">
+    {% blocktrans with username=user.username %}
+    Chào <strong>{{ username }}</strong>, tài khoản của bạn đã được kích hoạt thành công.
+    {% endblocktrans %}
+  </p>
+
+  <p class="text-sm sm:text-base text-slate-600">
+    {% trans "Bạn đã được đăng nhập. Bây giờ bạn có thể sử dụng đầy đủ các chức năng của hệ thống." %}
+  </p>
+
+  <a href="{% url 'library_management:home' %}"
+    class="inline-flex px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+    {% trans "Về trang chính" %}
+  </a>
+
+  <p class="text-xs text-slate-500 mt-2">
+    {% trans "Bạn sẽ được chuyển hướng về trang chính sau 3 giây..." %}
+  </p>
+
+</div>
+
+<script>
+  setTimeout(function () {
+    window.location.href = "{% url 'library_management:home' %}";
+  }, 3000);
+</script>
+{% endblock %}

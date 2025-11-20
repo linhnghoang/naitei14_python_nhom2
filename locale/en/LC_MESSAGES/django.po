@@ -1,0 +1,459 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-24 13:01+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: .\templates\accounts\activation_invalid.html:6
+msgid "Liên kết không hợp lệ | Library Management"
+msgstr "Invalid Link | Library Management"
+
+#: .\templates\accounts\activation_invalid.html:12
+msgid "Liên kết kích hoạt không hợp lệ"
+msgstr "Invalid activation link"
+
+#: .\templates\accounts\activation_invalid.html:16
+msgid "Có thể liên kết đã được sử dụng hoặc đã hết hạn."
+msgstr "The link may have been used or expired."
+
+#: .\templates\accounts\activation_invalid.html:26
+msgid "Đến trang đăng nhập"
+msgstr "Go to login page"
+
+#: .\templates\accounts\activation_success.html:5
+msgid "Kích hoạt thành công | Library Management"
+msgstr "Activation Successful | Library Management"
+
+#: .\templates\accounts\activation_success.html:12
+msgid "Tài khoản đã được kích hoạt"
+msgstr "Account has been activated"
+
+#: .\templates\accounts\activation_success.html:16
+msgid "\n"
+"    Chào <strong>%(username)s</strong>, tài khoản của bạn đã được kích hoạt thành công.\n"
+"    "
+msgstr "\n"
+"Hi <strong>%(username)s</strong>, your account has been successfully activated.\n"
+"    "
+
+#: .\templates\accounts\activation_success.html:22
+msgid "Bạn đã được đăng nhập. Bây giờ bạn có thể sử dụng đầy đủ các chức năng của hệ thống."
+msgstr "You are logged in. Now you can use the full functionality of the system."
+
+#: .\templates\accounts\activation_success.html:27
+msgid "Về trang chính"
+msgstr "Back to main page"
+
+#: .\templates\accounts\activation_success.html:31
+msgid "Bạn sẽ được chuyển hướng về trang chính sau 3 giây..."
+msgstr "You will be redirected to the main page after 3 seconds..."
+
+#: .\templates\accounts\signup.html:6
+msgid "Đăng ký tài khoản | Library Management"
+msgstr "Register an account | Library Management"
+
+#: .\templates\accounts\signup.html:15
+msgid "Bắt đầu thôi!"
+msgstr "Let's get started!"
+
+#: .\templates\accounts\signup.html:24 .\templates\registration\login.html:31
+msgid "Tên đăng nhập"
+msgstr "Username"
+
+#: .\templates\accounts\signup.html:29 .\templates\registration\login.html:36
+msgid "vd: ngvan_a"
+msgstr "eg: ngvan_a"
+
+#: .\templates\accounts\signup.html:41
+msgid "Email"
+msgstr "E-mail"
+
+#: .\templates\accounts\signup.html:58 .\templates\registration\login.html:47
+msgid "Mật khẩu"
+msgstr "Password"
+
+#: .\templates\accounts\signup.html:75
+msgid "Xác nhận mật khẩu"
+msgstr "Confirm password"
+
+#: .\templates\accounts\signup.html:103
+msgid "Đăng ký ngay"
+msgstr "Sign up now"
+
+#: .\templates\accounts\signup.html:109
+msgid "Đã có tài khoản?"
+msgstr "Already have an account?"
+
+#: .\templates\accounts\signup.html:111 .\templates\base.html:89
+#: .\templates\registration\login.html:15
+#: .\templates\registration\login.html:69
+msgid "Đăng nhập"
+msgstr "Log in"
+
+#: .\templates\accounts\signup_done.html:5
+msgid "Đăng ký thành công | Library Management"
+msgstr "Registration successful | Library Management"
+
+#: .\templates\accounts\signup_done.html:12
+msgid "Đăng ký thành công"
+msgstr "Registration successful"
+
+#: .\templates\accounts\signup_done.html:16
+msgid "Chúng tôi đã gửi cho bạn một email kích hoạt tài khoản."
+msgstr "We have sent you an account activation email."
+
+#: .\templates\accounts\signup_done.html:20
+msgid "\n"
+"    Vui lòng kiểm tra hộp thư <strong>(kể cả mục Spam/Junk)</strong> và nhấp vào liên kết kích hoạt để hoàn tất.\n"
+"    "
+msgstr "\n"
+"Please check your mailbox <strong>(including Spam/Junk folder)</strong> and click the activation link to complete.\n"
+"    "
+
+#: .\templates\base.html:8 .\templates\base.html:24
+#: .\templates\library_management\base_admin.html:163
+msgid "Library Management"
+msgstr "Library Management"
+
+#: .\templates\base.html:27
+msgid "Modern Library Platform"
+msgstr "Modern Library Platform"
+
+#: .\templates\base.html:38
+msgid "Trang chủ"
+msgstr "Home"
+
+#: .\templates\base.html:42 .\templates\library_management\base_admin.html:113
+msgid "Sách"
+msgstr "Book"
+
+#: .\templates\base.html:46
+msgid "Tác giả"
+msgstr "Author"
+
+#: .\templates\base.html:51
+msgid "Yêu thích"
+msgstr "Favourite"
+
+#: .\templates\base.html:56
+msgid "Lịch sử mượn"
+msgstr "Borrowing history"
+
+#: .\templates\base.html:66
+msgid "Tài khoản"
+msgstr "Account"
+
+#: .\templates\base.html:72
+msgid "Hồ sơ cá nhân"
+msgstr "Personal profile"
+
+#: .\templates\base.html:78 .\templates\library_management\base_admin.html:42
+msgid "Đăng xuất"
+msgstr "Log out"
+
+#: .\templates\base.html:93 .\templates\registration\login.html:82
+msgid "Đăng ký"
+msgstr "Register"
+
+#: .\templates\base.html:109
+msgid "Library Management."
+msgstr "Library Management"
+
+#: .\templates\base.html:110
+msgid "Built with Django + Tailwind"
+msgstr "Built with Django + Tailwind"
+
+#: .\templates\library_management\admin_dashboard.html:5
+msgid "Admin – Tổng quan | Library"
+msgstr "Admin – Overview | Library"
+
+#: .\templates\library_management\admin_dashboard.html:13
+#: .\templates\library_management\home.html:11
+msgid "Trang chủ thư viện"
+msgstr "Library home page"
+
+#: .\templates\library_management\admin_dashboard.html:16
+#: .\templates\library_management\home.html:14
+msgid "Quản lý sách, độc giả và phiếu mượn."
+msgstr "Manage books, readers and loan vouchers."
+
+#: .\templates\library_management\admin_dashboard.html:17
+msgid "Dashboard admin cho hệ thống quản lý thư viện."
+msgstr "Admin dashboard for library management system."
+
+#: .\templates\library_management\admin_dashboard.html:24
+#: .\templates\library_management\home.html:22
+msgid "+ Thêm sách mới"
+msgstr "+ Add new books"
+
+#: .\templates\library_management\admin_dashboard.html:28
+#: .\templates\library_management\home.html:26
+msgid "+ Thêm độc giả"
+msgstr "+ Add readers"
+
+#: .\templates\library_management\admin_dashboard.html:36
+#: .\templates\library_management\home.html:34
+msgid "Tổng số sách"
+msgstr "Total number of books"
+
+#: .\templates\library_management\admin_dashboard.html:38
+#: .\templates\library_management\home.html:36
+msgid "+8 so với tuần trước"
+msgstr "+8 compared to last week"
+
+#: .\templates\library_management\admin_dashboard.html:42
+#: .\templates\library_management\home.html:40
+msgid "Số độc giả"
+msgstr "Number of readers"
+
+#: .\templates\library_management\admin_dashboard.html:44
+#: .\templates\library_management\home.html:42
+msgid "Đang hoạt động"
+msgstr "In operation"
+
+#: .\templates\library_management\admin_dashboard.html:48
+#: .\templates\library_management\home.html:46
+msgid "Sách đang được mượn"
+msgstr "The book is being borrowed"
+
+#: .\templates\library_management\admin_dashboard.html:50
+#: .\templates\library_management\home.html:48
+msgid "2 quyển quá hạn"
+msgstr "2 overdue books"
+
+#: .\templates\library_management\admin_dashboard.html:54
+#: .\templates\library_management\home.html:52
+msgid "Phiếu mượn hôm nay"
+msgstr "Today's loan slip"
+
+#: .\templates\library_management\admin_dashboard.html:56
+#: .\templates\library_management\home.html:54
+msgid "Cập nhật theo ngày"
+msgstr "Updated daily"
+
+#: .\templates\library_management\admin_dashboard.html:65
+#: .\templates\library_management\home.html:64
+msgid "Sách mới thêm"
+msgstr "Newly added books"
+
+#: .\templates\library_management\admin_dashboard.html:67
+#: .\templates\library_management\home.html:65
+msgid "Xem tất cả"
+msgstr "View all"
+
+#: .\templates\library_management\admin_dashboard.html:73
+#: .\templates\library_management\admin_dashboard.html:77
+#: .\templates\library_management\home.html:70
+#: .\templates\library_management\home.html:74
+msgid "Lập trình"
+msgstr "Programming"
+
+#: .\templates\library_management\admin_dashboard.html:81
+#: .\templates\library_management\home.html:78
+msgid "Kỹ năng"
+msgstr "Skill"
+
+#: .\templates\library_management\admin_dashboard.html:89
+#: .\templates\library_management\home.html:86
+msgid "Phiếu mượn gần đây"
+msgstr "Recent loan slips"
+
+#: .\templates\library_management\admin_dashboard.html:91
+#: .\templates\library_management\home.html:87
+msgid "Xem chi tiết"
+msgstr "See details"
+
+#: .\templates\library_management\admin_dashboard.html:101
+#: .\templates\library_management\home.html:97
+msgid "Đang mượn"
+msgstr "Borrowing"
+
+#: .\templates\library_management\admin_dashboard.html:110
+#: .\templates\library_management\home.html:107
+msgid "Gần tới hạn"
+msgstr "Near the deadline"
+
+#: .\templates\library_management\admin_dashboard.html:119
+#: .\templates\library_management\home.html:117
+msgid "Đã trả"
+msgstr "Paid"
+
+#: .\templates\library_management\base_admin.html:8
+#: .\templates\library_management\base_admin.html:24
+msgid "Library Admin"
+msgstr "Library Admin"
+
+#: .\templates\library_management\base_admin.html:25
+msgid "Bảng điều khiển quản lý thư viện"
+msgstr "Library Management Dashboard"
+
+#: .\templates\library_management\base_admin.html:32
+msgid "Về trang người dùng"
+msgstr "About user page"
+
+#: .\templates\library_management\base_admin.html:61
+msgid "Admin"
+msgstr "Admin"
+
+#: .\templates\library_management\base_admin.html:83
+msgid "Tổng quan"
+msgstr "Overview"
+
+#: .\templates\library_management\base_admin.html:98
+msgid "Người dùng"
+msgstr "Users"
+
+#: .\templates\library_management\base_admin.html:128
+msgid "Danh mục"
+msgstr "Category"
+
+#: .\templates\library_management\base_admin.html:143
+msgid "Yêu cầu mượn"
+msgstr "Borrowing request"
+
+#: .\templates\library_management\base_admin.html:158
+msgid "Thống kê"
+msgstr "Statistical"
+
+#: .\templates\library_management\borrow_history.html:6
+msgid "\n"
+"    Lịch sử mượn sách của %(name)s\n"
+"    "
+msgstr "\n"
+"%(name)s Book Borrowing History\n"
+"    "
+
+#: .\templates\library_management\borrow_history.html:15
+msgid "\n"
+"        Yêu cầu #%(req_id)s:\n"
+"        "
+msgstr "\n"
+"Request #%(req_id)s:\n"
+"        "
+
+#: .\templates\library_management\borrow_history.html:21
+msgid "Trạng thái:"
+msgstr "Status:"
+
+#: .\templates\library_management\borrow_history.html:26
+msgid "\n"
+"                %(title)s (x%(quantity)s)\n"
+"                "
+msgstr "\n"
+"                %(title)s (x%(quantity)s)\n"
+"                "
+
+#: .\templates\library_management\borrow_history.html:37
+msgid "Chưa có yêu cầu mượn nào."
+msgstr "There are no loan requests yet."
+
+#: .\templates\library_management\borrow_request_form.html:5
+msgid "Mượn sách"
+msgstr "Borrow books"
+
+#: .\templates\library_management\borrow_request_form.html:22
+msgid "Ngày mượn"
+msgstr "Borrowed date"
+
+#: .\templates\library_management\borrow_request_form.html:27
+msgid "Ngày trả"
+msgstr "Payment date"
+
+#: .\templates\library_management\borrow_request_form.html:32
+msgid "Số lượng"
+msgstr "Quantity"
+
+#: .\templates\library_management\borrow_request_form.html:36
+msgid "Gửi yêu cầu"
+msgstr "Submit request"
+
+#: .\templates\library_management\home.html:4
+msgid "Trang chủ | Library"
+msgstr "Home | Library"
+
+#: .\templates\library_management\home.html:15
+msgid "Dashboard demo cho hệ thống quản lý thư viện."
+msgstr "Dashboard demo for library management system."
+
+#: .\templates\registration\login.html:6
+msgid "Đăng nhập | Library Management"
+msgstr "Login | Library Management"
+
+#: .\templates\registration\login.html:74
+msgid "Quên mật khẩu?"
+msgstr "Forgot your password?"
+
+#: .\templates\registration\login.html:80
+msgid "Chưa có tài khoản?"
+msgstr "Don't have an account?"
+
+#: .\templates\registration\password_change_done.html:6
+msgid "Đổi mật khẩu thành công | Library Management"
+msgstr "Password changed successfully | Library Management"
+
+#: .\templates\registration\password_change_done.html:15
+msgid "Mật khẩu đã được cập nhật"
+msgstr "Password has been updated"
+
+#: .\templates\registration\password_change_done.html:19
+msgid "Bạn đã đổi mật khẩu thành công."
+msgstr "You have changed your password successfully."
+
+#: .\templates\registration\password_change_done.html:27
+#: .\templates\registration\password_change_form.html:18
+msgid "Quay lại hồ sơ"
+msgstr "Back to profile"
+
+#: .\templates\registration\password_change_form.html:6
+msgid "Đổi mật khẩu | Library Management"
+msgstr "Change Password | Library Management"
+
+#: .\templates\registration\password_change_form.html:24
+msgid "Đổi mật khẩu"
+msgstr "Change password"
+
+#: .\templates\registration\password_change_form.html:53
+msgid "Mật khẩu hiện tại"
+msgstr "Current password"
+
+#: .\templates\registration\password_change_form.html:82
+msgid "MẬT KHẨU MỚI"
+msgstr "NEW PASSWORD"
+
+#: .\templates\registration\password_change_form.html:90
+msgid "Mật khẩu mới"
+msgstr "New password"
+
+#: .\templates\registration\password_change_form.html:114
+msgid "Xác nhận mật khẩu mới"
+msgstr "Confirm new password"
+
+#: .\templates\registration\password_change_form.html:147
+msgid "Yêu cầu mật khẩu"
+msgstr "Password required"
+
+#: .\templates\registration\password_change_form.html:151
+msgid "Tối thiểu 8 ký tự"
+msgstr "Minimum 8 characters"
+
+#: .\templates\registration\password_change_form.html:152
+msgid "Không được giống tên đăng nhập"
+msgstr "Must not be the same as login name"
+
+#: .\templates\registration\password_change_form.html:169
+msgid "Cập nhật mật khẩu"
+msgstr "Update password"
+

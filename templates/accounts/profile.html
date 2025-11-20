@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Hồ sơ cá nhân | Library Management" %}
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6 py-4 sm:py-8">
+
+  <div class="px-4 sm:px-0">
+    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+      {% trans "Hồ sơ cá nhân" %}
+    </h1>
+    <p class="mt-2 text-sm text-slate-600">
+      {% trans "Quản lý thông tin tài khoản và cài đặt của bạn" %}
+    </p>
+  </div>
+
+  {% if updated %}
+  <div class="mx-4 sm:mx-0 p-4 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-lg">
+    <div class="flex items-center">
+      <svg class="w-5 h-5 text-emerald-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      <p class="text-sm font-medium text-emerald-800">{% trans "Cập nhật thành công!" %}</p>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="mx-4 sm:mx-0 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="px-6 py-5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+      <h2 class="text-lg font-semibold text-slate-900">{% trans "Thông tin tài khoản" %}</h2>
+      <p class="mt-1 text-sm text-slate-500">{% trans "Cập nhật thông tin cá nhân của bạn" %}</p>
+    </div>
+
+    <form method="post" class="p-6 space-y-6">
+      {% csrf_token %}
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-2">
+          {% trans "Tên đăng nhập" %}
+        </label>
+        <div class="relative">
+          <input type="text" value="{{ request.user.username }}" class="w-full px-4 py-2 text-sm text-slate-700 bg-slate-50 border border-slate-200 rounded-xl cursor-not-allowed" disabled>
+          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 font-medium">
+            {% trans "Không thể thay đổi" %}
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-2">
+            {% trans "Họ" %}
+          </label>
+          <input type="text" name="first_name" value="{{ form.first_name.value|default_if_none:'' }}" placeholder="{% trans 'Nguyễn' %}"
+                 class="w-full px-4 py-2 text-sm text-slate-900 bg-white border border-slate-200 rounded-xl
+                        focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100
+                        placeholder:text-slate-400 transition-all">
+          {% if form.first_name.errors %}
+          <p class="mt-1.5 text-xs text-red-600 flex items-center">
+            <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+            {{ form.first_name.errors.0 }}
+          </p>
+          {% endif %}
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-2">
+            {% trans "Tên" %}
+          </label>
+          <input type="text" name="last_name" value="{{ form.last_name.value|default_if_none:'' }}" placeholder="{% trans 'An' %}"
+                 class="w-full px-4 py-2 text-sm text-slate-900 bg-white border border-slate-200 rounded-xl
+                        focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100
+                        placeholder:text-slate-400 transition-all">
+          {% if form.last_name.errors %}
+          <p class="mt-1.5 text-xs text-red-600 flex items-center">
+            <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+            {{ form.last_name.errors.0 }}
+          </p>
+          {% endif %}
+        </div>
+
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wide mb-2">
+          {% trans "Email" %}
+        </label>
+        <input type="email" name="email" value="{{ form.email.value|default_if_none:'' }}" placeholder="you@example.com"
+               class="w-full px-4 py-2 text-sm text-slate-900 bg-white border border-slate-200 rounded-xl
+                      focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100
+                      placeholder:text-slate-400 transition-all" required>
+        {% if form.email.errors %}
+        <p class="mt-1.5 text-xs text-red-600 flex items-center">
+          <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+          </svg>
+          {{ form.email.errors.0 }}
+        </p>
+        {% endif %}
+      </div>
+
+      <div class="pt-4 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 border-t border-slate-100">
+        
+        <a href="{% url 'password_change' %}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium
+                  text-slate-700 bg-white border border-slate-200 rounded-xl
+                  hover:bg-slate-50 hover:border-slate-300
+                  focus:outline-none focus:ring-2 focus:ring-slate-200 transition-all">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          {% trans "Đổi mật khẩu" %}
+        </a>
+
+        <button type="submit" class="inline-flex items-center justify-center px-5 py-2 text-sm font-semibold
+                 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl
+                 hover:from-blue-600 hover:to-blue-700
+                 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-offset-2 shadow-sm hover:shadow transition-all">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          {% trans "Lưu thay đổi" %}
+        </button>
+
+      </div>
+
+    </form>
+  </div>
+
+</div>
+{% endblock %}

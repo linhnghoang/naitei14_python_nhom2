@@ -1,8 +1,19 @@
 from django.urls import path
-from . import views
+from .views import (
+    home,
+    admin_dashboard,
+    create_borrow_request,
+    borrow_history,
+)
+
 
 app_name = "library_management"
 
 urlpatterns = [
-    path("", views.home, name="home"),
+    path("", home, name="home"),
+    path("admin/dashboard/", admin_dashboard, name="admin_dashboard"),
+    # Borrow
+    path("borrow/create/<int:book_id>/", create_borrow_request, 
+         name="create_borrow_request"),
+    path("borrow/history/", borrow_history, name="borrow_history"),
 ]
