@@ -69,7 +69,7 @@ def create_borrow_request(request, book_id):
         if errors:
             return render(
                 request,
-                "library_management/borrow_request_form.html",
+                "library_utilities/borrow_request_form.html",
                 {
                     "book": book,
                     "errors": errors,
@@ -105,7 +105,7 @@ def create_borrow_request(request, book_id):
     # GET: hiển thị form
     return render(
         request,
-        "library_ultilities/borrow_request_form.html",
+        "library_utilities/borrow_request_form.html",
         {
             "book": book,
         },
@@ -134,5 +134,5 @@ def borrow_history(request):
         "user": user,
         "borrow_requests": borrow_requests,
     }
-    return render(request, "library_ultilities/borrow_history.html", context)
+    return render(request, "library_utilities/borrow_history.html", context)
 

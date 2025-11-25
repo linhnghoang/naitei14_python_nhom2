@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Mượn sách" %} | Library{% endblock %}
+
+{% block main_classes %}max-w-4xl mx-auto px-4 py-8{% endblock %}
+
+{% block content %}
+<!-- Back link -->
+<div class="mb-4">
+    <a href="{% url 'library_management:home' %}"
+        class="inline-flex items-center text-sm text-slate-500 hover:text-slate-700">
+        ← {% trans "Quay lại trang chủ" %}
+    </a>
+</div>
+
+<!-- CARD CHÍNH -->
+<section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden !pb-8">
+    <!-- Header trong card -->
+    <div class="px-5 py-4 border-b border-slate-100">
+        <h1 class="text-xl font-semibold text-slate-900">
+            {% trans "Mượn sách" %}
+        </h1>
+        <p class="text-sm text-slate-600 mt-1">
+            {% blocktrans with book_title=book.title %}
+            Bạn đang tạo yêu cầu mượn cho
+            <span class="font-medium text-slate-900">
+                {{ book_title }}
+            </span>
+            {% endblocktrans %}
+        </p>
+    </div>
+
+    <!-- Error messages -->
+    {% if errors %}
+    <div class="px-5 pt-4">
+        <div class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3 mb-3">
+            <ul class="list-disc list-inside space-y-1">
+                {% for e in errors %}
+                <li>{{ e }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Form -->
+    <form method="post" class="px-5 pt-4 pb-5 space-y-5">
+        {% csrf_token %}
+
+        <!-- HÀNG 2 CỘT: NGÀY MƯỢN / NGÀY TRẢ trên màn hình lớn -->
+        <div class="flex flex-col gap-5">
+            <!-- NGÀY MƯỢN -->
+            <div class="flex flex-col gap-3">
+                <label for="requested_from" class="text-sm font-medium text-slate-700">
+                    {% trans "Ngày mượn" %}
+                </label>
+                <input type="date" id="requested_from" name="requested_from"
+                    value="{{ old_data.requested_from|default:'' }}" placeholder="dd/mm/yyyy" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm
+                   bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                <p class="text-xs text-slate-500">
+                    {% trans "Ngày bắt đầu mượn sách." %}
+                </p>
+            </div>
+
+            <!-- NGÀY TRẢ -->
+            <div class="flex flex-col gap-3">
+                <label for="requested_to" class="text-sm font-medium text-slate-700">
+                    {% trans "Ngày trả dự kiến" %}
+                </label>
+                <input type="date" id="requested_to" name="requested_to" value="{{ old_data.requested_to|default:'' }}"
+                    placeholder="dd/mm/yyyy" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm
+                   bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                <p class="text-xs text-slate-500">
+                    {% trans "Ngày bạn sẽ trả lại sách cho thư viện." %}
+                </p>
+            </div>
+        </div>
+
+        <!-- SỐ LƯỢNG -->
+        <div class="flex flex-col gap-3 max-w-xs">
+            <label for="quantity" class="text-sm font-medium text-slate-700">
+                {% trans "Số lượng" %}
+            </label>
+            <input type="number" id="quantity" name="quantity" min="1" value="{{ old_data.quantity|default:'1' }}"
+                class="w-28 rounded-xl border border-slate-300 px-3 py-2 text-sm
+                 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+            <p class="text-xs text-slate-500">
+                {% trans "Số bản bạn muốn mượn (tối đa theo tồn kho)." %}
+            </p>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 mt-4 mb-6">
+            <a href="{% url 'library_management:home' %}"
+                class="px-4 py-2 rounded-xl border border-slate-300 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                {% trans "Hủy" %}
+            </a>
+            <button type="submit" class="px-4 py-2 rounded-xl bg-blue-600 text-sm font-semibold text-white shadow-sm
+                 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                {% trans "Gửi yêu cầu" %}
+            </button>
+        </div>
+    </form>
+</section>
+{% endblock %}

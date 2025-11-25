@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Lịch sử mượn sách" %} | Library{% endblock %}
+
+{% block main_classes %}max-w-6xl mx-auto px-4 py-8{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="flex items-center justify-between mb-6">
+    <div>
+        <h1 class="text-2xl font-bold text-slate-900">
+            {% trans "Lịch sử mượn sách" %}
+        </h1>
+        <p class="text-sm text-slate-600 mt-1">
+            {% blocktrans %}Danh sách các yêu cầu mượn sách của:{% endblocktrans %}
+            <span class="font-medium text-slate-900">{{ user.username }}</span>
+        </p>
+    </div>
+
+    <a href="{% url 'library_management:home' %}"
+        class="inline-flex items-center text-sm text-slate-500 hover:text-slate-700">
+        ← {% trans "Quay lại trang chủ" %}
+    </a>
+</div>
+
+{% if borrow_requests %}
+<div class="space-y-4">
+    {% for req in borrow_requests %}
+    {% with first_item=req.items.all.0 %}
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 md:p-5">
+
+        <!-- Dòng chính: #, tên sách, thời gian mượn, tạo lúc -->
+        <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-3">
+            <div class="space-y-1">
+                <p class="text-sm text-slate-800">
+                    <!-- # theo thứ tự trong danh sách -->
+                    <span class="font-semibold text-slate-900">#{{ forloop.counter }}</span>
+
+                    {% if first_item %}
+                    • <span class="font-medium">
+                        {{ first_item.book.title }}
+                        <span class="text-slate-600">
+                            (x{{ first_item.quantity }})
+                        </span>
+                    </span>
+                    {% else %}
+                    • <span class="italic text-slate-500">
+                        {% trans "Chưa có thông tin sách" %}
+                    </span>
+                    {% endif %}
+
+                </p>
+                <p>
+                    <span class="text-slate-700">
+                        {{ req.requested_from }} → {{ req.requested_to }}
+                    </span>
+                </p>
+                <p class="text-xs text-slate-500">
+                    {% trans "Tạo lúc" %}: {{ req.created_at|date:"d/m/Y H:i" }}
+                </p>
+            </div>
+
+            <!-- Status pill -->
+            <div class="flex items-center gap-2">
+                {% if req.status == 'PENDING' %}
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                 bg-amber-50 text-amber-700 border border-amber-200">
+                    {% trans "Đang chờ duyệt" %}
+                </span>
+
+                <!--  Nút hủy yêu cầu (POST) -->
+                {% comment %}
+                <form method="post" action="{% url 'library_management:cancel_borrow_request' req.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="ml-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                     border border-red-200 text-red-600 hover:bg-red-50">
+                        {% trans "Hủy yêu cầu" %}
+                    </button>
+                </form>
+                {% endcomment %}
+                {% elif req.status == 'APPROVED' %}
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                               bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    {% trans "Đã được chấp nhận" %}
+                </span>
+                {% elif req.status == 'REJECTED' %}
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                               bg-red-50 text-red-700 border border-red-200">
+                    {% trans "Bị từ chối" %}
+                </span>
+                {% elif req.status == 'CANCELLED' %}
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                               bg-slate-50 text-slate-600 border border-slate-200">
+                    {% trans "Đã hủy" %}
+                </span>
+                {% elif req.status == 'EXPIRED' %}
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                               bg-orange-50 text-orange-700 border border-orange-200">
+                    {% trans "Quá hạn" %}
+                </span>
+                {% else %}
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                               bg-slate-100 text-slate-600 border border-slate-200">
+                    {{ req.status }}
+                </span>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if req.rejection_reason %}
+        <div class="mt-3 bg-red-50 border border-red-100 rounded-xl px-3 py-2 text-xs text-red-700">
+            {% trans "Lý do từ chối" %}: {{ req.rejection_reason }}
+        </div>
+        {% endif %}
+    </div>
+    {% endwith %}
+    {% endfor %}
+</div>
+{% else %}
+<div class="bg-white rounded-2xl border border-dashed border-slate-300 p-8 text-center">
+    <p class="text-sm text-slate-600">
+        {% trans "Bạn chưa có yêu cầu mượn sách nào." %}
+    </p>
+    <p class="text-xs text-slate-400 mt-1">
+        {% trans "Hãy chọn một cuốn sách và tạo yêu cầu mượn đầu tiên." %}
+    </p>
+</div>
+{% endif %}
+{% endblock %}
