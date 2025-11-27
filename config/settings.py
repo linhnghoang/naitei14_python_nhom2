@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,38 +20,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Load environment variables from .env file (if present)
 load_dotenv(BASE_DIR / ".env")
 
-LOCALE_PATHS = [
-    BASE_DIR / "locale",
-]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv(
-    "SECRET_KEY", "django-insecure-0k0(75psqcebmy18kh0+x)$$%e#)115k1s4!k2h$ge3tqk6eo*"
-)
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-b7onid7%70*412s-a=q8^#(hv07+9$fav31^n-8*4^xeq3+et5")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "0.0.0.0"]
 
-LOGIN_REDIRECT_URL = "library_management:home"
-LOGOUT_REDIRECT_URL = "login"
-LOGIN_URL = "login"
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-PASSWORD_RESET_TIMEOUT = 60 * 60 * 24
 
 # Application definition
 
@@ -65,15 +44,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # 'library_management',
-    # 'accounts',
     "catalog",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -108,13 +84,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.mysql"),
-        "NAME": os.getenv("DB_NAME", config("DB_NAME")),
-        "USER": os.getenv("DB_USER", config("DB_USER")),
-        "PASSWORD": os.getenv("DB_PASSWORD", config("DB_PASSWORD")),
-        "HOST": os.getenv("DB_HOST", config("DB_HOST")),
-        "PORT": os.getenv("DB_PORT", config("DB_PORT")),
+        "NAME": os.getenv("DB_NAME", ""),
+        "USER": os.getenv("DB_USER", ""),
+        "PASSWORD": os.getenv("DB_PASSWORD", ""),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", "3306"),
         "OPTIONS": {
-            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
             "charset": os.getenv("DB_CHARSET", "utf8mb4"),
         },
     }
@@ -126,10 +101,7 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "UserAttributeSimilarityValidator"
-        ),
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
@@ -146,11 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = "vi"
-LANGUAGES = [
-    ("vi", "Vietnamese"),
-    ("en", "English"),
-]
+LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
 
@@ -163,9 +131,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
