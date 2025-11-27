@@ -116,13 +116,12 @@ document.addEventListener('DOMContentLoaded', function() {
 {% endblock %}
 
 {% block content_title %}
-    <h1>
+    
         {% if add %}
-            📚 {% trans "Add new book" %}
+             {% trans "Add new book" %}
         {% else %}
-            📚 {% trans "Edit book:" %} {{ original.title }}
+             {% trans "Edit book:" %} {{ original.title }}
         {% endif %}
-    </h1>
     
     <div class="book-form-enhancements">
         {% if add %}
@@ -131,13 +130,6 @@ document.addEventListener('DOMContentLoaded', function() {
             <p><strong>Step 1:</strong> Fill in the basic book information below</p>
             <p><strong>Step 2:</strong> After saving, you can add authors and categories using the sections below</p>
             <p><strong>Step 3:</strong> Create physical book items with barcodes in the "Book Items" section</p>
-        </div>
-        {% else %}
-        <div class="book-form-help">
-            <h4>✏️ Editing Book: {{ original.title }}</h4>
-            <p><strong>Authors:</strong> {{ original.authors.count }} assigned</p>
-            <p><strong>Categories:</strong> {{ original.categories.count }} assigned</p>
-            <p><strong>Items:</strong> {{ original.items.count }} physical copies</p>
         </div>
         {% endif %}
     </div>
@@ -151,7 +143,6 @@ document.addEventListener('DOMContentLoaded', function() {
         <p><strong>Last Updated:</strong> {{ original.updated_at|date:"F d, Y \a\t g:i A" }}</p>
         <p><strong>ISBN-13:</strong> {{ original.isbn13|default:"Not specified" }}</p>
         <p><strong>Total Physical Items:</strong> {{ original.items.count }}</p>
-        <p><strong>Available Items:</strong> {{ original.items.filter:status="AVAILABLE"|length }}</p>
     </div>
     {% endif %}
 {% endblock %}
