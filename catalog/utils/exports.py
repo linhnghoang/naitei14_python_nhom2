@@ -5,7 +5,7 @@ from django.db.models import Q, Count
 from datetime import datetime
 import re
 
-from ..models import Category, Book, Publisher
+from ..models import Category, Book, Publisher, Author
 
 
 DEFAULT_CATEGORY_COLUMNS = [
@@ -17,6 +17,12 @@ DEFAULT_CATEGORY_COLUMNS = [
 DEFAULT_PUBLISHER_COLUMNS = [
     'id', 'name', 'description', 'founded_year', 'website', 
     'books_count', 'created_at'
+]
+
+
+DEFAULT_AUTHOR_COLUMNS = [
+    'id', 'name', 'biography', 'birth_date', 'death_date', 
+    'books_count', 'age', 'created_at'
 ]
 
 
@@ -540,6 +546,275 @@ def render_publishers_workbook(queryset, columns=None, include_books=False):
                 books_ws.cell(row=books_row, column=1).value = publisher.id
                 books_ws.cell(row=books_row, column=2).value = publisher.name
                 books_ws.cell(row=books_row, column=3).value = publisher.founded_year or ''
+                books_ws.cell(row=books_row, column=4).value = 'No books'
+                books_row += 1
+        
+        # Auto-adjust books sheet column widths
+        for col_idx in range(1, len(books_headers) + 1):
+            column_letter = get_column_letter(col_idx)
+            max_length = 0
+            for row in books_ws[column_letter]:
+                try:
+                    if len(str(row.value)) > max_length:
+                        max_length = len(str(row.value))
+                except:
+                    pass
+            adjusted_width = min(max_length + 2, 50)
+            books_ws.column_dimensions[column_letter].width = adjusted_width
+    
+    return wb
+
+def build_author_queryset(params, include_books=False):
+    """Build author queryset based on filter parameters."""
+    qs = Author.objects.all()
+    
+    # Search by name or biography
+    if 'q' in params and params['q'].strip():
+        q = params['q'].strip()
+        qs = qs.filter(
+            Q(name__icontains=q) | Q(biography__icontains=q)
+        )
+    
+    # Filter by birth year range
+    if 'birth_year_from' in params and params['birth_year_from']:
+        try:
+            year_from = int(params['birth_year_from'])
+            qs = qs.filter(birth_date__year__gte=year_from)
+        except (ValueError, TypeError):
+            pass
+    
+    if 'birth_year_to' in params and params['birth_year_to']:
+        try:
+            year_to = int(params['birth_year_to'])
+            qs = qs.filter(birth_date__year__lte=year_to)
+        except (ValueError, TypeError):
+            pass
+    
+    # Filter by death year range
+    if 'death_year_from' in params and params['death_year_from']:
+        try:
+            year_from = int(params['death_year_from'])
+            qs = qs.filter(death_date__year__gte=year_from)
+        except (ValueError, TypeError):
+            pass
+    
+    if 'death_year_to' in params and params['death_year_to']:
+        try:
+            year_to = int(params['death_year_to'])
+            qs = qs.filter(death_date__year__lte=year_to)
+        except (ValueError, TypeError):
+            pass
+    
+    # Filter by minimum books count
+    if 'min_books' in params and params['min_books']:
+        try:
+            min_books = int(params['min_books'])
+            qs = qs.annotate(books_count=Count('books')).filter(books_count__gte=min_books)
+        except (ValueError, TypeError):
+            pass
+    
+    # Filter authors without books
+    if 'empty_only' in params and params['empty_only'].lower() in ['true', '1', 'yes']:
+        qs = qs.filter(books__isnull=True)
+    
+    # Filter by biography presence
+    if 'has_biography' in params and params['has_biography'].lower() in ['true', '1', 'yes']:
+        qs = qs.exclude(Q(biography='') | Q(biography__isnull=True))
+    elif 'has_biography' in params and params['has_biography'].lower() in ['false', '0', 'no']:
+        qs = qs.filter(Q(biography='') | Q(biography__isnull=True))
+    
+    # Filter by living/deceased status
+    if 'living_only' in params and params['living_only'].lower() in ['true', '1', 'yes']:
+        qs = qs.filter(death_date__isnull=True)
+    elif 'deceased_only' in params and params['deceased_only'].lower() in ['true', '1', 'yes']:
+        qs = qs.filter(death_date__isnull=False)
+    
+    # Date range filters for creation date
+    if 'created_from' in params and params['created_from']:
+        try:
+            from_date = datetime.strptime(params['created_from'], '%Y-%m-%d').date()
+            qs = qs.filter(created_at__date__gte=from_date)
+        except (ValueError, TypeError):
+            pass
+    
+    if 'created_to' in params and params['created_to']:
+        try:
+            to_date = datetime.strptime(params['created_to'], '%Y-%m-%d').date()
+            qs = qs.filter(created_at__date__lte=to_date)
+        except (ValueError, TypeError):
+            pass
+    
+    # Sorting
+    sort = params.get('sort', 'name')
+    sort_mapping = {
+        'name': 'name',
+        '-name': '-name',
+        'birth_date': 'birth_date',
+        '-birth_date': '-birth_date',
+        'death_date': 'death_date',
+        '-death_date': '-death_date',
+        'books_count': 'books_count',  # Will need annotation
+        '-books_count': '-books_count',
+        'created_at': 'created_at',
+        '-created_at': '-created_at',
+        'id': 'id',
+        '-id': '-id',
+    }
+    
+    if sort in sort_mapping:
+        order_field = sort_mapping[sort]
+        
+        # Add annotations for count-based sorting
+        if 'books_count' in order_field:
+            qs = qs.annotate(books_count=Count('books', distinct=True))
+        
+        qs = qs.order_by(order_field)
+    
+    # Optimize with prefetch_related
+    if include_books:
+        qs = qs.prefetch_related('books')
+    
+    return qs
+
+
+def calculate_author_age(author):
+    """Calculate author's age. Returns current age if living, age at death if deceased."""
+    if not author.birth_date:
+        return None
+    
+    if author.death_date:
+        # Age at death
+        return author.death_date.year - author.birth_date.year
+    else:
+        # Current age (living author)
+        current_year = datetime.now().year
+        return current_year - author.birth_date.year
+
+
+def render_authors_workbook(queryset, columns=None, include_books=False):
+    """Create an Excel workbook with authors data."""
+    columns = columns or DEFAULT_AUTHOR_COLUMNS
+    
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Authors"
+    
+    # Header styling
+    header_font = Font(bold=True, color="FFFFFF")
+    header_fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
+    header_alignment = Alignment(horizontal="center", vertical="center")
+    
+    # Column headers
+    column_headers = {
+        'id': 'ID',
+        'name': 'Name',
+        'biography': 'Biography',
+        'birth_date': 'Birth Date',
+        'death_date': 'Death Date',
+        'books_count': 'Books Count',
+        'age': 'Age',
+        'created_at': 'Created At',
+        'status': 'Status',
+        'biography_length': 'Biography Length',
+        'birth_year': 'Birth Year',
+        'death_year': 'Death Year',
+    }
+    
+    # Write headers
+    for col_idx, col_name in enumerate(columns, 1):
+        cell = ws.cell(row=1, column=col_idx)
+        cell.value = column_headers.get(col_name, col_name.replace('_', ' ').title())
+        cell.font = header_font
+        cell.fill = header_fill
+        cell.alignment = header_alignment
+    
+    # Write data
+    row_idx = 2
+    
+    for author in queryset:
+        # Annotate with counts if not already done
+        books_count = getattr(author, 'books_count', author.books.count())
+        
+        for col_idx, col_name in enumerate(columns, 1):
+            cell = ws.cell(row=row_idx, column=col_idx)
+            
+            if col_name == 'id':
+                cell.value = author.id
+            elif col_name == 'name':
+                cell.value = author.name
+            elif col_name == 'biography':
+                cell.value = author.biography or ''
+            elif col_name == 'birth_date':
+                cell.value = author.birth_date.strftime('%Y-%m-%d') if author.birth_date else ''
+            elif col_name == 'death_date':
+                cell.value = author.death_date.strftime('%Y-%m-%d') if author.death_date else ''
+            elif col_name == 'books_count':
+                cell.value = books_count
+            elif col_name == 'age':
+                age = calculate_author_age(author)
+                cell.value = age if age is not None else 'Unknown'
+            elif col_name == 'created_at':
+                cell.value = author.created_at.strftime('%Y-%m-%d %H:%M:%S') if author.created_at else ''
+            elif col_name == 'status':
+                cell.value = 'Deceased' if author.death_date else 'Living'
+            elif col_name == 'biography_length':
+                cell.value = len(author.biography) if author.biography else 0
+            elif col_name == 'birth_year':
+                cell.value = author.birth_date.year if author.birth_date else ''
+            elif col_name == 'death_year':
+                cell.value = author.death_date.year if author.death_date else ''
+        
+        row_idx += 1
+    
+    # Auto-adjust column widths
+    for col_idx in range(1, len(columns) + 1):
+        column_letter = get_column_letter(col_idx)
+        max_length = 0
+        for row in ws[column_letter]:
+            try:
+                if len(str(row.value)) > max_length:
+                    max_length = len(str(row.value))
+            except:
+                pass
+        adjusted_width = min(max_length + 2, 50)  # Cap at 50 characters
+        ws.column_dimensions[column_letter].width = adjusted_width
+    
+    # Add books sheet if requested
+    if include_books:
+        books_ws = wb.create_sheet("Books by Author")
+        
+        # Books sheet headers
+        books_headers = ['Author ID', 'Author Name', 'Birth Year', 'Book ID', 'Book Title', 'ISBN13', 'Publisher', 'Year Published', 'Pages', 'Language']
+        for col_idx, header in enumerate(books_headers, 1):
+            cell = books_ws.cell(row=1, column=col_idx)
+            cell.value = header
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = header_alignment
+        
+        # Write books data
+        books_row = 2
+        for author in queryset:
+            books = author.books.all().select_related('publisher')
+            
+            if books:
+                for book in books:
+                    books_ws.cell(row=books_row, column=1).value = author.id
+                    books_ws.cell(row=books_row, column=2).value = author.name
+                    books_ws.cell(row=books_row, column=3).value = author.birth_date.year if author.birth_date else ''
+                    books_ws.cell(row=books_row, column=4).value = book.id
+                    books_ws.cell(row=books_row, column=5).value = book.title
+                    books_ws.cell(row=books_row, column=6).value = book.isbn13 or ''
+                    books_ws.cell(row=books_row, column=7).value = book.publisher.name if book.publisher else ''
+                    books_ws.cell(row=books_row, column=8).value = book.publish_year or ''
+                    books_ws.cell(row=books_row, column=9).value = book.pages or ''
+                    books_ws.cell(row=books_row, column=10).value = book.language_code or ''
+                    books_row += 1
+            else:
+                # Add author row even if no books
+                books_ws.cell(row=books_row, column=1).value = author.id
+                books_ws.cell(row=books_row, column=2).value = author.name
+                books_ws.cell(row=books_row, column=3).value = author.birth_date.year if author.birth_date else ''
                 books_ws.cell(row=books_row, column=4).value = 'No books'
                 books_row += 1
         

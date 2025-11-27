@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.db import models
 from django.forms import Textarea
 from .models import (
+    Author,
     Category,
     Publisher,
 )
@@ -13,6 +14,100 @@ from .models import (
 admin.site.site_header = "Library Management System"
 admin.site.site_title = "Library Admin"
 admin.site.index_title = "Welcome to Library Management"
+
+
+@admin.register(Author)
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = [
+        "name",
+        "birth_date",
+        "death_date",
+        "books_count",
+        "created_at",
+    ]
+    list_filter = ["birth_date", "death_date", "created_at"]
+    search_fields = ["name", "biography"]
+    readonly_fields = ["created_at"]
+    date_hierarchy = "created_at"
+    list_per_page = 25
+    ordering = ["name"]
+    
+    # Add actions for bulk operations
+    actions = ["clear_death_date", "clear_birth_date"]
+
+    fieldsets = (
+        ("Basic Information", {
+            "fields": ("name", "biography"),
+            "description": "Enter the author's basic information."
+        }),
+        (
+            "Dates",
+            {
+                "fields": ("birth_date", "death_date", "created_at"),
+                "classes": ("collapse",),
+                "description": "Important dates related to the author."
+            },
+        ),
+    )
+
+    def books_count(self, obj):
+        count = obj.books.count()
+        if count > 0:
+            return format_html(
+                '<span style="color: #007cba; font-weight: bold;">{} books</span>', 
+                count
+            )
+        return format_html('<span style="color: #666;">No books</span>')
+
+    books_count.short_description = "Books"
+    
+    def get_queryset(self, request):
+        """Optimize queryset with prefetch_related for better performance."""
+        queryset = super().get_queryset(request)
+        return queryset.prefetch_related('books')
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic with validation."""
+        # Validate dates
+        if obj.birth_date and obj.death_date:
+            if obj.birth_date > obj.death_date:
+                from django.contrib import messages
+                messages.error(
+                    request, 
+                    "Birth date cannot be later than death date. Please correct the dates."
+                )
+                return
+        
+        # Validate birth date is not in the future
+        from django.utils import timezone
+        if obj.birth_date and obj.birth_date > timezone.now().date():
+            from django.contrib import messages
+            messages.warning(
+                request, 
+                "Birth date is in the future. Please verify this is correct."
+            )
+        
+        super().save_model(request, obj, form, change)
+    
+    @admin.action(description="Clear death date for selected authors")
+    def clear_death_date(self, request, queryset):
+        """Action to clear death date for selected authors."""
+        count = queryset.update(death_date=None)
+        self.message_user(
+            request,
+            f"Successfully cleared death date for {count} authors.",
+            level='success'
+        )
+    
+    @admin.action(description="Clear birth date for selected authors")
+    def clear_birth_date(self, request, queryset):
+        """Action to clear birth date for selected authors."""
+        count = queryset.update(birth_date=None)
+        self.message_user(
+            request,
+            f"Successfully cleared birth date for {count} authors.",
+            level='success'
+        )
 
 
 @admin.register(Publisher)

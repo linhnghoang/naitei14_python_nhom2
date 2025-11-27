@@ -10,7 +10,7 @@ import json
 import io
 
 from .models import Book, Category, Author, Publisher
-from .utils.exports import build_category_queryset, render_categories_workbook, build_book_queryset, render_books_workbook, build_publisher_queryset, render_publishers_workbook
+from .utils.exports import build_category_queryset, render_categories_workbook, build_book_queryset, render_books_workbook, build_publisher_queryset, render_publishers_workbook, build_author_queryset, render_authors_workbook
 
 
 @staff_member_required
@@ -782,6 +782,345 @@ def export_publishers_excel(request):
     base = (
         request.GET.get("filename") or f"publishers_export_{ts}"
     ).strip() or f"publishers_export_{ts}"
+    resp = HttpResponse(
+        buf.getvalue(),
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+    resp["Content-Disposition"] = f'attachment; filename="{base}.xlsx"'
+    return resp
+
+
+@staff_member_required
+def author_stats_api(request):
+    """Author-specific statistics API."""
+    
+    # Authors with most books
+    popular_authors = Author.objects.annotate(
+        books_count=Count('books', distinct=True)
+    ).filter(books_count__gt=0).order_by('-books_count')[:10]
+    
+    # Authors by birth year
+    authors_by_birth_year = Author.objects.values('birth_date__year').annotate(
+        count=Count('id')
+    ).exclude(birth_date__isnull=True).order_by('birth_date__year')
+    
+    # Authors without books
+    empty_authors = Author.objects.filter(books__isnull=True).order_by('name')
+    
+    # Authors with/without biography
+    authors_with_biography = Author.objects.exclude(
+        Q(biography='') | Q(biography__isnull=True)
+    ).order_by('name')
+    
+    authors_without_biography = Author.objects.filter(
+        Q(biography='') | Q(biography__isnull=True)
+    ).order_by('name')
+    
+    # Living vs deceased authors
+    living_authors = Author.objects.filter(death_date__isnull=True).order_by('name')
+    deceased_authors = Author.objects.filter(death_date__isnull=False).order_by('death_date')
+    
+    # Recent authors
+    recent_authors = Author.objects.order_by('-created_at')[:10]
+    
+    # Age analysis for deceased authors
+    deceased_with_age = []
+    for author in deceased_authors:
+        if author.birth_date and author.death_date:
+            age = author.death_date.year - author.birth_date.year
+            deceased_with_age.append({
+                "id": author.id,
+                "name": author.name,
+                "birth_date": author.birth_date,
+                "death_date": author.death_date,
+                "age": age,
+                "books_count": author.books.count(),
+            })
+    
+    data = {
+        "popular_authors": [
+            {
+                "id": author.id,
+                "name": author.name,
+                "books_count": author.books_count,
+                "birth_date": author.birth_date.isoformat() if author.birth_date else None,
+                "death_date": author.death_date.isoformat() if author.death_date else None,
+                "has_biography": bool(author.biography and author.biography.strip()),
+            }
+            for author in popular_authors
+        ],
+        "authors_by_birth_year": [
+            {
+                "year": item['birth_date__year'],
+                "count": item['count']
+            }
+            for item in authors_by_birth_year
+        ],
+        "empty_authors": [
+            {
+                "id": author.id,
+                "name": author.name,
+                "birth_date": author.birth_date.isoformat() if author.birth_date else None,
+                "death_date": author.death_date.isoformat() if author.death_date else None,
+                "created_at": author.created_at.isoformat(),
+                "has_biography": bool(author.biography and author.biography.strip()),
+            }
+            for author in empty_authors
+        ],
+        "biography_stats": {
+            "with_biography": [
+                {
+                    "id": author.id,
+                    "name": author.name,
+                    "biography_length": len(author.biography or ""),
+                    "books_count": author.books.count(),
+                    "birth_date": author.birth_date.isoformat() if author.birth_date else None,
+                }
+                for author in authors_with_biography[:20]  # Limit for performance
+            ],
+            "without_biography": [
+                {
+                    "id": author.id,
+                    "name": author.name,
+                    "books_count": author.books.count(),
+                    "birth_date": author.birth_date.isoformat() if author.birth_date else None,
+                }
+                for author in authors_without_biography[:20]  # Limit for performance
+            ]
+        },
+        "mortality_stats": {
+            "living_authors": [
+                {
+                    "id": author.id,
+                    "name": author.name,
+                    "birth_date": author.birth_date.isoformat() if author.birth_date else None,
+                    "books_count": author.books.count(),
+                }
+                for author in living_authors[:20]  # Limit for performance
+            ],
+            "deceased_authors": deceased_with_age
+        },
+        "recent_authors": [
+            {
+                "id": author.id,
+                "name": author.name,
+                "birth_date": author.birth_date.isoformat() if author.birth_date else None,
+                "death_date": author.death_date.isoformat() if author.death_date else None,
+                "created_at": author.created_at.isoformat(),
+                "books_count": author.books.count(),
+                "has_biography": bool(author.biography and author.biography.strip()),
+            }
+            for author in recent_authors
+        ],
+        "summary": {
+            "total_authors": Author.objects.count(),
+            "with_books": Author.objects.filter(books__isnull=False).distinct().count(),
+            "without_books": Author.objects.filter(books__isnull=True).count(),
+            "with_biography": authors_with_biography.count(),
+            "without_biography": authors_without_biography.count(),
+            "living": living_authors.count(),
+            "deceased": deceased_authors.count(),
+            "avg_books_per_author": Author.objects.aggregate(
+                avg_books=Count('books', distinct=True)
+            )['avg_books'] or 0,
+            "oldest_birth_year": Author.objects.aggregate(
+                oldest=Min('birth_date')
+            )['oldest'],
+            "newest_birth_year": Author.objects.aggregate(
+                newest=Max('birth_date')
+            )['newest'],
+        }
+    }
+    return JsonResponse(data)
+
+
+@staff_member_required
+def author_books_api(request, author_id):
+    """API to get books for a specific author."""
+    try:
+        author = Author.objects.get(id=author_id)
+    except Author.DoesNotExist:
+        return JsonResponse({"error": "Author not found"}, status=404)
+    
+    books = author.books.all().select_related('publisher').prefetch_related('authors', 'categories')
+    
+    # Pagination
+    page = int(request.GET.get('page', 1))
+    page_size = int(request.GET.get('page_size', 20))
+    start = (page - 1) * page_size
+    end = start + page_size
+    
+    total_books = books.count()
+    books_page = books[start:end]
+    
+    books_data = []
+    for book in books_page:
+        books_data.append({
+            "id": book.id,
+            "title": book.title,
+            "isbn13": book.isbn13,
+            "publish_year": book.publish_year,
+            "pages": book.pages,
+            "language_code": book.language_code,
+            "publisher": book.publisher.name if book.publisher else None,
+            "authors": [auth.name for auth in book.authors.all()],
+            "categories": [cat.name for cat in book.categories.all()],
+            "created_at": book.created_at.isoformat(),
+            "updated_at": book.updated_at.isoformat(),
+        })
+    
+    data = {
+        "author": {
+            "id": author.id,
+            "name": author.name,
+            "biography": author.biography,
+            "birth_date": author.birth_date.isoformat() if author.birth_date else None,
+            "death_date": author.death_date.isoformat() if author.death_date else None,
+            "created_at": author.created_at.isoformat(),
+        },
+        "books": books_data,
+        "pagination": {
+            "page": page,
+            "page_size": page_size,
+            "total": total_books,
+            "has_next": end < total_books,
+            "has_prev": page > 1,
+        }
+    }
+    return JsonResponse(data)
+
+
+@staff_member_required
+def authors_export_api(request):
+    """Export authors data as JSON or CSV."""
+    format_type = request.GET.get('format', 'json')
+    include_books = request.GET.get('include_books', 'false').lower() == 'true'
+    
+    authors = Author.objects.all().order_by('name')
+    
+    if include_books:
+        authors = authors.prefetch_related('books')
+    
+    export_data = []
+    for author in authors:
+        author_data = {
+            "id": author.id,
+            "name": author.name,
+            "biography": author.biography,
+            "birth_date": author.birth_date.isoformat() if author.birth_date else None,
+            "death_date": author.death_date.isoformat() if author.death_date else None,
+            "created_at": author.created_at.isoformat(),
+        }
+        
+        if include_books:
+            author_data["books"] = [
+                {
+                    "id": book.id,
+                    "title": book.title,
+                    "isbn13": book.isbn13,
+                    "publish_year": book.publish_year,
+                }
+                for book in author.books.all()
+            ]
+            author_data["books_count"] = len(author_data["books"])
+        else:
+            author_data["books_count"] = author.books.count()
+        
+        export_data.append(author_data)
+    
+    if format_type == 'csv':
+        import csv
+        import io
+        
+        output = io.StringIO()
+        fieldnames = ['id', 'name', 'biography', 'birth_date', 'death_date', 'created_at', 'books_count']
+        
+        if include_books:
+            # Flatten books data for CSV
+            flattened_data = []
+            for author_data in export_data:
+                base_row = {k: v for k, v in author_data.items() if k != 'books'}
+                if author_data.get('books'):
+                    for book in author_data['books']:
+                        row = base_row.copy()
+                        row.update({f'book_{k}': v for k, v in book.items()})
+                        flattened_data.append(row)
+                else:
+                    flattened_data.append(base_row)
+            
+            # Update fieldnames for books
+            if flattened_data and any('book_id' in row for row in flattened_data):
+                fieldnames.extend(['book_id', 'book_title', 'book_isbn13', 'book_publish_year'])
+            
+            export_data = flattened_data
+        
+        writer = csv.DictWriter(output, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(export_data)
+        
+        response = HttpResponse(output.getvalue(), content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="authors_export.csv"'
+        return response
+    
+    else:
+        # JSON format (default)
+        data = {
+            "export_date": timezone.now().isoformat(),
+            "total_authors": len(export_data),
+            "include_books": include_books,
+            "authors": export_data
+        }
+        return JsonResponse(data, json_dumps_params={'indent': 2})
+
+
+@staff_member_required
+def export_authors_excel(request):
+    """Export Excel file with authors data.
+
+    Query parameters:
+    - q: search term for name/biography
+    - birth_year_from: minimum birth year
+    - birth_year_to: maximum birth year
+    - death_year_from: minimum death year
+    - death_year_to: maximum death year
+    - min_books: minimum number of books
+    - empty_only: true/false for authors without books
+    - has_biography: true/false for authors with/without biography
+    - living_only: true/false for living authors only
+    - deceased_only: true/false for deceased authors only
+    - created_from: date filter (YYYY-MM-DD)
+    - created_to: date filter (YYYY-MM-DD)
+    - sort: sorting field (name, birth_date, death_date, books_count, created_at)
+    - columns: comma-separated list of columns to include
+    - include_books: true/false to include books sheet
+    - filename: custom filename (without extension)
+    """
+    include_books = (request.GET.get("include_books") or "").lower() in {
+        "1",
+        "true",
+        "yes",
+    }
+    columns_param = (request.GET.get("columns") or "").strip()
+    columns = (
+        [c.strip() for c in columns_param.split(",") if c.strip()]
+        if columns_param
+        else None
+    )
+
+    # Build queryset & workbook
+    qs = build_author_queryset(request.GET, include_books=include_books)
+    wb = render_authors_workbook(
+        qs, columns=columns, include_books=include_books
+    )
+
+    # Serialize
+    buf = io.BytesIO()
+    wb.save(buf)
+    buf.seek(0)
+    ts = timezone.now().strftime("%Y%m%d_%H%M%S")
+    base = (
+        request.GET.get("filename") or f"authors_export_{ts}"
+    ).strip() or f"authors_export_{ts}"
     resp = HttpResponse(
         buf.getvalue(),
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
