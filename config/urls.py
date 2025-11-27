@@ -16,8 +16,25 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.shortcuts import redirect
+from catalog import admin_views
+
+def home_redirect(request):
+    """Redirect root URL to admin interface"""
+    return redirect('/admin/')
 
 urlpatterns = [
+    path("", home_redirect, name="home"),
     path("admin/", admin.site.urls),
+    # Admin API endpoints for categories
+    path("admin/api/stats/", admin_views.admin_stats_api, name="admin_stats_api"),
+    path("admin/api/category-stats/", admin_views.category_stats_api, name="admin_category_stats_api"),
+    path("admin/api/category-tree/", admin_views.category_tree_api, name="admin_category_tree_api"),
+    path("admin/api/category/<int:category_id>/books/", admin_views.category_books_api, name="admin_category_books_api"),
+    path("admin/api/category-export/", admin_views.category_export_api, name="admin_category_export_api"),
+    path("admin/api/activity/", admin_views.admin_activity_api, name="admin_activity_api"),
+    # Excel export endpoints
+    path("admin/export/categories/", admin_views.export_categories_excel, name="admin_export_categories_excel"),
+    path("admin/export/books/", admin_views.export_books_excel, name="admin_export_books_excel"),
 ]
