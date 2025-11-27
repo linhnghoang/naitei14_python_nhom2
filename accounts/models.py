@@ -1,10 +1,12 @@
 from django.db import models
 from django.conf import settings
 from .enums import Status, Role
+
 # =========================
 # =========================
 #  PROFILE / ACCOUNT
 # =========================
+
 
 class MemberProfile(models.Model):
     user = models.OneToOneField(
@@ -31,7 +33,7 @@ class MemberProfile(models.Model):
 
     def __str__(self):
         return self.full_name or self.user.username
-    
+
     @property
     def is_admin(self):
         return self.role == self.Role.ADMIN
@@ -53,4 +55,3 @@ class ActivationToken(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.token[:8]}..."
-

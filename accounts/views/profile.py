@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from ..forms import ProfileForm
 
+
 @login_required
 def profile_view(request):
     if request.method == "POST":
@@ -13,5 +14,4 @@ def profile_view(request):
         form = ProfileForm(instance=request.user)
         updated = False
 
-    return render(request, "accounts/profile.html",
-                  {"form": form, "updated": updated})
+    return render(request, "accounts/profile.html", {"form": form, "updated": updated})

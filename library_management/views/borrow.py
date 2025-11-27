@@ -5,9 +5,10 @@ from django.contrib.auth.decorators import login_required
 from library_management.models import Book, BookItem, BorrowRequest, BorrowRequestItem
 
 
-#==========================
+# ==========================
 #  BORROW: TẠO YÊU CẦU MƯỢN
 # ==========================
+
 
 @login_required
 def create_borrow_request(request, book_id):
@@ -32,12 +33,8 @@ def create_borrow_request(request, book_id):
         requested_to = None
 
         try:
-            requested_from = datetime.strptime(
-                requested_from_str, "%Y-%m-%d"
-            ).date()
-            requested_to = datetime.strptime(
-                requested_to_str, "%Y-%m-%d"
-            ).date()
+            requested_from = datetime.strptime(requested_from_str, "%Y-%m-%d").date()
+            requested_to = datetime.strptime(requested_to_str, "%Y-%m-%d").date()
 
             if requested_to < requested_from:
                 errors.append("Ngày trả phải lớn hơn hoặc bằng ngày mượn.")
@@ -116,6 +113,7 @@ def create_borrow_request(request, book_id):
 #  BORROW: LỊCH SỬ MƯỢN
 # ==========================
 
+
 @login_required
 def borrow_history(request):
     """
@@ -136,8 +134,9 @@ def borrow_history(request):
     }
     return render(request, "library_utilities/borrow_history.html", context)
 
+
 # ==========================
-#  Cancel: Huy yeu cau muon 
+#  Cancel: Huy yeu cau muon
 # ==========================
 @login_required
 def cancel_borrow_request(request, request_id):

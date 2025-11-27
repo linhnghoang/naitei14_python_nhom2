@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 
+
 def login_view(request):
     next_url = request.GET.get("next") or request.POST.get("next")
-    
+
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -22,5 +23,4 @@ def login_view(request):
     else:
         form = AuthenticationForm(request)
 
-    return render(request, "registration/login.html",
-                  {"form": form, "next": next_url})
+    return render(request, "registration/login.html", {"form": form, "next": next_url})

@@ -41,8 +41,9 @@ def send_activation_email(request, user):
         f"Nếu bạn không đăng ký tài khoản, vui lòng bỏ qua email này.\n"
     )
 
-    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL,
-              [user.email], fail_silently=False)
+    send_mail(
+        subject, message, settings.DEFAULT_FROM_EMAIL, [user.email], fail_silently=False
+    )
 
 
 def signup_done(request):
@@ -60,7 +61,6 @@ def activate_account(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        return render(request, "accounts/activation_success.html",
-                      {"user": user})
+        return render(request, "accounts/activation_success.html", {"user": user})
     else:
         return render(request, "accounts/activation_invalid.html")

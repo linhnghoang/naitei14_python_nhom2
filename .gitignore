@@ -18,5 +18,10 @@ media/
 
 # env file
 .env
+
 # Node
 node_modules/
+
+# Other
+base-project/
+

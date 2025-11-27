@@ -1,9 +1,7 @@
 from django.urls import path
 from .views.authentication import login_view
 from .views.profile import profile_view
-from .views.activation import (
-    signup_view, signup_done, activate_account
-)
+from .views.activation import signup_view, signup_done, activate_account
 
 app_name = "accounts"
 

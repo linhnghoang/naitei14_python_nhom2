@@ -5,6 +5,7 @@ from django.conf import settings
 #  AUTHORS / PUBLISHERS / CATEGORIES
 # =========================
 
+
 class Author(models.Model):
     name = models.CharField(max_length=255)
     biography = models.TextField(blank=True, null=True)
@@ -55,6 +56,7 @@ class Category(models.Model):
 # =========================
 #  BOOKS
 # =========================
+
 
 class Book(models.Model):
     title = models.CharField(max_length=500)
@@ -149,6 +151,7 @@ class BookItem(models.Model):
 # =========================
 #  SOCIAL (FAVORITES, FOLLOW, COMMENTS, RATINGS)
 # =========================
+
 
 class UserFavorite(models.Model):
     user = models.ForeignKey(
@@ -269,6 +272,7 @@ class BookRating(models.Model):
 #  BORROW REQUESTS & LOANS
 # =========================
 
+
 class BorrowRequest(models.Model):
     class Status(models.TextChoices):
         PENDING = "PENDING", "Pending"
@@ -370,6 +374,7 @@ class Loan(models.Model):
 # =========================
 #  MAIL QUEUE
 # =========================
+
 
 class MailQueue(models.Model):
     class MailType(models.TextChoices):
