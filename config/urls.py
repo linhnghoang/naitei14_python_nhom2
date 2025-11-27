@@ -34,7 +34,12 @@ urlpatterns = [
     path("admin/api/category/<int:category_id>/books/", admin_views.category_books_api, name="admin_category_books_api"),
     path("admin/api/category-export/", admin_views.category_export_api, name="admin_category_export_api"),
     path("admin/api/activity/", admin_views.admin_activity_api, name="admin_activity_api"),
+    # Publisher API endpoints
+    path("admin/api/publisher-stats/", admin_views.publisher_stats_api, name="admin_publisher_stats_api"),
+    path("admin/api/publisher/<int:publisher_id>/books/", admin_views.publisher_books_api, name="admin_publisher_books_api"),
+    path("admin/api/publishers-export/", admin_views.publishers_export_api, name="admin_publishers_export_api"),
     # Excel export endpoints
     path("admin/export/categories/", admin_views.export_categories_excel, name="admin_export_categories_excel"),
     path("admin/export/books/", admin_views.export_books_excel, name="admin_export_books_excel"),
+    path("admin/export/publishers/", admin_views.export_publishers_excel, name="admin_export_publishers_excel"),
 ]

@@ -2,7 +2,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Min, Max
 from django.db.models.functions import ExtractMonth, ExtractDay
 from datetime import date, timedelta
 import calendar
@@ -10,7 +10,7 @@ import json
 import io
 
 from .models import Book, Category, Author, Publisher
-from .utils.exports import build_category_queryset, render_categories_workbook, build_book_queryset, render_books_workbook
+from .utils.exports import build_category_queryset, render_categories_workbook, build_book_queryset, render_books_workbook, build_publisher_queryset, render_publishers_workbook
 
 
 @staff_member_required
@@ -29,8 +29,258 @@ def admin_stats_api(request):
             "with_subcategories": Category.objects.filter(children__isnull=False).distinct().count(),
             "empty_categories": Category.objects.filter(books=None).count(),
         },
+        "publishers": {
+            "with_books": Publisher.objects.filter(books__isnull=False).distinct().count(),
+            "without_books": Publisher.objects.filter(books__isnull=True).count(),
+            "with_website": Publisher.objects.exclude(Q(website='') | Q(website__isnull=True)).count(),
+        },
     }
     return JsonResponse(data)
+
+
+@staff_member_required
+def publisher_stats_api(request):
+    """Publisher-specific statistics API."""
+    
+    # Publishers with most books
+    popular_publishers = Publisher.objects.annotate(
+        books_count=Count('books', distinct=True)
+    ).filter(books_count__gt=0).order_by('-books_count')[:10]
+    
+    # Publishers by founded year
+    publishers_by_year = Publisher.objects.values('founded_year').annotate(
+        count=Count('id')
+    ).exclude(founded_year__isnull=True).order_by('founded_year')
+    
+    # Publishers without books
+    empty_publishers = Publisher.objects.filter(books__isnull=True).order_by('name')
+    
+    # Publishers with/without websites
+    publishers_with_website = Publisher.objects.exclude(
+        Q(website='') | Q(website__isnull=True)
+    ).order_by('name')
+    
+    publishers_without_website = Publisher.objects.filter(
+        Q(website='') | Q(website__isnull=True)
+    ).order_by('name')
+    
+    # Recent publishers
+    recent_publishers = Publisher.objects.order_by('-created_at')[:10]
+    
+    data = {
+        "popular_publishers": [
+            {
+                "id": pub.id,
+                "name": pub.name,
+                "books_count": pub.books_count,
+                "founded_year": pub.founded_year,
+                "website": pub.website,
+            }
+            for pub in popular_publishers
+        ],
+        "publishers_by_year": [
+            {
+                "year": item['founded_year'],
+                "count": item['count']
+            }
+            for item in publishers_by_year
+        ],
+        "empty_publishers": [
+            {
+                "id": pub.id,
+                "name": pub.name,
+                "founded_year": pub.founded_year,
+                "created_at": pub.created_at.isoformat(),
+            }
+            for pub in empty_publishers
+        ],
+        "website_stats": {
+            "with_website": [
+                {
+                    "id": pub.id,
+                    "name": pub.name,
+                    "website": pub.website,
+                    "books_count": pub.books.count(),
+                }
+                for pub in publishers_with_website
+            ],
+            "without_website": [
+                {
+                    "id": pub.id,
+                    "name": pub.name,
+                    "books_count": pub.books.count(),
+                    "founded_year": pub.founded_year,
+                }
+                for pub in publishers_without_website
+            ]
+        },
+        "recent_publishers": [
+            {
+                "id": pub.id,
+                "name": pub.name,
+                "founded_year": pub.founded_year,
+                "website": pub.website,
+                "created_at": pub.created_at.isoformat(),
+                "books_count": pub.books.count(),
+            }
+            for pub in recent_publishers
+        ],
+        "summary": {
+            "total_publishers": Publisher.objects.count(),
+            "with_books": Publisher.objects.filter(books__isnull=False).distinct().count(),
+            "without_books": Publisher.objects.filter(books__isnull=True).count(),
+            "with_website": publishers_with_website.count(),
+            "without_website": publishers_without_website.count(),
+            "avg_books_per_publisher": Publisher.objects.aggregate(
+                avg_books=Count('books', distinct=True)
+            )['avg_books'] or 0,
+            "oldest_year": Publisher.objects.aggregate(
+                oldest=Min('founded_year')
+            )['oldest'],
+            "newest_year": Publisher.objects.aggregate(
+                newest=Max('founded_year')
+            )['newest'],
+        }
+    }
+    return JsonResponse(data)
+
+
+@staff_member_required
+def publisher_books_api(request, publisher_id):
+    """API to get books for a specific publisher."""
+    try:
+        publisher = Publisher.objects.get(id=publisher_id)
+    except Publisher.DoesNotExist:
+        return JsonResponse({"error": "Publisher not found"}, status=404)
+    
+    books = publisher.books.all().select_related('publisher').prefetch_related('authors', 'categories')
+    
+    # Pagination
+    page = int(request.GET.get('page', 1))
+    page_size = int(request.GET.get('page_size', 20))
+    start = (page - 1) * page_size
+    end = start + page_size
+    
+    total_books = books.count()
+    books_page = books[start:end]
+    
+    books_data = []
+    for book in books_page:
+        books_data.append({
+            "id": book.id,
+            "title": book.title,
+            "isbn13": book.isbn13,
+            "publish_year": book.publish_year,
+            "pages": book.pages,
+            "language_code": book.language_code,
+            "authors": [author.name for author in book.authors.all()],
+            "categories": [cat.name for cat in book.categories.all()],
+            "created_at": book.created_at.isoformat(),
+            "updated_at": book.updated_at.isoformat(),
+        })
+    
+    data = {
+        "publisher": {
+            "id": publisher.id,
+            "name": publisher.name,
+            "description": publisher.description,
+            "founded_year": publisher.founded_year,
+            "website": publisher.website,
+            "created_at": publisher.created_at.isoformat(),
+        },
+        "books": books_data,
+        "pagination": {
+            "page": page,
+            "page_size": page_size,
+            "total": total_books,
+            "has_next": end < total_books,
+            "has_prev": page > 1,
+        }
+    }
+    return JsonResponse(data)
+
+
+@staff_member_required
+def publishers_export_api(request):
+    """Export publishers data as JSON or CSV."""
+    format_type = request.GET.get('format', 'json')
+    include_books = request.GET.get('include_books', 'false').lower() == 'true'
+    
+    publishers = Publisher.objects.all().order_by('name')
+    
+    if include_books:
+        publishers = publishers.prefetch_related('books')
+    
+    export_data = []
+    for publisher in publishers:
+        pub_data = {
+            "id": publisher.id,
+            "name": publisher.name,
+            "description": publisher.description,
+            "founded_year": publisher.founded_year,
+            "website": publisher.website,
+            "created_at": publisher.created_at.isoformat(),
+        }
+        
+        if include_books:
+            pub_data["books"] = [
+                {
+                    "id": book.id,
+                    "title": book.title,
+                    "isbn13": book.isbn13,
+                    "publish_year": book.publish_year,
+                }
+                for book in publisher.books.all()
+            ]
+            pub_data["books_count"] = len(pub_data["books"])
+        else:
+            pub_data["books_count"] = publisher.books.count()
+        
+        export_data.append(pub_data)
+    
+    if format_type == 'csv':
+        import csv
+        import io
+        
+        output = io.StringIO()
+        fieldnames = ['id', 'name', 'description', 'founded_year', 'website', 'created_at', 'books_count']
+        
+        if include_books:
+            # Flatten books data for CSV
+            flattened_data = []
+            for pub_data in export_data:
+                base_row = {k: v for k, v in pub_data.items() if k != 'books'}
+                if pub_data.get('books'):
+                    for book in pub_data['books']:
+                        row = base_row.copy()
+                        row.update({f'book_{k}': v for k, v in book.items()})
+                        flattened_data.append(row)
+                else:
+                    flattened_data.append(base_row)
+            
+            # Update fieldnames for books
+            if flattened_data and any('book_id' in row for row in flattened_data):
+                fieldnames.extend(['book_id', 'book_title', 'book_isbn13', 'book_publish_year'])
+            
+            export_data = flattened_data
+        
+        writer = csv.DictWriter(output, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(export_data)
+        
+        response = HttpResponse(output.getvalue(), content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="publishers_export.csv"'
+        return response
+    
+    else:
+        # JSON format (default)
+        data = {
+            "export_date": timezone.now().isoformat(),
+            "total_publishers": len(export_data),
+            "include_books": include_books,
+            "publishers": export_data
+        }
+        return JsonResponse(data, json_dumps_params={'indent': 2})
 
 
 @staff_member_required
@@ -337,7 +587,7 @@ def admin_activity_api(request):
     activities = []
 
     # Recent categories
-    recent_categories = Category.objects.order_by('-id')[:5]
+    recent_categories = Category.objects.order_by('-id')[:3]
     for cat in recent_categories:
         activities.append({
             "timestamp": timezone.now(),  # Categories don't have created_at in base model
@@ -347,8 +597,30 @@ def admin_activity_api(request):
             "type": "category"
         })
 
+    # Recent publishers
+    recent_publishers = Publisher.objects.order_by('-created_at')[:3]
+    for pub in recent_publishers:
+        activities.append({
+            "timestamp": pub.created_at,
+            "message": f"Publisher: {pub.name}",
+            "details": f"Founded: {pub.founded_year or 'Unknown'} • Books: {pub.books.count()} • Website: {'Yes' if pub.website else 'No'}",
+            "ago": _ago(pub.created_at),
+            "type": "publisher"
+        })
+
+    # Recent authors
+    recent_authors = Author.objects.order_by('-created_at')[:3]
+    for author in recent_authors:
+        activities.append({
+            "timestamp": author.created_at,
+            "message": f"Author: {author.name}",
+            "details": f"Born: {author.birth_date or 'Unknown'} • Books: {author.books.count()}",
+            "ago": _ago(author.created_at),
+            "type": "author"
+        })
+
     # Recent books
-    recent_books = Book.objects.order_by("-created_at")[:5]
+    recent_books = Book.objects.order_by("-created_at")[:4]
     for book in recent_books:
         activities.append({
             "timestamp": book.created_at,
@@ -458,6 +730,58 @@ def export_books_excel(request):
     base = (
         request.GET.get("filename") or f"books_export_{ts}"
     ).strip() or f"books_export_{ts}"
+    resp = HttpResponse(
+        buf.getvalue(),
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+    resp["Content-Disposition"] = f'attachment; filename="{base}.xlsx"'
+    return resp
+
+
+@staff_member_required
+def export_publishers_excel(request):
+    """Export Excel file with publishers data.
+
+    Query parameters:
+    - q: search term for name/description/website
+    - founded_year_from: minimum founded year
+    - founded_year_to: maximum founded year
+    - min_books: minimum number of books
+    - empty_only: true/false for publishers without books
+    - has_website: true/false for publishers with/without website
+    - created_from: date filter (YYYY-MM-DD)
+    - created_to: date filter (YYYY-MM-DD)
+    - sort: sorting field (name, founded_year, books_count, created_at)
+    - columns: comma-separated list of columns to include
+    - include_books: true/false to include books sheet
+    - filename: custom filename (without extension)
+    """
+    include_books = (request.GET.get("include_books") or "").lower() in {
+        "1",
+        "true",
+        "yes",
+    }
+    columns_param = (request.GET.get("columns") or "").strip()
+    columns = (
+        [c.strip() for c in columns_param.split(",") if c.strip()]
+        if columns_param
+        else None
+    )
+
+    # Build queryset & workbook
+    qs = build_publisher_queryset(request.GET, include_books=include_books)
+    wb = render_publishers_workbook(
+        qs, columns=columns, include_books=include_books
+    )
+
+    # Serialize
+    buf = io.BytesIO()
+    wb.save(buf)
+    buf.seek(0)
+    ts = timezone.now().strftime("%Y%m%d_%H%M%S")
+    base = (
+        request.GET.get("filename") or f"publishers_export_{ts}"
+    ).strip() or f"publishers_export_{ts}"
     resp = HttpResponse(
         buf.getvalue(),
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

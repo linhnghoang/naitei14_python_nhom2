@@ -5,6 +5,7 @@ from django.db import models
 from django.forms import Textarea
 from .models import (
     Category,
+    Publisher,
 )
 
 
@@ -12,6 +13,105 @@ from .models import (
 admin.site.site_header = "Library Management System"
 admin.site.site_title = "Library Admin"
 admin.site.index_title = "Welcome to Library Management"
+
+
+@admin.register(Publisher)
+class PublisherAdmin(admin.ModelAdmin):
+    list_display = [
+        "name",
+        "founded_year",
+        "website_link",
+        "books_count",
+        "created_at",
+    ]
+    list_filter = ["founded_year", "created_at"]
+    search_fields = ["name", "description", "website"]
+    readonly_fields = ["created_at"]
+    date_hierarchy = "created_at"
+    list_per_page = 25
+    ordering = ["name"]
+    
+    # Add actions for bulk operations
+    actions = ["clear_website", "set_current_year_founded"]
+    
+    fieldsets = (
+        ("Basic Information", {
+            "fields": ("name", "description"),
+            "description": "Enter the publisher's basic information."
+        }),
+        (
+            "Additional Info",
+            {
+                "fields": ("founded_year", "website", "created_at"),
+                "classes": ("collapse",),
+                "description": "Optional details about the publisher."
+            },
+        ),
+    )
+
+    def website_link(self, obj):
+        if obj.website:
+            # Ensure the URL has a protocol
+            url = obj.website
+            if not url.startswith(('http://', 'https://')):
+                url = f"https://{url}"
+            return format_html(
+                '<a href="{}" target="_blank" style="color: #007cba;">{}</a>', 
+                url, 
+                obj.website
+            )
+        return format_html('<span style="color: #666;">No website</span>')
+
+    website_link.short_description = "Website"
+    website_link.admin_order_field = "website"
+
+    def books_count(self, obj):
+        count = obj.books.count()
+        if count > 0:
+            return format_html(
+                '<span style="color: #007cba; font-weight: bold;">{} books</span>', 
+                count
+            )
+        return format_html('<span style="color: #666;">No books</span>')
+
+    books_count.short_description = "Published Books"
+    books_count.admin_order_field = "books_count"
+    
+    def get_queryset(self, request):
+        """Optimize queryset with prefetch_related for better performance."""
+        queryset = super().get_queryset(request)
+        return queryset.prefetch_related('books')
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic with validation."""
+        # Validate founded year if provided
+        if obj.founded_year and obj.founded_year > 2024:
+            from django.contrib import messages
+            messages.warning(
+                request, 
+                f"Founded year {obj.founded_year} is in the future. Please verify this is correct."
+            )
+        super().save_model(request, obj, form, change)
+    
+    @admin.action(description="Clear website field for selected publishers")
+    def clear_website(self, request, queryset):
+        """Action to clear website field for selected publishers."""
+        count = queryset.update(website="")
+        self.message_user(
+            request,
+            f"Successfully cleared website for {count} publishers.",
+            level='success'
+        )
+    
+    @admin.action(description="Set founded year to current year (2024)")
+    def set_current_year_founded(self, request, queryset):
+        """Action to set founded year to current year for selected publishers."""
+        count = queryset.update(founded_year=2024)
+        self.message_user(
+            request,
+            f"Successfully set founded year to 2024 for {count} publishers.",
+            level='success'
+        )
 
 
 @admin.register(Category)
