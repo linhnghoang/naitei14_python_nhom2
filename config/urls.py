@@ -38,8 +38,13 @@ urlpatterns = [
     path("admin/api/publisher-stats/", admin_views.publisher_stats_api, name="admin_publisher_stats_api"),
     path("admin/api/publisher/<int:publisher_id>/books/", admin_views.publisher_books_api, name="admin_publisher_books_api"),
     path("admin/api/publishers-export/", admin_views.publishers_export_api, name="admin_publishers_export_api"),
+    # Author API endpoints
+    path("admin/api/author-stats/", admin_views.author_stats_api, name="admin_author_stats_api"),
+    path("admin/api/author/<int:author_id>/books/", admin_views.author_books_api, name="admin_author_books_api"),
+    path("admin/api/authors-export/", admin_views.authors_export_api, name="admin_authors_export_api"),
     # Excel export endpoints
     path("admin/export/categories/", admin_views.export_categories_excel, name="admin_export_categories_excel"),
     path("admin/export/books/", admin_views.export_books_excel, name="admin_export_books_excel"),
     path("admin/export/publishers/", admin_views.export_publishers_excel, name="admin_export_publishers_excel"),
+    path("admin/export/authors/", admin_views.export_authors_excel, name="admin_export_authors_excel"),
 ]
