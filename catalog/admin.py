@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.utils.html import format_html
 from django.urls import reverse
 from django.db import models
@@ -11,6 +11,7 @@ from .models import (
     BookAuthor,
     BookCategory,
     BookItem,
+    BorrowRequest,
 )
 
 
@@ -824,3 +825,62 @@ class CategoryAdmin(admin.ModelAdmin):
             f"Successfully set {parent_category.name} as parent for {len(children)} categories.",
             level='success'
         )
+
+@admin.register(BorrowRequest)
+class BorrowRequestAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'book_item', 'status', 'requested_from', 'duration', 'requested_to', 'admin')
+    list_filter = ('status', 'requested_from', 'requested_to')
+    search_fields = ('user__username', 'user__email', 'book_item__barcode', 'book_item__book__title')
+    autocomplete_fields = ['book_item']
+    actions = ['return_books', 'mark_books_as_lost']
+    exclude = ('decision_at', 'requested_to')
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            if obj.status == BorrowRequest.Status.RETURNED:
+                return [f.name for f in self.model._meta.fields]
+            if obj.status == BorrowRequest.Status.APPROVED:
+                return [f.name for f in self.model._meta.fields if f.name != 'status']
+        return list(self.readonly_fields) + ['admin']
+
+    def save_model(self, request, obj, form, change):
+        obj.admin = request.user
+        super().save_model(request, obj, form, change)
+
+    @admin.action(description='Return selected books')
+    def return_books(self, request, queryset):
+        updated_count = 0
+        for borrow_request in queryset:
+            if borrow_request.status in [BorrowRequest.Status.APPROVED, BorrowRequest.Status.OVERDUE, BorrowRequest.Status.LOST]:
+                borrow_request.status = BorrowRequest.Status.RETURNED
+                borrow_request.save()
+                updated_count += 1
+        self.message_user(request, f"{updated_count} books returned successfully.", messages.SUCCESS)
+
+    @admin.action(description='Mark selected books as Lost')
+    def mark_books_as_lost(self, request, queryset):
+        updated_count = 0
+        for borrow_request in queryset:
+             if borrow_request.status in [BorrowRequest.Status.APPROVED, BorrowRequest.Status.OVERDUE]:
+                borrow_request.status = BorrowRequest.Status.LOST
+                borrow_request.save()
+                updated_count += 1
+        self.message_user(request, f"{updated_count} books marked as lost.", messages.SUCCESS)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if not obj:  # Creating a new object
+            field = form.base_fields['status']
+            allowed_statuses = [
+                BorrowRequest.Status.PENDING,
+                BorrowRequest.Status.APPROVED,
+                BorrowRequest.Status.REJECTED,
+            ]
+            field.choices = [
+                (k, v) for k, v in BorrowRequest.Status.choices 
+                if k in allowed_statuses
+            ]
+        return form
