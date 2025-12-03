@@ -3,11 +3,7 @@
 
 {% block extrastyle %}
   {{ block.super }}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
-    /* Ensure Font Awesome loads properly */
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
-    
     /* Modern Export Excel Button */
     .object-tools .exportlink {
       display: inline-flex;
@@ -36,9 +32,6 @@
       box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
     .object-tools .exportlink::before { content: none !important; display: none !important; }
-    .object-tools .exportlink i {
-      font-size: 16px;
-    }
 
     /* Enhanced changelist styling */
     .results tbody tr:hover {
@@ -50,14 +43,19 @@
       font-weight: 600;
     }
 
-    .results .field-children_count {
-      font-style: italic;
+    .results .field-website_link a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+
+    .results .field-website_link a:hover {
+      text-decoration: underline;
     }
   </style>
 {% endblock %}
 
 {% block content_title %}
-  Categories Management
+  Publishers Management
 {% endblock %}
 
 {% block result_list %}
@@ -66,7 +64,7 @@
 
 {% block object-tools-items %}
   {{ block.super }}
-  <a href="{% url 'admin_export_categories_excel' %}?{{ request.GET.urlencode }}" 
+  <a href="{% url 'admin_export_publishers_excel' %}?{{ request.GET.urlencode }}" 
      class="exportlink" 
      title="Export to Excel">
     Export Excel
@@ -77,14 +75,14 @@
   {{ block.super }}
   <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Add icons to action buttons if not present
+    // Add visual feedback for bulk actions
     const actionSelect = document.querySelector('select[name="action"]');
     if (actionSelect) {
       Array.from(actionSelect.options).forEach(option => {
-        if (option.value.includes('clear_parent')) {
-          option.text = '🔼 ' + option.text;
-        } else if (option.value.includes('make_parent')) {
-          option.text = '👥 ' + option.text;
+        if (option.value.includes('clear_website')) {
+          option.text = '🌐 ' + option.text;
+        } else if (option.value.includes('set_current_year')) {
+          option.text = '📅 ' + option.text;
         }
       });
     }
