@@ -9,30 +9,32 @@ import calendar
 import json
 import io
 
-from .models import Book, Category, Author, Publisher
+from .models import Book, Category, Author, Publisher, BookItem
 from .utils.exports import build_category_queryset, render_categories_workbook, build_book_queryset, render_books_workbook, build_publisher_queryset, render_publishers_workbook, build_author_queryset, render_authors_workbook
 
 
 @staff_member_required
 def admin_stats_api(request):
     """General admin statistics API."""
+    from .models import BorrowRequest, Loan
+    
+    # Count overdue loans - check both Loan model and BorrowRequest model
+    overdue_loans_count = Loan.objects.filter(status=Loan.Status.OVERDUE).count()
+    # Also count overdue borrow requests if they exist
+    overdue_requests_count = BorrowRequest.objects.filter(status=BorrowRequest.Status.OVERDUE).count() if hasattr(BorrowRequest.Status, 'OVERDUE') else 0
+    
     data = {
         "basic": {
             "total_books": Book.objects.count(),
-            "total_categories": Category.objects.count(),
-            "total_authors": Author.objects.count(),
-            "total_publishers": Publisher.objects.count(),
             "total_users": User.objects.filter(is_active=True).count(),
         },
-        "categories": {
-            "top_level": Category.objects.filter(parent=None).count(),
-            "with_subcategories": Category.objects.filter(children__isnull=False).distinct().count(),
-            "empty_categories": Category.objects.filter(books=None).count(),
+        "requests": {
+            "pending": BorrowRequest.objects.filter(
+                status=BorrowRequest.Status.PENDING
+            ).count(),
         },
-        "publishers": {
-            "with_books": Publisher.objects.filter(books__isnull=False).distinct().count(),
-            "without_books": Publisher.objects.filter(books__isnull=True).count(),
-            "with_website": Publisher.objects.exclude(Q(website='') | Q(website__isnull=True)).count(),
+        "loans": {
+            "overdue": max(overdue_loans_count, overdue_requests_count),
         },
     }
     return JsonResponse(data)
@@ -584,51 +586,46 @@ def _ago(dt):
 @staff_member_required
 def admin_activity_api(request):
     """Recent admin activity API."""
+    from .models import BorrowRequest, Loan
+    
     activities = []
 
-    # Recent categories
-    recent_categories = Category.objects.order_by('-id')[:3]
-    for cat in recent_categories:
-        activities.append({
-            "timestamp": timezone.now(),  # Categories don't have created_at in base model
-            "message": f"Category: {cat.name}",
-            "details": f"Slug: {cat.slug} • Books: {cat.books.count()} • Children: {cat.children.count()}",
-            "ago": "Recently",
-            "type": "category"
-        })
+    recent_requests = BorrowRequest.objects.select_related("user").order_by(
+        "-created_at"
+    )[:5]
+    for r in recent_requests:
+        activities.append(
+            {
+                "timestamp": r.created_at,
+                "message": f"Borrow request #{r.id} by {r.user}",
+                "details": f"{r.items.count()} item(s) • Status: {r.status}",
+                "ago": _ago(r.created_at),
+            }
+        )
 
-    # Recent publishers
-    recent_publishers = Publisher.objects.order_by('-created_at')[:3]
-    for pub in recent_publishers:
-        activities.append({
-            "timestamp": pub.created_at,
-            "message": f"Publisher: {pub.name}",
-            "details": f"Founded: {pub.founded_year or 'Unknown'} • Books: {pub.books.count()} • Website: {'Yes' if pub.website else 'No'}",
-            "ago": _ago(pub.created_at),
-            "type": "publisher"
-        })
+    recent_books = Book.objects.order_by("-created_at")[:5]
+    for b in recent_books:
+        activities.append(
+            {
+                "timestamp": b.created_at,
+                "message": f"New book: {b.title}",
+                "details": f"Publisher: {b.publisher or '-'} • Year: {b.publish_year or '-'}",
+                "ago": _ago(b.created_at),
+            }
+        )
 
-    # Recent authors
-    recent_authors = Author.objects.order_by('-created_at')[:3]
-    for author in recent_authors:
-        activities.append({
-            "timestamp": author.created_at,
-            "message": f"Author: {author.name}",
-            "details": f"Born: {author.birth_date or 'Unknown'} • Books: {author.books.count()}",
-            "ago": _ago(author.created_at),
-            "type": "author"
-        })
-
-    # Recent books
-    recent_books = Book.objects.order_by("-created_at")[:4]
-    for book in recent_books:
-        activities.append({
-            "timestamp": book.created_at,
-            "message": f"New book: {book.title}",
-            "details": f"Publisher: {book.publisher or '-'} • Year: {book.publish_year or '-'}",
-            "ago": _ago(book.created_at),
-            "type": "book"
-        })
+    recent_loans = Loan.objects.select_related("book_item").order_by(
+        "-created_at"
+    )[:5]
+    for loan in recent_loans:
+        activities.append(
+            {
+                "timestamp": loan.created_at,
+                "message": f"Loan #{loan.id} {loan.status}",
+                "details": f"Item: {loan.book_item} • Due: {loan.due_date}",
+                "ago": _ago(loan.created_at),
+            }
+        )
 
     # Sort mixed activities by timestamp desc and cap to 10
     activities.sort(
@@ -637,6 +634,350 @@ def admin_activity_api(request):
     activities = activities[:10]
 
     return JsonResponse({"activities": activities})
+
+
+@staff_member_required
+def admin_book_stats_api(request):
+    """Return book-related statistics for charts (month/year scope).
+
+    Query params:
+    - period: 'month' (default) or 'year'
+    - year: integer (defaults to current year)
+    - month: 1-12 (required when period=month; defaults to current month)
+    """
+    from .models import BorrowRequest, Loan, BorrowRequestItem
+    
+    now = timezone.now()
+    period = (request.GET.get("period") or "month").lower()
+    try:
+        year = int(request.GET.get("year", now.year))
+    except ValueError:
+        year = now.year
+    try:
+        month = int(request.GET.get("month", now.month))
+    except ValueError:
+        month = now.month
+
+    if period == "year":
+        start = date(year, 1, 1)
+        end = date(year + 1, 1, 1)
+    else:
+        # default to month
+        month = max(1, min(12, month))
+        start = date(year, month, 1)
+        last_day = calendar.monthrange(year, month)[1]
+        end = date(year, month, last_day) + timedelta(days=1)
+
+    # Books per category (overall, not scoped to period)
+    category_book_counts_qs = (
+        Category.objects.annotate(total_books=Count("books", distinct=True))
+        .values("id", "name", "total_books")
+        .order_by("-total_books", "name")
+    )
+    category_book_counts = list(category_book_counts_qs)
+
+    # Try to use Loan model first, fallback to BorrowRequest if no loans exist
+    loan_count = Loan.objects.count()
+    
+    if loan_count > 0:
+        # Use Loan-based queries (base_project style)
+        # Loans by category in the period
+        loans_qs = (
+            Loan.objects.filter(approved_from__gte=start, approved_from__lt=end)
+            .values(
+                "request_item__book__categories__id",
+                "request_item__book__categories__name",
+            )
+            .annotate(total=Count("id"))
+            .exclude(request_item__book__categories__id__isnull=True)
+            .order_by("-total", "request_item__book__categories__name")
+        )
+        loans_by_category = [
+            {
+                "category_id": row["request_item__book__categories__id"],
+                "category_name": row["request_item__book__categories__name"],
+                "total": row["total"],
+            }
+            for row in loans_qs
+        ]
+
+        # Top books by loans in the period
+        top_books_qs = (
+            Loan.objects.filter(approved_from__gte=start, approved_from__lt=end)
+            .values("request_item__book__id", "request_item__book__title")
+            .annotate(total=Count("id"))
+            .order_by("-total", "request_item__book__title")[:10]
+        )
+        top_books = [
+            {
+                "book_id": row["request_item__book__id"],
+                "book_title": row["request_item__book__title"],
+                "total": row["total"],
+            }
+            for row in top_books_qs
+        ]
+
+        # Time series: loans over time in selected period
+        if period == "year":
+            over_time_qs = (
+                Loan.objects.filter(
+                    approved_from__gte=start, approved_from__lt=end
+                )
+                .annotate(month=ExtractMonth("approved_from"))
+                .values("month")
+                .annotate(total=Count("id"))
+            )
+            by_key = {row["month"]: row["total"] for row in over_time_qs}
+            labels = [str(m) for m in range(1, 13)]
+            values = [by_key.get(m, 0) for m in range(1, 13)]
+            time_series = {
+                "type": "by_month",
+                "labels": labels,
+                "values": values,
+            }
+        else:
+            # month view: by day
+            last_day = calendar.monthrange(year, month)[1]
+            over_time_qs = (
+                Loan.objects.filter(
+                    approved_from__gte=start, approved_from__lt=end
+                )
+                .annotate(day=ExtractDay("approved_from"))
+                .values("day")
+                .annotate(total=Count("id"))
+            )
+            by_key = {row["day"]: row["total"] for row in over_time_qs}
+            labels = [str(d) for d in range(1, last_day + 1)]
+            values = [by_key.get(d, 0) for d in range(1, last_day + 1)]
+            time_series = {
+                "type": "by_day",
+                "labels": labels,
+                "values": values,
+            }
+
+        # Top authors in the period
+        top_authors_qs = (
+            Loan.objects.filter(approved_from__gte=start, approved_from__lt=end)
+            .values(
+                "request_item__book__authors__id",
+                "request_item__book__authors__name",
+            )
+            .annotate(total=Count("id"))
+            .exclude(request_item__book__authors__id__isnull=True)
+            .order_by("-total", "request_item__book__authors__name")[:10]
+        )
+        top_authors = [
+            {
+                "author_id": row["request_item__book__authors__id"],
+                "author_name": row["request_item__book__authors__name"],
+                "total": row["total"],
+            }
+            for row in top_authors_qs
+        ]
+
+        # Top publishers in the period
+        top_publishers_qs = (
+            Loan.objects.filter(approved_from__gte=start, approved_from__lt=end)
+            .values(
+                "request_item__book__publisher__id",
+                "request_item__book__publisher__name",
+            )
+            .annotate(total=Count("id"))
+            .exclude(request_item__book__publisher__id__isnull=True)
+            .order_by("-total", "request_item__book__publisher__name")[:10]
+        )
+        top_publishers = [
+            {
+                "publisher_id": row["request_item__book__publisher__id"],
+                "publisher_name": row["request_item__book__publisher__name"],
+                "total": row["total"],
+            }
+            for row in top_publishers_qs
+        ]
+
+        # Status distribution from BorrowRequest (all statuses: PENDING, APPROVED, REJECTED, RETURNED, LOST, OVERDUE)
+        status_dist_qs = (
+            BorrowRequest.objects.all()
+            .values("status")
+            .annotate(total=Count("id"))
+            .order_by("status")
+        )
+        status_distribution = [
+            {"status": row["status"], "total": row["total"]}
+            for row in status_dist_qs
+        ]
+
+        # Language distribution from all books in library (not just loaned ones)
+        language_dist_qs = (
+            Book.objects.all()
+            .values("language_code")
+            .annotate(total=Count("id"))
+            .order_by("-total")
+        )
+        language_distribution = [
+            {
+                "language": row["language_code"] or "Unknown",
+                "total": row["total"],
+            }
+            for row in language_dist_qs
+        ]
+    else:
+        # Fallback: Use BorrowRequest-based queries if no Loan records exist
+        # Borrow requests by category (via items and book_item)
+        approved_requests = BorrowRequest.objects.filter(
+            status=BorrowRequest.Status.APPROVED,
+            decision_at__gte=start,
+            decision_at__lt=end
+        ) if hasattr(BorrowRequest, 'decision_at') else BorrowRequest.objects.filter(
+            status=BorrowRequest.Status.APPROVED,
+            created_at__gte=start,
+            created_at__lt=end
+        )
+        
+        # Get books from approved requests via items
+        books_in_requests = Book.objects.filter(
+            requested_items__request__in=approved_requests
+        ).distinct()
+        
+        # Requests by category
+        requests_by_category_qs = (
+            books_in_requests
+            .values("categories__id", "categories__name")
+            .annotate(total=Count("requested_items__id"))
+            .exclude(categories__id__isnull=True)
+            .order_by("-total", "categories__name")
+        )
+        loans_by_category = [
+            {
+                "category_id": row["categories__id"],
+                "category_name": row["categories__name"],
+                "total": row["total"],
+            }
+            for row in requests_by_category_qs
+        ]
+
+        # Top books
+        top_books_qs = (
+            books_in_requests
+            .annotate(total=Count("requested_items__id"))
+            .order_by("-total", "title")[:10]
+        )
+        top_books = [
+            {
+                "book_id": book.id,
+                "book_title": book.title,
+                "total": book.total,
+            }
+            for book in top_books_qs
+        ]
+
+        # Time series
+        if period == "year":
+            over_time_qs = (
+                approved_requests
+                .annotate(month=ExtractMonth("created_at"))
+                .values("month")
+                .annotate(total=Count("id"))
+            )
+            by_key = {row["month"]: row["total"] for row in over_time_qs}
+            labels = [str(m) for m in range(1, 13)]
+            values = [by_key.get(m, 0) for m in range(1, 13)]
+            time_series = {"type": "by_month", "labels": labels, "values": values}
+        else:
+            last_day = calendar.monthrange(year, month)[1]
+            over_time_qs = (
+                approved_requests
+                .annotate(day=ExtractDay("created_at"))
+                .values("day")
+                .annotate(total=Count("id"))
+            )
+            by_key = {row["day"]: row["total"] for row in over_time_qs}
+            labels = [str(d) for d in range(1, last_day + 1)]
+            values = [by_key.get(d, 0) for d in range(1, last_day + 1)]
+            time_series = {"type": "by_day", "labels": labels, "values": values}
+
+        # Top authors
+        top_authors_qs = (
+            books_in_requests
+            .values("authors__id", "authors__name")
+            .annotate(total=Count("requested_items__id"))
+            .exclude(authors__id__isnull=True)
+            .order_by("-total", "authors__name")[:10]
+        )
+        top_authors = [
+            {
+                "author_id": row["authors__id"],
+                "author_name": row["authors__name"],
+                "total": row["total"],
+            }
+            for row in top_authors_qs
+        ]
+
+        # Top publishers
+        top_publishers_qs = (
+            books_in_requests
+            .values("publisher__id", "publisher__name")
+            .annotate(total=Count("requested_items__id"))
+            .exclude(publisher__id__isnull=True)
+            .order_by("-total", "publisher__name")[:10]
+        )
+        top_publishers = [
+            {
+                "publisher_id": row["publisher__id"],
+                "publisher_name": row["publisher__name"],
+                "total": row["total"],
+            }
+            for row in top_publishers_qs
+        ]
+
+        # Status distribution from BorrowRequest (all statuses: PENDING, APPROVED, REJECTED, RETURNED, LOST, OVERDUE)
+        status_dist_qs = (
+            BorrowRequest.objects.all()
+            .values("status")
+            .annotate(total=Count("id"))
+            .order_by("status")
+        )
+        status_distribution = [
+            {"status": row["status"], "total": row["total"]}
+            for row in status_dist_qs
+        ]
+
+        # Language distribution from all books in library (not just loaned ones)
+        language_dist_qs = (
+            Book.objects.all()
+            .values("language_code")
+            .annotate(total=Count("id"))
+            .order_by("-total")
+        )
+        language_distribution = [
+            {
+                "language": row["language_code"] or "Unknown",
+                "total": row["total"],
+            }
+            for row in language_dist_qs
+        ]
+
+    top_category = loans_by_category[0] if loans_by_category else None
+
+    data = {
+        "period": {
+            "type": "year" if period == "year" else "month",
+            "year": year,
+            "month": month if period != "year" else None,
+            "start": start.isoformat(),
+            "end_exclusive": end.isoformat(),
+        },
+        "category_book_counts": category_book_counts,
+        "loans_by_category": loans_by_category,
+        "top_category": top_category,
+        "top_books": top_books,
+        "time_series": time_series,
+        "top_authors": top_authors,
+        "top_publishers": top_publishers,
+        "status_distribution": status_distribution,
+        "language_distribution": language_distribution,
+    }
+    return JsonResponse(data)
 
 
 @staff_member_required

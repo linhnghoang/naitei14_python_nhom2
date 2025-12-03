@@ -1,5 +1,5 @@
-{% extends "admin/index.html" %}
-{% load admin_urls static %}
+{% extends "admin/base_site.html" %}
+{% load admin_urls static admin_modify %}
 
 {% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
 
@@ -15,6 +15,8 @@
 {% block extrahead %}
 {{ block.super }}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2"></script>
 <style>
     /* Custom styling for the admin interface */
     #site-name a {
@@ -32,8 +34,8 @@
     /* Layout wrapper for the dashboard */
     .admin-dashboard {
         display: grid;
-        grid-template-columns: 3fr 1fr;
-        gap: 24px;
+        grid-template-columns: 5fr 1.2fr;
+        gap: 16px;
         align-items: start;
     }
 
@@ -45,15 +47,15 @@
 
     .dashboard-stats {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 24px;
         margin: 20px 0;
     }
     
     .stat-card {
         background: #fff;
         border-radius: 8px;
-        padding: 20px;
+        padding: 24px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         border-left: 4px solid #007cba;
         transition: transform 0.2s;
@@ -89,9 +91,11 @@
     .quick-actions {
         background: #fff;
         border-radius: 8px;
-        padding: 20px;
+        padding: 20px 16px;
         margin: 20px 0;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 20px;
     }
     
     .quick-actions h3 {
@@ -99,12 +103,13 @@
         color: #333;
         border-bottom: 2px solid #007cba;
         padding-bottom: 10px;
+        font-size: 16px;
     }
     
     .action-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
         margin-top: 20px;
     }
     
@@ -113,17 +118,18 @@
         background: #007cba;
         color: white;
         text-decoration: none;
-        padding: 15px 20px;
+        padding: 12px 16px;
         border-radius: 6px;
-        text-align: center;
+        text-align: left;
         transition: background 0.2s;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 10px;
         width: 100%;
-        min-height: 46px;
-        font-weight: 600;
+        min-height: 42px;
+        font-weight: 500;
+        font-size: 14px;
     }
     
     .action-button:hover {
@@ -196,46 +202,91 @@
         color: #fff !important;
     }
 
-    /* Category-specific styling */
-    .category-stats {
+    /* Statistics section */
+    .statistics {
         background: #fff;
         border-radius: 8px;
         padding: 20px;
         margin: 20px 0;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-
-    .category-stats h3 {
+    .statistics h3 {
         margin-top: 0;
         color: #333;
         border-bottom: 2px solid #007cba;
         padding-bottom: 10px;
     }
-
-    .category-overview {
+    .stats-controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+    }
+    .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin-top: 15px;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 24px;
+    }
+    .chart-card {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 20px;
+        min-height: 320px;
     }
 
-    .category-item {
-        background: #f8f9fa;
-        padding: 15px;
+    /* Make charts feel interactive */
+    .chart-card canvas { cursor: zoom-in; }
+
+    /* Modal for expanded chart */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.6);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        padding: 20px;
+    }
+    .modal-content {
+        background: #fff;
+        width: 95vw;
+        max-width: 1100px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        padding: 16px 16px 8px 16px;
+        position: relative;
+    }
+    .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+    .modal-header h3 {
+        margin: 0;
+        font-size: 18px;
+    }
+    .modal-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .btn {
+        background: #007cba;
+        color: #fff;
+        border: none;
         border-radius: 6px;
-        border-left: 4px solid #007cba;
+        padding: 6px 10px;
+        cursor: pointer;
+        font-size: 13px;
     }
-
-    .category-name {
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 5px;
-    }
-
-    .category-meta {
-        font-size: 12px;
-        color: #666;
-    }
+    .btn.secondary { background: #6c757d; }
+    .btn:hover { background: #005a87; }
+    .btn.secondary:hover { background: #5a6268; }
 </style>
 {% endblock %}
 
@@ -244,57 +295,95 @@
     <div class="left-col">
         <div class="dashboard-stats">
             <div class="stat-card">
-                <i class="fa-solid fa-tags stat-icon"></i>
-                <p class="stat-number" id="categories-count">-</p>
-                <p class="stat-label">Total Categories</p>
+                <i class="fa-solid fa-book stat-icon"></i>
+                <p class="stat-number" id="books-count">-</p>
+                <p class="stat-label">Total Books</p>
             </div>
             
             <div class="stat-card">
-                <i class="fa-solid fa-sitemap stat-icon"></i>
-                <p class="stat-number" id="top-level-count">-</p>
-                <p class="stat-label">Top Level Categories</p>
+                <i class="fa-solid fa-users stat-icon"></i>
+                <p class="stat-number" id="users-count">-</p>
+                <p class="stat-label">Active Users</p>
             </div>
             
             <div class="stat-card">
-                <i class="fa-solid fa-folder stat-icon"></i>
-                <p class="stat-number" id="categories-with-children">-</p>
-                <p class="stat-label">Categories with Subcategories</p>
+                <i class="fa-solid fa-clock stat-icon"></i>
+                <p class="stat-number" id="pending-requests">-</p>
+                <p class="stat-label">Pending Requests</p>
             </div>
             
             <div class="stat-card">
-                <i class="fa-solid fa-folder-open stat-icon"></i>
-                <p class="stat-number" id="empty-categories">-</p>
-                <p class="stat-label">Empty Categories</p>
+                <i class="fa-solid fa-exclamation-triangle stat-icon"></i>
+                <p class="stat-number" id="overdue-loans">-</p>
+                <p class="stat-label">Overdue Loans</p>
             </div>
         </div>
 
-        <div class="category-stats">
-            <h3><i class="fa-solid fa-sitemap"></i> Category Overview</h3>
-            <div class="category-overview" id="categoryOverview">
-                <div class="loading" style="text-align: center; padding: 20px; color: #666;">
-                    Loading category data...
+        <div class="statistics">
+            <h3><i class="fa-solid fa-chart-simple"></i> Thống kê thư viện</h3>
+            <div class="stats-controls">
+                <label><strong>Kỳ:</strong></label>
+                <select id="stats-period">
+                    <option value="month">Tháng này</option>
+                    <option value="year">Năm nay</option>
+                </select>
+                <label><strong>Năm:</strong></label>
+                <input type="number" id="stats-year" min="2000" max="2999" style="width: 100px;">
+                <label id="label-month"><strong>Tháng:</strong></label>
+                <input type="number" id="stats-month" min="1" max="12" style="width: 70px;">
+            </div>
+            <div class="stats-grid">
+                <div class="chart-card">
+                    <h4>Số lượng sách theo thể loại (tổng)</h4>
+                    <canvas id="booksPerCategoryChart" height="160"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h4>Xu hướng mượn theo thời gian</h4>
+                    <canvas id="loansOverTimeChart" height="160"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h4>Trạng thái yêu cầu mượn sách</h4>
+                    <canvas id="loanStatusChart" height="160"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h4>Ngôn ngữ sách trong thư viện</h4>
+                    <canvas id="languageChart" height="160"></canvas>
                 </div>
             </div>
         </div>
-
-        {{ block.super }}
     </div>
 
     <aside class="right-col">
         <div class="quick-actions">
             <h3><i class="fa-solid fa-bolt"></i> Quick Actions</h3>
             <div class="action-grid">
+                <a href="{% url 'admin:auth_user_changelist' %}" class="action-button">
+                    <i class="fa-solid fa-users"></i>
+                    Quản lý người dùng
+                </a>
                 <a href="{% url 'admin:catalog_category_changelist' %}" class="action-button">
-                    <i class="fa-solid fa-tags"></i>
-                    Manage Categories
+                    <i class="fa-solid fa-tag"></i>
+                    Quản lý thể loại sách
                 </a>
-                <a href="{% url 'admin:catalog_category_add' %}" class="action-button">
-                    <i class="fa-solid fa-plus"></i>
-                    Add Category
+                <a href="{% url 'admin:catalog_author_changelist' %}" class="action-button">
+                    <i class="fa-solid fa-user-pen"></i>
+                    Quản lý tác giả
                 </a>
-                <a href="{% url 'admin_export_categories_excel' %}" class="action-button">
+                <a href="{% url 'admin:catalog_publisher_changelist' %}" class="action-button">
+                    <i class="fa-solid fa-building"></i>
+                    Quản lý nhà xuất bản
+                </a>
+                <a href="{% url 'admin:catalog_book_changelist' %}" class="action-button">
+                    <i class="fa-solid fa-book"></i>
+                    Quản lý sách
+                </a>
+                <a href="{% url 'admin:catalog_borrowrequest_changelist' %}" class="action-button">
+                    <i class="fa-solid fa-file-signature"></i>
+                    Quản lý yêu cầu mượn sách
+                </a>
+                <a href="{% url 'admin-export-books' %}" class="action-button">
                     <i class="fa-solid fa-file-excel"></i>
-                    Export Categories
+                    Xuất Excel sách
                 </a>
             </div>
         </div>
@@ -307,61 +396,49 @@
     </aside>
 </div>
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Register zoom plugin if available
+    const zoomPlugin = window['chartjs-plugin-zoom'] || (window.ChartZoom && window.ChartZoom.default);
+    if (zoomPlugin && Chart && Chart.register) {
+        try { Chart.register(zoomPlugin); } catch (e) { console.warn('Zoom plugin register failed:', e); }
+    }
+    const fetchJSON = (url) => {
+        return fetch(url, {
+            credentials: 'same-origin',
+            headers: { 'Accept': 'application/json' }
+        }).then(response => {
+            const contentType = response.headers.get('content-type') || '';
+            if (!response.ok || !contentType.includes('application/json')) {
+                // Surface more helpful error for redirects to login or HTML errors
+                return response.text().then(text => {
+                    throw new Error(`Unexpected response (${response.status}): ${text.substring(0, 200)}...`);
+                });
+            }
+            return response.json();
+        });
+    };
+
     // Load dashboard statistics from API
-    fetch('{% url "admin_stats_api" %}')
-        .then(response => response.json())
+    fetchJSON('{% url "admin-stats-api" %}')
         .then(data => {
-            document.getElementById('categories-count').textContent = data.basic.total_categories.toLocaleString();
+            document.getElementById('books-count').textContent = data.basic.total_books.toLocaleString();
+            document.getElementById('users-count').textContent = data.basic.total_users.toLocaleString();
+            document.getElementById('pending-requests').textContent = data.requests.pending.toLocaleString();
+            document.getElementById('overdue-loans').textContent = data.loans.overdue.toLocaleString();
         })
         .catch(error => {
             console.error('Error loading stats:', error);
-            document.getElementById('categories-count').textContent = '-';
-        });
-    
-    // Load category-specific statistics
-    fetch('{% url "admin_category_stats_api" %}')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('top-level-count').textContent = data.summary.top_level_count.toLocaleString();
-            document.getElementById('categories-with-children').textContent = data.parent_categories.length.toLocaleString();
-            document.getElementById('empty-categories').textContent = data.empty_categories.length.toLocaleString();
-        })
-        .catch(error => {
-            console.error('Error loading category stats:', error);
-            document.getElementById('top-level-count').textContent = '-';
-            document.getElementById('categories-with-children').textContent = '-';
-            document.getElementById('empty-categories').textContent = '-';
-        });
-    
-    // Load category overview
-    fetch('{% url "admin_category_stats_api" %}')
-        .then(response => response.json())
-        .then(data => {
-            const categoryOverview = document.getElementById('categoryOverview');
-            
-            if (data.popular_categories && data.popular_categories.length > 0) {
-                categoryOverview.innerHTML = data.popular_categories.slice(0, 8).map(category => `
-                    <div class="category-item">
-                        <div class="category-name">${category.name}</div>
-                        <div class="category-meta">
-                            ${category.books_count} books • ${category.slug}
-                        </div>
-                    </div>
-                `).join('');
-            } else {
-                categoryOverview.innerHTML = '<div class="category-item">No categories found</div>';
-            }
-        })
-        .catch(error => {
-            console.error('Error loading category overview:', error);
-            document.getElementById('categoryOverview').innerHTML = '<div class="category-item">Error loading categories</div>';
+            // Fallback to placeholder values
+            document.getElementById('books-count').textContent = '-';
+            document.getElementById('users-count').textContent = '-';
+            document.getElementById('pending-requests').textContent = '-';
+            document.getElementById('overdue-loans').textContent = '-';
         });
     
     // Load recent activity from API
-    fetch('{% url "admin_activity_api" %}')
-        .then(response => response.json())
+    fetchJSON('{% url "admin-activity-api" %}')
         .then(data => {
             const activityList = document.getElementById('recent-activity-list');
             if (data.activities && data.activities.length > 0) {
@@ -383,6 +460,197 @@ document.addEventListener('DOMContentLoaded', function() {
             const activityList = document.getElementById('recent-activity-list');
             activityList.innerHTML = '<p>Error loading recent activity</p>';
         });
+
+    // ====================
+    // Book statistics charts
+    // ====================
+    const periodEl = document.getElementById('stats-period');
+    const yearEl = document.getElementById('stats-year');
+    const monthEl = document.getElementById('stats-month');
+    const labelMonth = document.getElementById('label-month');
+
+    const now = new Date();
+    yearEl.value = now.getFullYear();
+    monthEl.value = now.getMonth() + 1;
+
+    function toggleMonthVisibility() {
+        const isYear = periodEl.value === 'year';
+        monthEl.style.display = isYear ? 'none' : 'inline-block';
+        labelMonth.style.display = isYear ? 'none' : 'inline-block';
+    }
+    periodEl.addEventListener('change', () => { toggleMonthVisibility(); loadBookStats(); });
+    toggleMonthVisibility();
+
+    let booksPerCategoryChart;
+    let loansOverTimeChart;
+    let loanStatusChart;
+    let languageChart;
+
+    // Modal logic for expanded charts
+    let modal, modalCanvas, modalCtx, modalChartInstance, modalTitleEl, modalResetBtn, modalCloseBtn;
+    function ensureModal() {
+        if (modal) return;
+        modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="chart-modal-title">
+                <div class="modal-header">
+                    <h3 id="chart-modal-title">Biểu đồ</h3>
+                    <div class="modal-actions">
+                        <button type="button" class="btn secondary" id="chart-reset-zoom"><i class="fa-solid fa-magnifying-glass-minus"></i> Reset zoom</button>
+                        <button type="button" class="btn" id="chart-close"><i class="fa-solid fa-xmark"></i> Đóng</button>
+                    </div>
+                </div>
+                <div style="width: 100%; height: 70vh;">
+                    <canvas id="modalChart" style="width:100%; height:100%"></canvas>
+                </div>
+            </div>`;
+        document.body.appendChild(modal);
+        modalCanvas = modal.querySelector('#modalChart');
+        modalCtx = modalCanvas.getContext('2d');
+        modalTitleEl = modal.querySelector('#chart-modal-title');
+        modalResetBtn = modal.querySelector('#chart-reset-zoom');
+        modalCloseBtn = modal.querySelector('#chart-close');
+
+        const close = () => {
+            modal.style.display = 'none';
+            if (modalChartInstance) { modalChartInstance.destroy(); modalChartInstance = null; }
+        };
+        modalCloseBtn.addEventListener('click', close);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) close();
+        });
+
+        modalResetBtn.addEventListener('click', () => {
+            if (modalChartInstance && modalChartInstance.resetZoom) modalChartInstance.resetZoom();
+        });
+    }
+
+    function openModalForChart(sourceChart, titleText) {
+        ensureModal();
+        modalTitleEl.textContent = titleText || 'Biểu đồ';
+        // Deep clone data to avoid mutations
+        const dataClone = JSON.parse(JSON.stringify(sourceChart.config.data));
+        // Merge options and enable zoom/pan in modal
+        const srcOpts = sourceChart.config.options || {};
+        const options = JSON.parse(JSON.stringify(srcOpts));
+        options.plugins = options.plugins || {};
+        options.plugins.legend = options.plugins.legend || { position: 'top' };
+        options.plugins.zoom = {
+            zoom: {
+                wheel: { enabled: true },
+                pinch: { enabled: true },
+                drag: { enabled: true },
+                mode: 'xy',
+            },
+            pan: {
+                enabled: true,
+                mode: 'xy',
+                modifierKey: 'shift'
+            }
+        };
+        options.maintainAspectRatio = false;
+
+        if (modalChartInstance) modalChartInstance.destroy();
+        modalChartInstance = new Chart(modalCtx, {
+            type: sourceChart.config.type,
+            data: dataClone,
+            options
+        });
+        modal.style.display = 'flex';
+    }
+
+    function buildBarColors(n) {
+        const base = ['#007cba','#00a8e8','#17a2b8','#28a745','#20c997','#6f42c1','#6610f2','#e83e8c','#fd7e14','#ffc107'];
+        const colors = [];
+        for (let i = 0; i < n; i++) colors.push(base[i % base.length]);
+        return colors;
+    }
+
+    function renderCharts(data) {
+        // Books per category (overall)
+        const bpc = (data.category_book_counts || []).slice(0, 20);
+        const bpcLabels = bpc.map(x => x.name);
+        const bpcValues = bpc.map(x => x.total_books);
+        const bpcColors = buildBarColors(bpc.length);
+
+        const bpcCtx = document.getElementById('booksPerCategoryChart').getContext('2d');
+        if (booksPerCategoryChart) booksPerCategoryChart.destroy();
+        booksPerCategoryChart = new Chart(bpcCtx, {
+            type: 'doughnut',
+            data: { labels: bpcLabels, datasets: [{ label: 'Sách', data: bpcValues, backgroundColor: bpcColors }] },
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+        booksPerCategoryChart.canvas.addEventListener('click', () => openModalForChart(booksPerCategoryChart, 'Số lượng sách theo thể loại'));
+
+        // Loans over time
+        const ts = data.time_series || { labels: [], values: [] };
+        const tsCtx = document.getElementById('loansOverTimeChart').getContext('2d');
+        if (loansOverTimeChart) loansOverTimeChart.destroy();
+        loansOverTimeChart = new Chart(tsCtx, {
+            type: 'line',
+            data: {
+                labels: ts.labels,
+                datasets: [{
+                    label: 'Lượt mượn',
+                    data: ts.values,
+                    borderColor: '#007cba',
+                    backgroundColor: 'rgba(0,124,186,0.1)',
+                    fill: true,
+                    tension: 0.2
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, precision: 0 } } }
+        });
+        loansOverTimeChart.canvas.addEventListener('click', () => openModalForChart(loansOverTimeChart, 'Xu hướng mượn theo thời gian'));
+
+        // Borrow Request status distribution (all statuses including PENDING, APPROVED, REJECTED, RETURNED, LOST, OVERDUE)
+        const sd = data.status_distribution || [];
+        const sdLabels = sd.map(x => x.status);
+        const sdValues = sd.map(x => x.total);
+        const sdColors = buildBarColors(sd.length);
+        const sdCtx = document.getElementById('loanStatusChart').getContext('2d');
+        if (loanStatusChart) loanStatusChart.destroy();
+        loanStatusChart = new Chart(sdCtx, {
+            type: 'doughnut',
+            data: { labels: sdLabels, datasets: [{ label: 'Yêu cầu', data: sdValues, backgroundColor: sdColors }] },
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+        });
+        loanStatusChart.canvas.addEventListener('click', () => openModalForChart(loanStatusChart, 'Trạng thái yêu cầu mượn sách'));
+
+        // Language distribution (all books in library, not just loaned ones)
+        const ld = (data.language_distribution || []).slice(0, 12);
+        const ldLabels = ld.map(x => x.language);
+        const ldValues = ld.map(x => x.total);
+        const ldColors = buildBarColors(ld.length);
+        const ldCtx = document.getElementById('languageChart').getContext('2d');
+        if (languageChart) languageChart.destroy();
+        languageChart = new Chart(ldCtx, {
+            type: 'bar',
+            data: { labels: ldLabels, datasets: [{ label: 'Số lượng sách', data: ldValues, backgroundColor: ldColors }] },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, precision: 0 } } }
+        });
+        languageChart.canvas.addEventListener('click', () => openModalForChart(languageChart, 'Ngôn ngữ sách trong thư viện'));
+    }
+
+    function loadBookStats() {
+        const period = periodEl.value;
+        const y = yearEl.value;
+        const m = monthEl.value;
+        const params = new URLSearchParams({ period, year: y });
+        if (period !== 'year') params.set('month', m);
+        fetch(`{% url "admin-book-stats-api" %}?${params.toString()}`, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+            .then(r => r.json())
+            .then(renderCharts)
+            .catch(err => console.error('Error loading book stats:', err));
+    }
+
+    // Auto-load on changes
+    yearEl.addEventListener('change', loadBookStats);
+    yearEl.addEventListener('input', loadBookStats);
+    monthEl.addEventListener('change', loadBookStats);
+    monthEl.addEventListener('input', loadBookStats);
+    loadBookStats();
 });
 </script>
 {% endblock %}
