@@ -30,6 +30,16 @@ def admin_stats_api(request):
     year = int(request.GET.get('year', timezone.now().year))
     month = int(request.GET.get('month', timezone.now().month))
 
+    # Basic statistics for cards
+    total_books = Book.objects.count()
+    total_users = User.objects.filter(is_active=True).count()
+    pending_requests = BorrowRequest.objects.filter(
+        status=BorrowRequest.Status.PENDING
+    ).count()
+    overdue_loans = Loan.objects.filter(
+        status=Loan.Status.OVERDUE
+    ).count()
+
     # Category book counts
     category_book_counts = list(
         Category.objects.annotate(
@@ -120,6 +130,16 @@ def admin_stats_api(request):
     ]
 
     data = {
+        'basic': {
+            'total_books': total_books,
+            'total_users': total_users,
+        },
+        'requests': {
+            'pending': pending_requests,
+        },
+        'loans': {
+            'overdue': overdue_loans,
+        },
         'category_book_counts': category_book_counts,
         'time_series': time_series,
         'status_distribution': status_distribution,
