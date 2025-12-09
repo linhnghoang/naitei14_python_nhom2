@@ -29,7 +29,6 @@ urlpatterns = [
     # Place API endpoints BEFORE the admin.urls to avoid 404 from admin's resolver
     path("admin/api/stats/", admin_views.admin_stats_api, name="admin-stats-api"),
     path("admin/api/activity/", admin_views.admin_activity_api, name="admin-activity-api"),
-    path("admin/api/book-stats/", admin_views.admin_book_stats_api, name="admin-book-stats-api"),
     path("admin/export/books/", admin_views.export_books_excel, name="admin-export-books"),
     # Additional existing API endpoints
     path("admin/api/category-stats/", admin_views.category_stats_api, name="admin_category_stats_api"),
