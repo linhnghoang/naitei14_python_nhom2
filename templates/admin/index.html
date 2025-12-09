@@ -639,7 +639,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const m = monthEl.value;
         const params = new URLSearchParams({ period, year: y });
         if (period !== 'year') params.set('month', m);
-        fetch(`{% url "admin-book-stats-api" %}?${params.toString()}`, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+        fetch(`{% url "admin-stats-api" %}?${params.toString()}`, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
             .then(r => r.json())
             .then(renderCharts)
             .catch(err => console.error('Error loading book stats:', err));
