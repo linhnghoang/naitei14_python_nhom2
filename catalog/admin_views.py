@@ -2,14 +2,15 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
-from django.db.models import Count, Q, Min, Max
+from django.db.models import Count, Q, Min, Max, F
 from django.db.models.functions import ExtractMonth, ExtractDay
 from datetime import date, timedelta
 import calendar
 import json
 import io
 
-from .models import Book, Category, Author, Publisher
+from .models import Book, Category, Author, Publisher, BorrowRequest, Loan
+
 from .utils.exports import (
     build_category_queryset,
     render_categories_workbook,
@@ -24,31 +25,105 @@ from .utils.exports import (
 
 @staff_member_required
 def admin_stats_api(request):
-    """General admin statistics API."""
+    """Dashboard statistics API with all required data for charts."""
+    period = request.GET.get('period', 'month')  # month, year
+    year = int(request.GET.get('year', timezone.now().year))
+    month = int(request.GET.get('month', timezone.now().month))
+
+    # Category book counts
+    category_book_counts = list(
+        Category.objects.annotate(
+            total_books=Count('books', distinct=True)
+        ).filter(
+            total_books__gt=0
+        ).order_by('-total_books').values('name', 'total_books')
+    )
+
+    # Time series: loans over time
+    if period == 'month':
+        # Get daily data for current month
+        start_date = date(year, month, 1)
+        if month == 12:
+            end_date = date(year + 1, 1, 1) - timedelta(days=1)
+        else:
+            end_date = date(year, month + 1, 1) - timedelta(days=1)
+
+        loans_by_day = list(
+            Loan.objects.filter(
+                approved_from__year=year,
+                approved_from__month=month
+            ).extra(
+                select={'day': 'DAY(approved_from)'}
+            ).values('day').annotate(
+                count=Count('id')
+            ).order_by('day')
+        )
+
+        ts_labels = []
+        ts_values = []
+        current = start_date
+        while current <= end_date:
+            ts_labels.append(current.strftime('%d/%m'))
+            day_data = next(
+                (x for x in loans_by_day
+                 if x['day'] == current.day), None
+            )
+            ts_values.append(day_data['count'] if day_data else 0)
+            current += timedelta(days=1)
+    else:
+        # Get monthly data for year
+        loans_by_month = list(
+            Loan.objects.filter(
+                approved_from__year=year
+            ).extra(
+                select={'month': 'MONTH(approved_from)'}
+            ).values('month').annotate(
+                count=Count('id')
+            ).order_by('month')
+        )
+
+        ts_labels = []
+        ts_values = []
+        for m in range(1, 13):
+            ts_labels.append(calendar.month_name[m])
+            month_data = next(
+                (x for x in loans_by_month
+                 if x['month'] == m), None
+            )
+            ts_values.append(month_data['count'] if month_data else 0)
+
+    time_series = {'labels': ts_labels, 'values': ts_values}
+
+    # Status distribution
+    status_distribution = list(
+        BorrowRequest.objects.values('status').annotate(
+            total=Count('id')
+        ).order_by('-total')
+    )
+
+    # Language distribution
+    language_distribution = list(
+        Book.objects.values('language_code').annotate(
+            total=Count('id')
+        ).filter(
+            total__gt=0
+        ).exclude(
+            language_code__isnull=True
+        ).order_by('-total')
+    )
+    language_distribution = [
+        {
+            'language': item['language_code'],
+            'total': item['total']
+        }
+        for item in language_distribution
+    ]
+
     data = {
-        "basic": {
-            "total_books": Book.objects.count(),
-            "total_categories": Category.objects.count(),
-            "total_authors": Author.objects.count(),
-            "total_publishers": Publisher.objects.count(),
-            "total_users": User.objects.filter(is_active=True).count(),
-        },
-        "categories": {
-            "top_level": Category.objects.filter(parent=None).count(),
-            "with_subcategories": Category.objects.filter(children__isnull=False)
-            .distinct()
-            .count(),
-            "empty_categories": Category.objects.filter(books=None).count(),
-        },
-        "publishers": {
-            "with_books": Publisher.objects.filter(books__isnull=False)
-            .distinct()
-            .count(),
-            "without_books": Publisher.objects.filter(books__isnull=True).count(),
-            "with_website": Publisher.objects.exclude(
-                Q(website="") | Q(website__isnull=True)
-            ).count(),
-        },
+        'category_book_counts': category_book_counts,
+        'time_series': time_series,
+        'status_distribution': status_distribution,
+        'language_distribution': language_distribution,
     }
     return JsonResponse(data)
 
