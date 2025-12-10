@@ -26,9 +26,9 @@ from .utils.exports import (
 @staff_member_required
 def admin_stats_api(request):
     """Dashboard statistics API with all required data for charts."""
-    period = request.GET.get('period', 'month')  # month, year
-    year = int(request.GET.get('year', timezone.now().year))
-    month = int(request.GET.get('month', timezone.now().month))
+    period = request.GET.get("period", "month")  # month, year
+    year = int(request.GET.get("year", timezone.now().year))
+    month = int(request.GET.get("month", timezone.now().month))
 
     # Basic statistics for cards
     total_books = Book.objects.count()
@@ -36,21 +36,18 @@ def admin_stats_api(request):
     pending_requests = BorrowRequest.objects.filter(
         status=BorrowRequest.Status.PENDING
     ).count()
-    overdue_loans = Loan.objects.filter(
-        status=Loan.Status.OVERDUE
-    ).count()
+    overdue_loans = Loan.objects.filter(status=Loan.Status.OVERDUE).count()
 
     # Category book counts
     category_book_counts = list(
-        Category.objects.annotate(
-            total_books=Count('books', distinct=True)
-        ).filter(
-            total_books__gt=0
-        ).order_by('-total_books').values('name', 'total_books')
+        Category.objects.annotate(total_books=Count("books", distinct=True))
+        .filter(total_books__gt=0)
+        .order_by("-total_books")
+        .values("name", "total_books")
     )
 
     # Time series: borrow requests over time (xu hướng mượn)
-    if period == 'month':
+    if period == "month":
         # Get daily data for current month
         start_date = date(year, month, 1)
         if month == 12:
@@ -59,91 +56,77 @@ def admin_stats_api(request):
             end_date = date(year, month + 1, 1) - timedelta(days=1)
 
         requests_by_day = list(
-            BorrowRequest.objects.filter(
-                created_at__year=year,
-                created_at__month=month
-            ).annotate(
-                day=ExtractDay('created_at')
-            ).values('day').annotate(
-                count=Count('id')
-            ).order_by('day')
+            BorrowRequest.objects.filter(created_at__year=year, created_at__month=month)
+            .annotate(day=ExtractDay("created_at"))
+            .values("day")
+            .annotate(count=Count("id"))
+            .order_by("day")
         )
 
         ts_labels = []
         ts_values = []
         current = start_date
         while current <= end_date:
-            ts_labels.append(current.strftime('%d/%m'))
+            ts_labels.append(current.strftime("%d/%m"))
             day_data = next(
-                (x for x in requests_by_day
-                 if x['day'] == current.day), None
+                (x for x in requests_by_day if x["day"] == current.day), None
             )
-            ts_values.append(day_data['count'] if day_data else 0)
+            ts_values.append(day_data["count"] if day_data else 0)
             current += timedelta(days=1)
     else:
         # Get monthly data for year
         requests_by_month = list(
-            BorrowRequest.objects.filter(
-                created_at__year=year
-            ).annotate(
-                month=ExtractMonth('created_at')
-            ).values('month').annotate(
-                count=Count('id')
-            ).order_by('month')
+            BorrowRequest.objects.filter(created_at__year=year)
+            .annotate(month=ExtractMonth("created_at"))
+            .values("month")
+            .annotate(count=Count("id"))
+            .order_by("month")
         )
 
         ts_labels = []
         ts_values = []
         for m in range(1, 13):
             ts_labels.append(calendar.month_name[m])
-            month_data = next(
-                (x for x in requests_by_month
-                 if x['month'] == m), None
-            )
-            ts_values.append(month_data['count'] if month_data else 0)
+            month_data = next((x for x in requests_by_month if x["month"] == m), None)
+            ts_values.append(month_data["count"] if month_data else 0)
 
-    time_series = {'labels': ts_labels, 'values': ts_values}
+    time_series = {"labels": ts_labels, "values": ts_values}
 
     # Status distribution
     status_distribution = list(
-        BorrowRequest.objects.values('status').annotate(
-            total=Count('id')
-        ).order_by('-total')
+        BorrowRequest.objects.values("status")
+        .annotate(total=Count("id"))
+        .order_by("-total")
     )
 
     # Language distribution
     language_distribution = list(
-        Book.objects.values('language_code').annotate(
-            total=Count('id')
-        ).filter(
-            total__gt=0
-        ).exclude(
-            language_code__isnull=True
-        ).order_by('-total')
+        Book.objects.values("language_code")
+        .annotate(total=Count("id"))
+        .filter(total__gt=0)
+        .exclude(language_code__isnull=True)
+        .order_by("-total")
     )
     language_distribution = [
-        {
-            'language': item['language_code'],
-            'total': item['total']
-        }
+        {"language": item["language_code"], "total": item["total"]}
         for item in language_distribution
     ]
 
     data = {
-        'basic': {
-            'total_books': total_books,
-            'total_users': total_users,
+        "basic": {
+            "total_books": total_books,
+            "total_users": total_users,
         },
-        'requests': {
-            'pending': pending_requests,
+        "requests": {
+            "pending": pending_requests,
         },
-        'loans': {
-            'overdue': overdue_loans,
+        "loans": {
+            "overdue": overdue_loans,
         },
-        'category_book_counts': category_book_counts,
-        'time_series': time_series,
-        'status_distribution': status_distribution,
-        'language_distribution': language_distribution,
+        "category_book_counts": category_book_counts,
+        "time_series": time_series,
+        "status_distribution": status_distribution,
+        "language_distribution": language_distribution,
     }
     return JsonResponse(data)
 

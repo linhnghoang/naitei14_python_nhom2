@@ -155,8 +155,7 @@ class Command(BaseCommand):
             {
                 "title": "Fahrenheit 451",
                 "description": (
-                    "A dystopian novel about a future society "
-                    "where books are burned"
+                    "A dystopian novel about a future society " "where books are burned"
                 ),
                 "isbn13": "9781451673319",
                 "publish_year": 1953,
@@ -213,9 +212,7 @@ class Command(BaseCommand):
                         barcode=f"{book.isbn13}-{i+1:02d}",
                         defaults={
                             "status": BookItem.Status.AVAILABLE,
-                            "location_code": (
-                                f"A{(book.id % 10) + 1:02d}-{i+1:02d}"
-                            ),
+                            "location_code": (f"A{(book.id % 10) + 1:02d}-{i+1:02d}"),
                         },
                     )
 

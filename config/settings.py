@@ -26,8 +26,7 @@ load_dotenv(BASE_DIR / ".env")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv(
-    "SECRET_KEY",
-    "django-insecure-b7onid7%70*412s-a=q8^#(hv07+9$fav31^n-8*4^xeq3+et5",
+    "SECRET_KEY", "django-insecure-b7onid7%70*412s-a=q8^#(hv07+9$fav31^n-8*4^xeq3+et5"
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -110,10 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
         ),
     },
     {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "MinimumLengthValidator"
-        ),
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",

@@ -23,7 +23,7 @@ from catalog import admin_views
 
 def home_redirect(request):
     """Redirect root URL to admin interface"""
-    return redirect('/admin/')
+    return redirect("/admin/")
 
 
 urlpatterns = [

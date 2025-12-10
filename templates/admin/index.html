@@ -6,7 +6,6 @@
 {% block branding %}
 <h1 id="site-name">
     <a href="{% url 'admin:index' %}">
-        <i class="fa-solid fa-book-open"></i>
         Library Management System
     </a>
 </h1>
@@ -14,23 +13,9 @@
 
 {% block extrahead %}
 {{ block.super }}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2"></script>
 <style>
-    /* Custom styling for the admin interface */
-    #site-name a {
-        text-decoration: none;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    
-    #site-name i {
-        font-size: 24px;
-    }
-    
     /* Layout wrapper for the dashboard */
     .admin-dashboard {
         display: grid;
@@ -94,8 +79,7 @@
         padding: 20px 16px;
         margin: 20px 0;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        position: sticky;
-        top: 20px;
+        /* REMOVED: position: sticky; top: 20px; */
     }
     
     .quick-actions h3 {
@@ -121,7 +105,7 @@
         padding: 12px 16px;
         border-radius: 6px;
         text-align: left;
-        transition: background 0.2s;
+        transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
         display: flex;
         align-items: center;
         justify-content: flex-start;
@@ -136,6 +120,30 @@
         background: #005a87;
         color: white;
         text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    /* Export buttons với thiết kế mới - đơn giản, rõ ràng */
+    .export-section {
+        margin-top: 10px;
+    }
+
+    .export-section .action-button.export-btn {
+        background: #28a745;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .export-section .action-button.export-btn:hover {
+        background: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .export-section .action-button.export-btn i {
+        font-size: 18px;
+        color: #fff;
     }
     
     .recent-activity {
@@ -168,28 +176,6 @@
     .activity-time {
         color: #666;
         font-size: 12px;
-    }
-    
-    /* Override default Django admin colors */
-    #header {
-        background: linear-gradient(135deg, #007cba 0%, #005a87 100%);
-    }
-    
-    .module h2, .module caption, .inline-group h2 {
-        background: #007cba;
-    }
-    
-    a:link, a:visited {
-        color: #007cba;
-    }
-    
-    .button, input[type=submit], input[type=button], .submit-row input, a.button {
-        background: #007cba;
-        border-color: #007cba;
-    }
-    
-    .button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover, a.button:hover {
-        background: #005a87;
     }
 
     /* Ensure quick action buttons show white text regardless of global link color */
@@ -355,40 +341,48 @@
 
     <aside class="right-col">
         <div class="quick-actions">
-            <h3><i class="fa-solid fa-bolt"></i> Quick Actions</h3>
+            <h3>⚡ Quick Actions</h3>
             <div class="action-grid">
                 <a href="{% url 'admin:auth_user_changelist' %}" class="action-button">
-                    <i class="fa-solid fa-users"></i>
-                    Quản lý người dùng
+                    👥 Quản lý người dùng
                 </a>
                 <a href="{% url 'admin:catalog_category_changelist' %}" class="action-button">
-                    <i class="fa-solid fa-tag"></i>
-                    Quản lý thể loại sách
+                    🏷️ Quản lý thể loại sách
                 </a>
                 <a href="{% url 'admin:catalog_author_changelist' %}" class="action-button">
-                    <i class="fa-solid fa-user-pen"></i>
-                    Quản lý tác giả
+                    ✍️ Quản lý tác giả
                 </a>
                 <a href="{% url 'admin:catalog_publisher_changelist' %}" class="action-button">
-                    <i class="fa-solid fa-building"></i>
-                    Quản lý nhà xuất bản
+                    🏢 Quản lý nhà xuất bản
                 </a>
                 <a href="{% url 'admin:catalog_book_changelist' %}" class="action-button">
-                    <i class="fa-solid fa-book"></i>
-                    Quản lý sách
+                    📚 Quản lý sách
                 </a>
                 <a href="{% url 'admin:catalog_borrowrequest_changelist' %}" class="action-button">
-                    <i class="fa-solid fa-file-signature"></i>
-                    Quản lý yêu cầu mượn sách
+                    📝 Quản lý yêu cầu mượn sách
                 </a>
-                <a href="{% url 'admin-export-books' %}" class="action-button">
-                    <i class="fa-solid fa-file-excel"></i>
-                    Xuất Excel sách
+            </div>
+            
+            <h3 style="margin-top: 25px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+                📊 Xuất dữ liệu Excel
+            </h3>
+            <div class="action-grid export-section">
+                <a href="{% url 'admin-export-books' %}" class="action-button export-btn">
+                    Xuất Excel Sách
+                </a>
+                <a href="{% url 'admin_export_categories_excel' %}" class="action-button export-btn">
+                    Xuất Excel Thể loại
+                </a>
+                <a href="{% url 'admin_export_authors_excel' %}" class="action-button export-btn">
+                    Xuất Excel Tác giả
+                </a>
+                <a href="{% url 'admin_export_publishers_excel' %}" class="action-button export-btn">
+                    Xuất Excel Nhà XB
                 </a>
             </div>
         </div>
         <div class="recent-activity">
-            <h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Activity</h3>
+            <h3>🕒 Recent Activity</h3>
             <div id="recent-activity-list">
                 <p>Loading recent activity...</p>
             </div>

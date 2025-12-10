@@ -6,16 +6,18 @@ from .models import BorrowRequest
 
 class BorrowRequestForm(forms.ModelForm):
     requested_from = forms.DateField(
-        widget=forms.DateInput(attrs={
-            'type': 'date',
-            'readonly': True,
-        }),
+        widget=forms.DateInput(
+            attrs={
+                "type": "date",
+                "readonly": True,
+            }
+        ),
         disabled=True,
     )
 
     class Meta:
         model = BorrowRequest
-        fields = ['user', 'book_item', 'requested_from', 'duration', 'status']
+        fields = ["user", "book_item", "requested_from", "duration", "status"]
 
     def clean_requested_from(self):
         """Validate that requested_from is today or tomorrow"""
@@ -31,9 +33,7 @@ class BorrowRequestForm(forms.ModelForm):
 
         # Check if it's in the past (should not happen since readonly)
         if requested_from < today:
-            raise forms.ValidationError(
-                "Borrow date cannot be in the past."
-            )
+            raise forms.ValidationError("Borrow date cannot be in the past.")
 
         # Check if it's more than 1 day in the future
         if requested_from > tomorrow:
@@ -47,7 +47,7 @@ class BorrowRequestForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Set requested_from to today if creating new object
         if not self.instance.pk:
-            self.fields['requested_from'].initial = timezone.now().date()
-            self.fields['requested_from'].widget.attrs['value'] = (
+            self.fields["requested_from"].initial = timezone.now().date()
+            self.fields["requested_from"].widget.attrs["value"] = (
                 timezone.now().date().isoformat()
             )
