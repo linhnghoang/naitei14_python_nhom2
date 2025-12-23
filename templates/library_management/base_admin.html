@@ -5,6 +5,7 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}{% trans "Library Admin" %}{% endblock %}</title>
 
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -16,13 +17,22 @@
     <header class="border-b border-blue-100 bg-white/90 backdrop-blur">
       <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
 
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
-            AD
-          </div>
-          <div>
-            <p class="text-sm font-semibold text-slate-900">{% trans "Library Admin" %}</p>
-            <p class="text-xs text-slate-500">{% trans "Bảng điều khiển quản lý thư viện" %}</p>
+        <div class="flex items-center gap-3">
+          <!-- Mobile sidebar toggle -->
+          <button id="adminSidebarToggle" type="button" class="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100 text-slate-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
+              AD
+            </div>
+            <div class="hidden sm:block">
+              <p class="text-sm font-semibold text-slate-900">{% trans "Library Admin" %}</p>
+              <p class="text-xs text-slate-500">{% trans "Bảng điều khiển quản lý thư viện" %}</p>
+            </div>
           </div>
         </div>
 
@@ -84,23 +94,35 @@
     </header>
 
     <div class="flex-1 bg-gradient-to-br from-blue-50 via-slate-50 to-blue-50">
-      <div class="max-w-6xl mx-auto px-4 py-8 flex gap-6">
+      <div class="max-w-6xl mx-auto px-4 py-4 lg:py-8 flex flex-col lg:flex-row gap-6">
         {% with active_section|default:'dashboard' as active %}
 
-        <aside class="flex flex-col w-72 shrink-0 bg-white/95 border border-blue-100 rounded-3xl shadow-lg">
+        <!-- Mobile Sidebar Overlay -->
+        <div id="adminSidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
 
-          <div class="flex items-center gap-3 px-4 pt-4 pb-6 border-b border-slate-100">
-            <div class="w-9 h-9 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
-              {{ user.username|first|upper }}
+        <!-- Sidebar -->
+        <aside id="adminSidebar" class="fixed lg:relative inset-y-0 left-0 z-50 lg:z-auto flex flex-col w-72 shrink-0 bg-white lg:bg-white/95 border-r lg:border border-blue-100 lg:rounded-3xl shadow-xl lg:shadow-lg transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+
+          <div class="flex items-center justify-between px-4 pt-4 pb-6 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
+                {{ user.username|first|upper }}
+              </div>
+              <div>
+                <p class="text-[11px] uppercase tracking-wide text-blue-500 font-semibold">
+                  {% trans "Admin" %}
+                </p>
+                <p class="text-sm font-semibold text-slate-800 truncate max-w-[9rem]">
+                  {{ user.get_full_name|default:user.username }}
+                </p>
+              </div>
             </div>
-            <div>
-              <p class="text-[11px] uppercase tracking-wide text-blue-500 font-semibold">
-                {% trans "Admin" %}
-              </p>
-              <p class="text-sm font-semibold text-slate-800 truncate max-w-[9rem]">
-                {{ user.get_full_name|default:user.username }}
-              </p>
-            </div>
+            <!-- Close button for mobile -->
+            <button id="closeSidebar" type="button" class="lg:hidden p-2 rounded-lg hover:bg-slate-100 text-slate-500">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
 
           <nav class="space-y-1 text-sm px-3 py-4">
@@ -210,6 +232,39 @@
     </div>
 
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebarToggle = document.getElementById('adminSidebarToggle');
+      const sidebar = document.getElementById('adminSidebar');
+      const sidebarOverlay = document.getElementById('adminSidebarOverlay');
+      const closeSidebar = document.getElementById('closeSidebar');
+
+      function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        sidebarOverlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeSidebarFn() {
+        sidebar.classList.add('-translate-x-full');
+        sidebarOverlay.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', openSidebar);
+      }
+
+      if (closeSidebar) {
+        closeSidebar.addEventListener('click', closeSidebarFn);
+      }
+
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebarFn);
+      }
+    });
+  </script>
 </body>
 
 </html>

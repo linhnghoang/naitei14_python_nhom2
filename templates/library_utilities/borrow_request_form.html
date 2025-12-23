@@ -49,14 +49,14 @@
         {% csrf_token %}
 
         <!-- HÀNG 2 CỘT: NGÀY MƯỢN / NGÀY TRẢ trên màn hình lớn -->
-        <div class="flex flex-col gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <!-- NGÀY MƯỢN -->
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-2">
                 <label for="requested_from" class="text-sm font-medium text-slate-700">
                     {% trans "Ngày mượn" %}
                 </label>
                 <input type="date" id="requested_from" name="requested_from"
-                    value="{{ old_data.requested_from|default:'' }}" placeholder="dd/mm/yyyy" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm
+                    value="{{ old_data.requested_from|default:'' }}" placeholder="dd/mm/yyyy" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm
                    bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 <p class="text-xs text-slate-500">
                     {% trans "Ngày bắt đầu mượn sách." %}
@@ -64,12 +64,12 @@
             </div>
 
             <!-- NGÀY TRẢ -->
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-2">
                 <label for="requested_to" class="text-sm font-medium text-slate-700">
                     {% trans "Ngày trả dự kiến" %}
                 </label>
                 <input type="date" id="requested_to" name="requested_to" value="{{ old_data.requested_to|default:'' }}"
-                    placeholder="dd/mm/yyyy" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm
+                    placeholder="dd/mm/yyyy" class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm
                    bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                 <p class="text-xs text-slate-500">
                     {% trans "Ngày bạn sẽ trả lại sách cho thư viện." %}
@@ -91,12 +91,12 @@
         </div>
 
         <!-- ACTIONS -->
-        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 mt-4 mb-6">
+        <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-4 border-t border-slate-100 mt-4 mb-6">
             <a href="{% url 'library_management:home' %}"
-                class="px-4 py-2 rounded-xl border border-slate-300 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                class="px-4 py-2.5 rounded-xl border border-slate-300 text-sm font-medium text-slate-700 hover:bg-slate-50 text-center">
                 {% trans "Hủy" %}
             </a>
-            <button type="submit" class="px-4 py-2 rounded-xl bg-blue-600 text-sm font-semibold text-white shadow-sm
+            <button type="submit" class="px-4 py-2.5 rounded-xl bg-blue-600 text-sm font-semibold text-white shadow-sm
                  hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 {% trans "Gửi yêu cầu" %}
             </button>

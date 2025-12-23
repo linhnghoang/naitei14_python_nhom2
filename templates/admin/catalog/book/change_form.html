@@ -3,11 +3,12 @@
 
 {% block extrahead %}
 {{ block.super }}
+<link rel="stylesheet" href="{% static 'css/admin/changelist.css' %}">
 <style>
     .book-form-enhancements {
         margin: 10px 0;
     }
-    
+
     .book-form-help {
         background: #e7f3ff;
         border-left: 4px solid #007cba;
@@ -15,12 +16,12 @@
         margin: 10px 0;
         border-radius: 0 4px 4px 0;
     }
-    
+
     .book-form-help h4 {
         margin-top: 0;
         color: #007cba;
     }
-    
+
     .form-section {
         background: #f8f9fa;
         border: 1px solid #dee2e6;
@@ -28,7 +29,7 @@
         padding: 15px;
         margin: 15px 0;
     }
-    
+
     .inline-tips {
         background: #fff3cd;
         border: 1px solid #ffeaa7;
@@ -37,7 +38,7 @@
         border-radius: 4px;
         color: #856404;
     }
-    
+
     .cover-preview {
         max-width: 200px;
         max-height: 300px;
@@ -45,11 +46,154 @@
         border-radius: 4px;
         margin: 10px 0;
     }
-    
+
     .isbn-help {
         font-size: 0.9em;
         color: #666;
         font-style: italic;
+    }
+
+    /* Responsive Form Styles */
+    @media (max-width: 767.98px) {
+        /* Form tabs */
+        .nav-tabs-custom > .nav-tabs {
+            flex-wrap: wrap;
+            border-bottom: none;
+        }
+
+        .nav-tabs-custom > .nav-tabs > li {
+            flex: 0 0 auto;
+            margin-bottom: 5px;
+        }
+
+        .nav-tabs-custom > .nav-tabs > li > a {
+            padding: 8px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+            margin-right: 5px;
+            border: 1px solid #dee2e6 !important;
+        }
+
+        .nav-tabs-custom > .nav-tabs > li.active > a {
+            background: #007cba;
+            color: #fff;
+            border-color: #007cba !important;
+        }
+
+        /* Card body */
+        .card-body {
+            padding: 15px 10px;
+        }
+
+        /* Form rows */
+        .form-group.row {
+            margin-bottom: 15px;
+        }
+
+        .form-group.row > label {
+            padding-bottom: 5px;
+            font-size: 13px;
+        }
+
+        /* Input fields */
+        .form-control,
+        .vTextField,
+        .vURLField,
+        textarea {
+            width: 100% !important;
+            max-width: 100% !important;
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        /* Select fields */
+        select.form-control {
+            width: 100% !important;
+            padding: 10px;
+        }
+
+        /* Help text */
+        .book-form-help {
+            padding: 12px;
+            font-size: 13px;
+        }
+
+        .book-form-help h4 {
+            font-size: 14px;
+        }
+
+        .book-form-help p {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        /* Form section */
+        .form-section {
+            padding: 12px;
+            font-size: 13px;
+        }
+
+        .form-section h3 {
+            font-size: 15px;
+        }
+
+        /* Inline tips */
+        .inline-tips {
+            padding: 12px;
+            font-size: 13px;
+        }
+
+        .inline-tips h4 {
+            font-size: 14px;
+        }
+
+        .inline-tips ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+
+        .inline-tips li {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        /* Cover preview */
+        .cover-preview {
+            max-width: 150px;
+            max-height: 200px;
+        }
+
+        /* Submit row */
+        .submit-row {
+            position: relative !important;
+            padding: 15px 10px !important;
+        }
+
+        .submit-row input[type="submit"],
+        .submit-row .deletelink {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 12px !important;
+            text-align: center;
+        }
+
+        /* Inline related forms */
+        .inline-related {
+            margin-bottom: 20px;
+        }
+
+        .inline-related h3 {
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        /* Tabular inline */
+        .tabular .module table {
+            display: block;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
     }
 </style>
 
