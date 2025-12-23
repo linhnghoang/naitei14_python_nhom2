@@ -2,6 +2,7 @@
 Helper functions for admin views.
 """
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 
 def get_pagination_params(request, default_page=1, default_page_size=20, max_page_size=100):
@@ -48,15 +49,15 @@ def time_ago(dt):
     seconds = int(delta.total_seconds())
 
     if seconds < 60:
-        return f"{seconds}s ago"
+        return _("%(count)ss ago") % {"count": seconds}
 
     minutes = seconds // 60
     if minutes < 60:
-        return f"{minutes}m ago"
+        return _("%(count)sm ago") % {"count": minutes}
 
     hours = minutes // 60
     if hours < 24:
-        return f"{hours}h ago"
+        return _("%(count)sh ago") % {"count": hours}
 
     days = hours // 24
-    return f"{days}d ago"
+    return _("%(count)sd ago") % {"count": days}

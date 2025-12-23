@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load admin_urls static %}
+{% load admin_urls static i18n %}
 
 {% block title %}Dashboard | {{ site_title|default:_('Django site admin') }}{% endblock %}
 
@@ -17,56 +17,56 @@
             <div class="stat-card">
                 <i class="fa-solid fa-book stat-icon"></i>
                 <p class="stat-number" id="books-count">-</p>
-                <p class="stat-label">Total Books</p>
+                <p class="stat-label">{% trans "Total Books" %}</p>
             </div>
 
             <div class="stat-card">
                 <i class="fa-solid fa-users stat-icon"></i>
                 <p class="stat-number" id="users-count">-</p>
-                <p class="stat-label">Active Users</p>
+                <p class="stat-label">{% trans "Active Users" %}</p>
             </div>
 
             <div class="stat-card">
                 <i class="fa-solid fa-clock stat-icon"></i>
                 <p class="stat-number" id="pending-requests">-</p>
-                <p class="stat-label">Pending Requests</p>
+                <p class="stat-label">{% trans "Pending Requests" %}</p>
             </div>
 
             <div class="stat-card">
                 <i class="fa-solid fa-exclamation-triangle stat-icon"></i>
                 <p class="stat-number" id="overdue-loans">-</p>
-                <p class="stat-label">Overdue Loans</p>
+                <p class="stat-label">{% trans "Overdue Loans" %}</p>
             </div>
         </div>
 
         <div class="statistics">
-            <h3><i class="fa-solid fa-chart-simple"></i> Thống kê thư viện</h3>
+            <h3><i class="fa-solid fa-chart-simple"></i> {% trans "Library Statistics" %}</h3>
             <div class="stats-controls">
-                <label><strong>Kỳ:</strong></label>
+                <label><strong>{% trans "Period:" %}</strong></label>
                 <select id="stats-period">
-                    <option value="month">Tháng này</option>
-                    <option value="year">Năm nay</option>
+                    <option value="month">{% trans "This Month" %}</option>
+                    <option value="year">{% trans "This Year" %}</option>
                 </select>
-                <label><strong>Năm:</strong></label>
+                <label><strong>{% trans "Year:" %}</strong></label>
                 <input type="number" id="stats-year" min="2000" max="2999" style="width: 100px;">
-                <label id="label-month"><strong>Tháng:</strong></label>
+                <label id="label-month"><strong>{% trans "Month:" %}</strong></label>
                 <input type="number" id="stats-month" min="1" max="12" style="width: 70px;">
             </div>
             <div class="stats-grid">
                 <div class="chart-card">
-                    <h4>Số lượng sách theo thể loại (tổng)</h4>
+                    <h4>{% trans "Books by Category (total)" %}</h4>
                     <canvas id="booksPerCategoryChart" height="160"></canvas>
                 </div>
                 <div class="chart-card">
-                    <h4>Xu hướng mượn theo thời gian</h4>
+                    <h4>{% trans "Loan Trends Over Time" %}</h4>
                     <canvas id="loansOverTimeChart" height="160"></canvas>
                 </div>
                 <div class="chart-card">
-                    <h4>Trạng thái yêu cầu mượn sách</h4>
+                    <h4>{% trans "Borrow Request Status" %}</h4>
                     <canvas id="loanStatusChart" height="160"></canvas>
                 </div>
                 <div class="chart-card">
-                    <h4>Ngôn ngữ sách trong thư viện</h4>
+                    <h4>{% trans "Book Languages in Library" %}</h4>
                     <canvas id="languageChart" height="160"></canvas>
                 </div>
             </div>
@@ -75,50 +75,50 @@
 
     <aside class="right-col">
         <div class="quick-actions">
-            <h3>⚡ Quick Actions</h3>
+            <h3>⚡ {% trans "Quick Actions" %}</h3>
             <div class="action-grid">
                 <a href="{% url 'admin:auth_user_changelist' %}" class="action-button">
-                    👥 Quản lý người dùng
+                    👥 {% trans "User Management" %}
                 </a>
                 <a href="{% url 'admin:catalog_category_changelist' %}" class="action-button">
-                    🏷️ Quản lý thể loại sách
+                    🏷️ {% trans "Category Management" %}
                 </a>
                 <a href="{% url 'admin:catalog_author_changelist' %}" class="action-button">
-                    ✍️ Quản lý tác giả
+                    ✍️ {% trans "Author Management" %}
                 </a>
                 <a href="{% url 'admin:catalog_publisher_changelist' %}" class="action-button">
-                    🏢 Quản lý nhà xuất bản
+                    🏢 {% trans "Publisher Management" %}
                 </a>
                 <a href="{% url 'admin:catalog_book_changelist' %}" class="action-button">
-                    📚 Quản lý sách
+                    📚 {% trans "Book Management" %}
                 </a>
                 <a href="{% url 'admin:catalog_borrowrequest_changelist' %}" class="action-button">
-                    📝 Quản lý yêu cầu mượn sách
+                    📝 {% trans "Borrow Request Management" %}
                 </a>
             </div>
 
             <h3 style="margin-top: 25px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
-                📊 Xuất dữ liệu Excel
+                📊 {% trans "Export Excel Data" %}
             </h3>
             <div class="action-grid export-section">
                 <a href="{% url 'admin-export-books' %}" class="action-button export-btn">
-                    Xuất Excel Sách
+                    {% trans "Export Books Excel" %}
                 </a>
                 <a href="{% url 'admin_export_categories_excel' %}" class="action-button export-btn">
-                    Xuất Excel Thể loại
+                    {% trans "Export Categories Excel" %}
                 </a>
                 <a href="{% url 'admin_export_authors_excel' %}" class="action-button export-btn">
-                    Xuất Excel Tác giả
+                    {% trans "Export Authors Excel" %}
                 </a>
                 <a href="{% url 'admin_export_publishers_excel' %}" class="action-button export-btn">
-                    Xuất Excel Nhà XB
+                    {% trans "Export Publishers Excel" %}
                 </a>
             </div>
         </div>
         <div class="recent-activity">
-            <h3>🕒 Recent Activity</h3>
+            <h3>🕒 {% trans "Recent Activity" %}</h3>
             <div id="recent-activity-list">
-                <p>Loading recent activity...</p>
+                <p>{% trans "Loading recent activity..." %}</p>
             </div>
         </div>
     </aside>

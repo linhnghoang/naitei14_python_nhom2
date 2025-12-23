@@ -7,15 +7,15 @@
 {% endblock %}
 
 {% block content_title %}
-Books Management
+{% trans "Books Management" %}
 {% endblock %}
 
 {% block object-tools-items %}
 {{ block.super }}
 <a href="{% url 'admin-export-books' %}?{{ request.GET.urlencode }}"
    class="exportlink"
-   title="Export to Excel">
-    Export Excel
+   title="{% trans 'Export to Excel' %}">
+    {% trans "Export Excel" %}
 </a>
 {% endblock %}
 

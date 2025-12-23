@@ -1,4 +1,4 @@
-# English translations for Library Management System
+# Japanese translations for Library Management System
 # Copyright (C) 2025 Library Management
 # This file is distributed under the same license as the Library Management package.
 #
@@ -9,103 +9,103 @@ msgstr ""
 "POT-Creation-Date: 2025-12-23 00:00+0700\n"
 "PO-Revision-Date: 2025-12-23 00:00+0700\n"
 "Last-Translator: Library Management Team\n"
-"Language-Team: English\n"
-"Language: en\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # Base template
 msgid "Library Management"
-msgstr "Library Management"
+msgstr "図書館管理システム"
 
 msgid "Modern Library Platform"
-msgstr "Modern Library Platform"
+msgstr "最新の図書館プラットフォーム"
 
 msgid "Trang chủ"
-msgstr "Home"
+msgstr "ホーム"
 
 msgid "Sách"
-msgstr "Books"
+msgstr "書籍"
 
 msgid "Tác giả"
-msgstr "Authors"
+msgstr "著者"
 
 msgid "Yêu thích"
-msgstr "Favorites"
+msgstr "お気に入り"
 
 msgid "Lịch sử mượn"
-msgstr "Borrow History"
+msgstr "貸出履歴"
 
 msgid "Tài khoản"
-msgstr "Account"
+msgstr "アカウント"
 
 msgid "Hồ sơ cá nhân"
-msgstr "Profile"
+msgstr "プロフィール"
 
 msgid "Đăng xuất"
-msgstr "Log out"
+msgstr "ログアウト"
 
 msgid "Đăng nhập"
-msgstr "Log in"
+msgstr "ログイン"
 
 msgid "Đăng ký"
-msgstr "Sign up"
+msgstr "新規登録"
 
 msgid "Library Management."
-msgstr "Library Management."
+msgstr "図書館管理システム"
 
 msgid "Built with Django + Tailwind"
-msgstr "Built with Django + Tailwind"
+msgstr "Django + Tailwindで構築"
 
 # Login page
 msgid "Đăng nhập | Library Management"
-msgstr "Login | Library Management"
+msgstr "ログイン | 図書館管理システム"
 
 msgid "Tên đăng nhập"
-msgstr "Username"
+msgstr "ユーザー名"
 
 msgid "vd: ngvan_a"
-msgstr "e.g.: johndoe"
+msgstr "例: yamada_t"
 
 msgid "Mật khẩu"
-msgstr "Password"
+msgstr "パスワード"
 
 msgid "Quên mật khẩu?"
-msgstr "Forgot password?"
+msgstr "パスワードをお忘れですか？"
 
 msgid "Chưa có tài khoản?"
-msgstr "Don't have an account?"
+msgstr "アカウントをお持ちでないですか？"
 
 # Signup page
 msgid "Đăng ký tài khoản | Library Management"
-msgstr "Create Account | Library Management"
+msgstr "アカウント作成 | 図書館管理システム"
 
 msgid "Bắt đầu thôi!"
-msgstr "Let's get started!"
+msgstr "はじめましょう！"
 
 msgid "Email"
-msgstr "Email"
+msgstr "メールアドレス"
 
 msgid "Xác nhận mật khẩu"
-msgstr "Confirm password"
+msgstr "パスワード確認"
 
 msgid "Đăng ký ngay"
-msgstr "Sign up now"
+msgstr "今すぐ登録"
 
 msgid "Đã có tài khoản?"
-msgstr "Already have an account?"
+msgstr "すでにアカウントをお持ちですか？"
 
 # Signup done
 msgid "Đăng ký thành công | Library Management"
-msgstr "Registration Successful | Library Management"
+msgstr "登録完了 | 図書館管理システム"
 
 msgid "Đăng ký thành công"
-msgstr "Registration Successful"
+msgstr "登録完了"
 
 msgid "Chúng tôi đã gửi cho bạn một email kích hoạt tài khoản."
-msgstr "We have sent you an account activation email."
+msgstr "アカウント認証メールを送信しました。"
 
 #, python-format
 msgid ""
@@ -115,28 +115,28 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"Please check your mailbox <strong>(including Spam/Junk folder)</strong> and "
-"click the activation link to complete.\n"
+"メールボックス<strong>（迷惑メールフォルダを含む）</strong>を確認し、"
+"認証リンクをクリックして完了してください。\n"
 "    "
 
 # Activation pages
 msgid "Liên kết không hợp lệ | Library Management"
-msgstr "Invalid Link | Library Management"
+msgstr "無効なリンク | 図書館管理システム"
 
 msgid "Liên kết kích hoạt không hợp lệ"
-msgstr "Invalid activation link"
+msgstr "無効な認証リンク"
 
 msgid "Có thể liên kết đã được sử dụng hoặc đã hết hạn."
-msgstr "The link may have been used or has expired."
+msgstr "このリンクは既に使用されたか、有効期限が切れています。"
 
 msgid "Đến trang đăng nhập"
-msgstr "Go to login page"
+msgstr "ログインページへ"
 
 msgid "Kích hoạt thành công | Library Management"
-msgstr "Activation Successful | Library Management"
+msgstr "認証成功 | 図書館管理システム"
 
 msgid "Tài khoản đã được kích hoạt"
-msgstr "Account has been activated"
+msgstr "アカウントが認証されました"
 
 #, python-format
 msgid ""
@@ -146,246 +146,245 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"Hello <strong>%(username)s</strong>, your account has been successfully "
-"activated.\n"
+"<strong>%(username)s</strong>さん、アカウントの認証が完了しました。\n"
 "    "
 
 msgid "Bạn đã được đăng nhập. Bây giờ bạn có thể sử dụng đầy đủ các chức năng của hệ thống."
-msgstr "You are now logged in. You can now use all the features of the system."
+msgstr "ログインしました。システムのすべての機能をご利用いただけます。"
 
 msgid "Về trang chính"
-msgstr "Go to homepage"
+msgstr "ホームページへ"
 
 msgid "Bạn sẽ được chuyển hướng về trang chính sau 3 giây..."
-msgstr "You will be redirected to the homepage in 3 seconds..."
+msgstr "3秒後にホームページへリダイレクトします..."
 
 # Profile page
 msgid "Hồ sơ cá nhân | Library Management"
-msgstr "Profile | Library Management"
+msgstr "プロフィール | 図書館管理システム"
 
 msgid "Quản lý thông tin tài khoản và cài đặt của bạn"
-msgstr "Manage your account information and settings"
+msgstr "アカウント情報と設定を管理"
 
 msgid "Cập nhật thành công!"
-msgstr "Update successful!"
+msgstr "更新しました！"
 
 msgid "Thông tin tài khoản"
-msgstr "Account Information"
+msgstr "アカウント情報"
 
 msgid "Cập nhật thông tin cá nhân của bạn"
-msgstr "Update your personal information"
+msgstr "個人情報を更新"
 
 msgid "Không thể thay đổi"
-msgstr "Cannot be changed"
+msgstr "変更不可"
 
 msgid "Họ"
-msgstr "Last name"
+msgstr "姓"
 
 msgid "Nguyễn"
-msgstr "Nguyen"
+msgstr "山田"
 
 msgid "Tên"
-msgstr "First name"
+msgstr "名"
 
 msgid "An"
-msgstr "An"
+msgstr "太郎"
 
 msgid "Đổi mật khẩu"
-msgstr "Change password"
+msgstr "パスワード変更"
 
 msgid "Lưu thay đổi"
-msgstr "Save changes"
+msgstr "変更を保存"
 
 # Password change
 msgid "Đổi mật khẩu | Library Management"
-msgstr "Change Password | Library Management"
+msgstr "パスワード変更 | 図書館管理システム"
 
 msgid "Quay lại hồ sơ"
-msgstr "Back to profile"
+msgstr "プロフィールに戻る"
 
 msgid "Mật khẩu hiện tại"
-msgstr "Current password"
+msgstr "現在のパスワード"
 
 msgid "MẬT KHẨU MỚI"
-msgstr "NEW PASSWORD"
+msgstr "新しいパスワード"
 
 msgid "Mật khẩu mới"
-msgstr "New password"
+msgstr "新しいパスワード"
 
 msgid "Xác nhận mật khẩu mới"
-msgstr "Confirm new password"
+msgstr "新しいパスワード（確認）"
 
 msgid "Yêu cầu mật khẩu"
-msgstr "Password requirements"
+msgstr "パスワード要件"
 
 msgid "Tối thiểu 8 ký tự"
-msgstr "Minimum 8 characters"
+msgstr "8文字以上"
 
 msgid "Không được giống tên đăng nhập"
-msgstr "Must not be the same as username"
+msgstr "ユーザー名と同じにできません"
 
 msgid "Cập nhật mật khẩu"
-msgstr "Update password"
+msgstr "パスワードを更新"
 
 msgid "Đổi mật khẩu thành công | Library Management"
-msgstr "Password Changed | Library Management"
+msgstr "パスワード変更完了 | 図書館管理システム"
 
 msgid "Mật khẩu đã được cập nhật"
-msgstr "Password has been updated"
+msgstr "パスワードが更新されました"
 
 msgid "Bạn đã đổi mật khẩu thành công."
-msgstr "You have successfully changed your password."
+msgstr "パスワードの変更が完了しました。"
 
 # Home page
 msgid "Trang chủ | Library"
-msgstr "Home | Library"
+msgstr "ホーム | 図書館"
 
 msgid "Trang chủ thư viện"
-msgstr "Library Homepage"
+msgstr "図書館ホーム"
 
 msgid "Quản lý sách, độc giả và phiếu mượn."
-msgstr "Manage books, readers, and loan slips."
+msgstr "書籍、利用者、貸出伝票を管理します。"
 
 msgid "Dashboard demo cho hệ thống quản lý thư viện."
-msgstr "Dashboard demo for library management system."
+msgstr "図書館管理システムのダッシュボードデモ。"
 
 msgid "+ Thêm sách mới"
-msgstr "+ Add New Book"
+msgstr "+ 新しい書籍を追加"
 
 msgid "+ Thêm độc giả"
-msgstr "+ Add Reader"
+msgstr "+ 利用者を追加"
 
 msgid "Tổng số sách"
-msgstr "Total Books"
+msgstr "総書籍数"
 
 msgid "+8 so với tuần trước"
-msgstr "+8 from last week"
+msgstr "先週比+8冊"
 
 msgid "Số độc giả"
-msgstr "Total Readers"
+msgstr "利用者数"
 
 msgid "Đang hoạt động"
-msgstr "Active"
+msgstr "アクティブ"
 
 msgid "Sách đang được mượn"
-msgstr "Books Being Borrowed"
+msgstr "貸出中の書籍"
 
 msgid "2 quyển quá hạn"
-msgstr "2 books overdue"
+msgstr "2冊が延滞中"
 
 msgid "Phiếu mượn hôm nay"
-msgstr "Today's Loan Slips"
+msgstr "本日の貸出伝票"
 
 msgid "Cập nhật theo ngày"
-msgstr "Updated daily"
+msgstr "毎日更新"
 
 msgid "Sách mới thêm"
-msgstr "Recently Added Books"
+msgstr "最近追加された書籍"
 
 msgid "Xem tất cả"
-msgstr "View all"
+msgstr "すべて表示"
 
 msgid "Lập trình"
-msgstr "Programming"
+msgstr "プログラミング"
 
 msgid "Kỹ năng"
-msgstr "Skills"
+msgstr "スキル"
 
 msgid "Phiếu mượn gần đây"
-msgstr "Recent Loan Slips"
+msgstr "最近の貸出伝票"
 
 msgid "Xem chi tiết"
-msgstr "View details"
+msgstr "詳細を見る"
 
 msgid "Đang mượn"
-msgstr "Borrowing"
+msgstr "貸出中"
 
 msgid "Gần tới hạn"
-msgstr "Due soon"
+msgstr "返却期限間近"
 
 msgid "Đã trả"
-msgstr "Returned"
+msgstr "返却済み"
 
 # Admin dashboard
 msgid "Admin – Tổng quan | Library"
-msgstr "Admin – Overview | Library"
+msgstr "管理者 – 概要 | 図書館"
 
 msgid "Dashboard admin cho hệ thống quản lý thư viện."
-msgstr "Admin dashboard for library management system."
+msgstr "図書館管理システムの管理者ダッシュボード。"
 
 msgid "Library Admin"
-msgstr "Library Admin"
+msgstr "図書館管理"
 
 msgid "Bảng điều khiển quản lý thư viện"
-msgstr "Library Management Dashboard"
+msgstr "図書館管理ダッシュボード"
 
 msgid "Về trang người dùng"
-msgstr "Go to user page"
+msgstr "ユーザーページへ"
 
 msgid "Admin"
-msgstr "Admin"
+msgstr "管理者"
 
 msgid "Tổng quan"
-msgstr "Overview"
+msgstr "概要"
 
 msgid "Người dùng"
-msgstr "Users"
+msgstr "ユーザー"
 
 msgid "Danh mục"
-msgstr "Categories"
+msgstr "カテゴリ"
 
 msgid "Yêu cầu mượn"
-msgstr "Borrow Requests"
+msgstr "貸出リクエスト"
 
 msgid "Thống kê"
-msgstr "Statistics"
+msgstr "統計"
 
 # Borrow history
 msgid "Lịch sử mượn sách"
-msgstr "Book Borrow History"
+msgstr "書籍貸出履歴"
 
 msgid "Danh sách các yêu cầu mượn sách của:"
-msgstr "List of book borrow requests from:"
+msgstr "書籍貸出リクエスト一覧："
 
 msgid "Quay lại trang chủ"
-msgstr "Back to homepage"
+msgstr "ホームへ戻る"
 
 msgid "Chưa có thông tin sách"
-msgstr "No book information yet"
+msgstr "書籍情報がありません"
 
 msgid "Tạo lúc"
-msgstr "Created at"
+msgstr "作成日時"
 
 msgid "Đang chờ duyệt"
-msgstr "Pending approval"
+msgstr "承認待ち"
 
 msgid "Hủy yêu cầu"
-msgstr "Cancel request"
+msgstr "リクエストをキャンセル"
 
 msgid "Đã được chấp nhận"
-msgstr "Approved"
+msgstr "承認済み"
 
 msgid "Bị từ chối"
-msgstr "Rejected"
+msgstr "却下"
 
 msgid "Đã hủy"
-msgstr "Cancelled"
+msgstr "キャンセル済み"
 
 msgid "Quá hạn"
-msgstr "Overdue"
+msgstr "延滞"
 
 msgid "Lý do từ chối"
-msgstr "Rejection reason"
+msgstr "却下理由"
 
 msgid "Bạn chưa có yêu cầu mượn sách nào."
-msgstr "You don't have any borrow requests yet."
+msgstr "貸出リクエストはまだありません。"
 
 msgid "Hãy chọn một cuốn sách và tạo yêu cầu mượn đầu tiên."
-msgstr "Choose a book and create your first borrow request."
+msgstr "書籍を選んで最初の貸出リクエストを作成してください。"
 
 # Borrow request form
 msgid "Mượn sách"
-msgstr "Borrow Book"
+msgstr "書籍を借りる"
 
 #, python-format
 msgid ""
@@ -397,35 +396,35 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"You are creating a borrow request for\n"
+"貸出リクエストを作成中：\n"
 "<span class=\"font-medium text-slate-900\">\n"
 "%(book_title)s\n"
 "</span>\n"
 "            "
 
 msgid "Ngày mượn"
-msgstr "Borrow date"
+msgstr "貸出日"
 
 msgid "Ngày bắt đầu mượn sách."
-msgstr "Start date for borrowing the book."
+msgstr "書籍の貸出開始日。"
 
 msgid "Ngày trả dự kiến"
-msgstr "Expected return date"
+msgstr "返却予定日"
 
 msgid "Ngày bạn sẽ trả lại sách cho thư viện."
-msgstr "The date you will return the book to the library."
+msgstr "図書館に書籍を返却する日付。"
 
 msgid "Số lượng"
-msgstr "Quantity"
+msgstr "数量"
 
 msgid "Số bản bạn muốn mượn (tối đa theo tồn kho)."
-msgstr "Number of copies you want to borrow (maximum based on stock)."
+msgstr "借りたい冊数（在庫数が上限）。"
 
 msgid "Hủy"
-msgstr "Cancel"
+msgstr "キャンセル"
 
 msgid "Gửi yêu cầu"
-msgstr "Submit request"
+msgstr "リクエストを送信"
 
 # ==========================================
 # CATALOG APP TRANSLATIONS
@@ -433,611 +432,611 @@ msgstr "Submit request"
 
 # Models - Author
 msgid "Author"
-msgstr "Author"
+msgstr "著者"
 
 msgid "Authors"
-msgstr "Authors"
+msgstr "著者"
 
 msgid "Name"
-msgstr "Name"
+msgstr "名前"
 
 msgid "Biography"
-msgstr "Biography"
+msgstr "経歴"
 
 msgid "Birth date"
-msgstr "Birth date"
+msgstr "生年月日"
 
 msgid "Death date"
-msgstr "Death date"
+msgstr "没年月日"
 
 msgid "Created at"
-msgstr "Created at"
+msgstr "作成日時"
 
 # Models - Publisher
 msgid "Publisher"
-msgstr "Publisher"
+msgstr "出版社"
 
 msgid "Publishers"
-msgstr "Publishers"
+msgstr "出版社"
 
 msgid "Description"
-msgstr "Description"
+msgstr "説明"
 
 msgid "Founded year"
-msgstr "Founded year"
+msgstr "設立年"
 
 msgid "Website"
-msgstr "Website"
+msgstr "ウェブサイト"
 
 # Models - Category
 msgid "Category"
-msgstr "Category"
+msgstr "カテゴリ"
 
 msgid "Categories"
-msgstr "Categories"
+msgstr "カテゴリ"
 
 msgid "Slug"
-msgstr "Slug"
+msgstr "スラッグ"
 
 msgid "Parent category"
-msgstr "Parent category"
+msgstr "親カテゴリ"
 
 # Models - Book
 msgid "Book"
-msgstr "Book"
+msgstr "書籍"
 
 msgid "Books"
-msgstr "Books"
+msgstr "書籍"
 
 msgid "Title"
-msgstr "Title"
+msgstr "タイトル"
 
 msgid "ISBN-13"
 msgstr "ISBN-13"
 
 msgid "Publish year"
-msgstr "Publish year"
+msgstr "出版年"
 
 msgid "Pages"
-msgstr "Pages"
+msgstr "ページ数"
 
 msgid "Cover URL"
-msgstr "Cover URL"
+msgstr "表紙URL"
 
 msgid "Language code"
-msgstr "Language code"
+msgstr "言語コード"
 
 msgid "Updated at"
-msgstr "Updated at"
+msgstr "更新日時"
 
 # Models - BookAuthor
 msgid "Book Author"
-msgstr "Book Author"
+msgstr "書籍著者"
 
 msgid "Book Authors"
-msgstr "Book Authors"
+msgstr "書籍著者"
 
 msgid "Author order"
-msgstr "Author order"
+msgstr "著者順序"
 
 # Models - BookCategory
 msgid "Book Category"
-msgstr "Book Category"
+msgstr "書籍カテゴリ"
 
 msgid "Book Categories"
-msgstr "Book Categories"
+msgstr "書籍カテゴリ"
 
 # Models - BookItem
 msgid "Book Item"
-msgstr "Book Item"
+msgstr "書籍アイテム"
 
 msgid "Book Items"
-msgstr "Book Items"
+msgstr "書籍アイテム"
 
 msgid "Barcode"
-msgstr "Barcode"
+msgstr "バーコード"
 
 msgid "Status"
-msgstr "Status"
+msgstr "ステータス"
 
 msgid "Location code"
-msgstr "Location code"
+msgstr "配置コード"
 
 msgid "Available"
-msgstr "Available"
+msgstr "利用可能"
 
 msgid "Reserved"
-msgstr "Reserved"
+msgstr "予約済み"
 
 msgid "Loaned"
-msgstr "Loaned"
+msgstr "貸出中"
 
 msgid "Lost"
-msgstr "Lost"
+msgstr "紛失"
 
 msgid "Damaged"
-msgstr "Damaged"
+msgstr "破損"
 
 # Models - UserFavorite
 msgid "User"
-msgstr "User"
+msgstr "ユーザー"
 
 msgid "User Favorite"
-msgstr "User Favorite"
+msgstr "お気に入り"
 
 msgid "User Favorites"
-msgstr "User Favorites"
+msgstr "お気に入り"
 
 # Models - FollowAuthor
 msgid "Follow Author"
-msgstr "Follow Author"
+msgstr "著者フォロー"
 
 msgid "Follow Authors"
-msgstr "Follow Authors"
+msgstr "著者フォロー"
 
 # Models - FollowPublisher
 msgid "Follow Publisher"
-msgstr "Follow Publisher"
+msgstr "出版社フォロー"
 
 msgid "Follow Publishers"
-msgstr "Follow Publishers"
+msgstr "出版社フォロー"
 
 # Models - BookComment
 msgid "Book Comment"
-msgstr "Book Comment"
+msgstr "書籍コメント"
 
 msgid "Book Comments"
-msgstr "Book Comments"
+msgstr "書籍コメント"
 
 msgid "Content"
-msgstr "Content"
+msgstr "内容"
 
 msgid "Is deleted"
-msgstr "Is deleted"
+msgstr "削除済み"
 
 # Models - BookRating
 msgid "Book Rating"
-msgstr "Book Rating"
+msgstr "書籍評価"
 
 msgid "Book Ratings"
-msgstr "Book Ratings"
+msgstr "書籍評価"
 
 msgid "Rating"
-msgstr "Rating"
+msgstr "評価"
 
 msgid "Review"
-msgstr "Review"
+msgstr "レビュー"
 
 # Models - BorrowRequest
 msgid "Borrow Request"
-msgstr "Borrow Request"
+msgstr "貸出リクエスト"
 
 msgid "Borrow Requests"
-msgstr "Borrow Requests"
+msgstr "貸出リクエスト"
 
 msgid "Book item"
-msgstr "Book item"
+msgstr "書籍アイテム"
 
 msgid "Requested from"
-msgstr "Requested from"
+msgstr "貸出開始日"
 
 msgid "Duration"
-msgstr "Duration"
+msgstr "期間"
 
 msgid "Requested to"
-msgstr "Requested to"
+msgstr "返却予定日"
 
 msgid "Decision at"
-msgstr "Decision at"
+msgstr "決定日時"
 
 msgid "Pending"
-msgstr "Pending"
+msgstr "承認待ち"
 
 msgid "Approved"
-msgstr "Approved"
+msgstr "承認済み"
 
 msgid "Rejected"
-msgstr "Rejected"
+msgstr "却下"
 
 msgid "Returned"
-msgstr "Returned"
+msgstr "返却済み"
 
 msgid "Overdue"
-msgstr "Overdue"
+msgstr "延滞"
 
 msgid "1 Week"
-msgstr "1 Week"
+msgstr "1週間"
 
 msgid "2 Weeks"
-msgstr "2 Weeks"
+msgstr "2週間"
 
 msgid "1 Month"
-msgstr "1 Month"
+msgstr "1ヶ月"
 
 msgid "3 Months"
-msgstr "3 Months"
+msgstr "3ヶ月"
 
 msgid "6 Months"
-msgstr "6 Months"
+msgstr "6ヶ月"
 
 # Models - BorrowRequestItem
 msgid "Borrow Request Item"
-msgstr "Borrow Request Item"
+msgstr "貸出リクエスト項目"
 
 msgid "Borrow Request Items"
-msgstr "Borrow Request Items"
+msgstr "貸出リクエスト項目"
 
 msgid "Request"
-msgstr "Request"
+msgstr "リクエスト"
 
 msgid "Quantity"
-msgstr "Quantity"
+msgstr "数量"
 
 # Models - Loan
 msgid "Loan"
-msgstr "Loan"
+msgstr "貸出"
 
 msgid "Loans"
-msgstr "Loans"
+msgstr "貸出"
 
 msgid "Request item"
-msgstr "Request item"
+msgstr "リクエスト項目"
 
 msgid "Approved from"
-msgstr "Approved from"
+msgstr "承認開始日"
 
 msgid "Due date"
-msgstr "Due date"
+msgstr "返却期限"
 
 msgid "Returned at"
-msgstr "Returned at"
+msgstr "返却日"
 
 msgid "Borrowed"
-msgstr "Borrowed"
+msgstr "貸出中"
 
 # Models - MailQueue
 msgid "Mail Queue"
-msgstr "Mail Queue"
+msgstr "メールキュー"
 
 msgid "Type"
-msgstr "Type"
+msgstr "種類"
 
 msgid "To user"
-msgstr "To user"
+msgstr "宛先ユーザー"
 
 msgid "To admin"
-msgstr "To admin"
+msgstr "宛先管理者"
 
 msgid "To email"
-msgstr "To email"
+msgstr "宛先メール"
 
 msgid "Subject"
-msgstr "Subject"
+msgstr "件名"
 
 msgid "Body"
-msgstr "Body"
+msgstr "本文"
 
 msgid "Reference type"
-msgstr "Reference type"
+msgstr "参照タイプ"
 
 msgid "Reference ID"
-msgstr "Reference ID"
+msgstr "参照ID"
 
 msgid "Scheduled at"
-msgstr "Scheduled at"
+msgstr "予定日時"
 
 msgid "Sent at"
-msgstr "Sent at"
+msgstr "送信日時"
 
 msgid "Error"
-msgstr "Error"
+msgstr "エラー"
 
 msgid "Borrow accepted"
-msgstr "Borrow accepted"
+msgstr "貸出承認"
 
 msgid "Borrow rejected"
-msgstr "Borrow rejected"
+msgstr "貸出却下"
 
 msgid "Account activation"
-msgstr "Account activation"
+msgstr "アカウント認証"
 
 msgid "Return reminder admin"
-msgstr "Return reminder admin"
+msgstr "返却リマインダー"
 
 msgid "Queued"
-msgstr "Queued"
+msgstr "待機中"
 
 msgid "Sent"
-msgstr "Sent"
+msgstr "送信済み"
 
 msgid "Failed"
-msgstr "Failed"
+msgstr "失敗"
 
 msgid "Cancelled"
-msgstr "Cancelled"
+msgstr "キャンセル"
 
 # Admin
 msgid "Library Management System"
-msgstr "Library Management System"
+msgstr "図書館管理システム"
 
 msgid "Welcome to Library Management"
-msgstr "Welcome to Library Management"
+msgstr "図書館管理へようこそ"
 
 msgid "Basic Information"
-msgstr "Basic Information"
+msgstr "基本情報"
 
 msgid "Hierarchy"
-msgstr "Hierarchy"
+msgstr "階層"
 
 msgid "Select a parent category to create a subcategory hierarchy."
-msgstr "Select a parent category to create a subcategory hierarchy."
+msgstr "親カテゴリを選択してサブカテゴリ階層を作成します。"
 
 msgid "%(count)s books"
-msgstr "%(count)s books"
+msgstr "%(count)s冊"
 
 msgid "%(count)s subcategories"
-msgstr "%(count)s subcategories"
+msgstr "%(count)sサブカテゴリ"
 
 msgid "No subcategories"
-msgstr "No subcategories"
+msgstr "サブカテゴリなし"
 
 msgid "Subcategories"
-msgstr "Subcategories"
+msgstr "サブカテゴリ"
 
 msgid "Cannot set parent to a descendant category."
-msgstr "Cannot set parent to a descendant category."
+msgstr "子孫カテゴリを親に設定することはできません。"
 
 msgid "Clear parent category (make top-level)"
-msgstr "Clear parent category (make top-level)"
+msgstr "親カテゴリをクリア（トップレベルにする）"
 
 msgid "Successfully cleared parent for %(count)s categories."
-msgstr "Successfully cleared parent for %(count)s categories."
+msgstr "%(count)sカテゴリの親をクリアしました。"
 
 msgid "Set as subcategories of first selected"
-msgstr "Set as subcategories of first selected"
+msgstr "最初に選択したものをサブカテゴリに設定"
 
 msgid "Please select at least 2 categories (first will be parent, others will become subcategories)."
-msgstr "Please select at least 2 categories (first will be parent, others will become subcategories)."
+msgstr "2つ以上のカテゴリを選択してください（最初が親、他がサブカテゴリになります）。"
 
 msgid "Cannot set %(parent)s as parent for %(child)s - would create circular relationship."
-msgstr "Cannot set %(parent)s as parent for %(child)s - would create circular relationship."
+msgstr "%(parent)sを%(child)sの親に設定できません - 循環参照になります。"
 
 msgid "Successfully set %(parent)s as parent for %(count)s categories."
-msgstr "Successfully set %(parent)s as parent for %(count)s categories."
+msgstr "%(parent)sを%(count)sカテゴリの親に設定しました。"
 
 msgid "Dates"
-msgstr "Dates"
+msgstr "日付"
 
 msgid "Additional Info"
-msgstr "Additional Info"
+msgstr "追加情報"
 
 msgid "Publication Details"
-msgstr "Publication Details"
+msgstr "出版詳細"
 
 msgid "Media"
-msgstr "Media"
+msgstr "メディア"
 
 msgid "Timestamps"
-msgstr "Timestamps"
+msgstr "タイムスタンプ"
 
 msgid "Items"
-msgstr "Items"
+msgstr "アイテム"
 
 msgid "Book Information"
-msgstr "Book Information"
+msgstr "書籍情報"
 
 msgid "Item Details"
-msgstr "Item Details"
+msgstr "アイテム詳細"
 
 msgid "Return selected books"
-msgstr "Return selected books"
+msgstr "選択した書籍を返却"
 
 msgid "%(count)s books returned successfully."
-msgstr "%(count)s books returned successfully."
+msgstr "%(count)s冊が正常に返却されました。"
 
 msgid "Mark selected books as Lost"
-msgstr "Mark selected books as Lost"
+msgstr "選択した書籍を紛失としてマーク"
 
 msgid "%(count)s books marked as lost."
-msgstr "%(count)s books marked as lost."
+msgstr "%(count)s冊が紛失としてマークされました。"
 
 # Admin Templates
 msgid "Books Management"
-msgstr "Books Management"
+msgstr "書籍管理"
 
 msgid "Categories Management"
-msgstr "Categories Management"
+msgstr "カテゴリ管理"
 
 msgid "Authors Management"
-msgstr "Authors Management"
+msgstr "著者管理"
 
 msgid "Publishers Management"
-msgstr "Publishers Management"
+msgstr "出版社管理"
 
 msgid "Export to Excel"
-msgstr "Export to Excel"
+msgstr "Excelにエクスポート"
 
 msgid "Export Excel"
-msgstr "Export Excel"
+msgstr "Excelエクスポート"
 
 # Validation messages
 msgid "New requests can only be Pending, Approved, or Rejected."
-msgstr "New requests can only be Pending, Approved, or Rejected."
+msgstr "新規リクエストは承認待ち、承認済み、または却下のみ可能です。"
 
 msgid "Book item is required for approval."
-msgstr "Book item is required for approval."
+msgstr "承認には書籍アイテムが必要です。"
 
 msgid "Book item %(barcode)s is not available (Status: %(status)s)."
-msgstr "Book item %(barcode)s is not available (Status: %(status)s)."
+msgstr "書籍アイテム%(barcode)sは利用できません（ステータス: %(status)s）。"
 
 msgid "Cannot edit a request that has already been returned."
-msgstr "Cannot edit a request that has already been returned."
+msgstr "既に返却されたリクエストは編集できません。"
 
 msgid "Approved requests can only be changed to Returned, Lost, or Overdue."
-msgstr "Approved requests can only be changed to Returned, Lost, or Overdue."
+msgstr "承認済みリクエストは返却済み、紛失、または延滞にのみ変更できます。"
 
 msgid "Only approved, overdue, or lost requests can be returned."
-msgstr "Only approved, overdue, or lost requests can be returned."
+msgstr "承認済み、延滞、または紛失のリクエストのみ返却できます。"
 
 #, python-format
 msgid "Request #%(id)s by %(user)s"
-msgstr "Request #%(id)s by %(user)s"
+msgstr "リクエスト #%(id)s - %(user)s"
 
 # Admin Dashboard
 msgid "Total Books"
-msgstr "Total Books"
+msgstr "総書籍数"
 
 msgid "Active Users"
-msgstr "Active Users"
+msgstr "アクティブユーザー"
 
 msgid "Pending Requests"
-msgstr "Pending Requests"
+msgstr "保留中のリクエスト"
 
 msgid "Overdue Loans"
-msgstr "Overdue Loans"
+msgstr "延滞貸出"
 
 msgid "Library Statistics"
-msgstr "Library Statistics"
+msgstr "図書館統計"
 
 msgid "Period:"
-msgstr "Period:"
+msgstr "期間:"
 
 msgid "This Month"
-msgstr "This Month"
+msgstr "今月"
 
 msgid "This Year"
-msgstr "This Year"
+msgstr "今年"
 
 msgid "Year:"
-msgstr "Year:"
+msgstr "年:"
 
 msgid "Month:"
-msgstr "Month:"
+msgstr "月:"
 
 msgid "Books by Category (total)"
-msgstr "Books by Category (total)"
+msgstr "カテゴリ別書籍数（合計）"
 
 msgid "Loan Trends Over Time"
-msgstr "Loan Trends Over Time"
+msgstr "貸出トレンド"
 
 msgid "Borrow Request Status"
-msgstr "Borrow Request Status"
+msgstr "貸出リクエスト状況"
 
 msgid "Book Languages in Library"
-msgstr "Book Languages in Library"
+msgstr "図書館の書籍言語"
 
 msgid "Quick Actions"
-msgstr "Quick Actions"
+msgstr "クイックアクション"
 
 msgid "User Management"
-msgstr "User Management"
+msgstr "ユーザー管理"
 
 msgid "Category Management"
-msgstr "Category Management"
+msgstr "カテゴリ管理"
 
 msgid "Author Management"
-msgstr "Author Management"
+msgstr "著者管理"
 
 msgid "Publisher Management"
-msgstr "Publisher Management"
+msgstr "出版社管理"
 
 msgid "Book Management"
-msgstr "Book Management"
+msgstr "書籍管理"
 
 msgid "Borrow Request Management"
-msgstr "Borrow Request Management"
+msgstr "貸出リクエスト管理"
 
 msgid "Export Excel Data"
-msgstr "Export Excel Data"
+msgstr "Excelデータエクスポート"
 
 msgid "Export Books Excel"
-msgstr "Export Books Excel"
+msgstr "書籍Excelエクスポート"
 
 msgid "Export Categories Excel"
-msgstr "Export Categories Excel"
+msgstr "カテゴリExcelエクスポート"
 
 msgid "Export Authors Excel"
-msgstr "Export Authors Excel"
+msgstr "著者Excelエクスポート"
 
 msgid "Export Publishers Excel"
-msgstr "Export Publishers Excel"
+msgstr "出版社Excelエクスポート"
 
 msgid "Recent Activity"
-msgstr "Recent Activity"
+msgstr "最近のアクティビティ"
 
 msgid "Loading recent activity..."
-msgstr "Loading recent activity..."
+msgstr "最近のアクティビティを読み込み中..."
 
 # Recent Activity API strings
 #, python-format
 msgid "Category: %(name)s"
-msgstr "Category: %(name)s"
+msgstr "カテゴリ: %(name)s"
 
 #, python-format
 msgid "Slug: %(slug)s"
-msgstr "Slug: %(slug)s"
+msgstr "スラッグ: %(slug)s"
 
 #, python-format
 msgid "Books: %(count)s"
-msgstr "Books: %(count)s"
+msgstr "書籍: %(count)s"
 
 #, python-format
 msgid "Children: %(count)s"
-msgstr "Children: %(count)s"
+msgstr "子カテゴリ: %(count)s"
 
 msgid "Recently"
-msgstr "Recently"
+msgstr "最近"
 
 #, python-format
 msgid "Publisher: %(name)s"
-msgstr "Publisher: %(name)s"
+msgstr "出版社: %(name)s"
 
 #, python-format
 msgid "Founded: %(year)s"
-msgstr "Founded: %(year)s"
+msgstr "設立年: %(year)s"
 
 msgid "Unknown"
-msgstr "Unknown"
+msgstr "不明"
 
 msgid "Yes"
-msgstr "Yes"
+msgstr "はい"
 
 msgid "No"
-msgstr "No"
+msgstr "いいえ"
 
 #, python-format
 msgid "Website: %(status)s"
-msgstr "Website: %(status)s"
+msgstr "ウェブサイト: %(status)s"
 
 #, python-format
 msgid "Author: %(name)s"
-msgstr "Author: %(name)s"
+msgstr "著者: %(name)s"
 
 #, python-format
 msgid "Born: %(date)s"
-msgstr "Born: %(date)s"
+msgstr "生年月日: %(date)s"
 
 #, python-format
 msgid "New book: %(title)s"
-msgstr "New book: %(title)s"
+msgstr "新着書籍: %(title)s"
 
 #, python-format
 msgid "Year: %(year)s"
-msgstr "Year: %(year)s"
+msgstr "年: %(year)s"
 
 # Time ago strings
 #, python-format
 msgid "%(count)ss ago"
-msgstr "%(count)ss ago"
+msgstr "%(count)s秒前"
 
 #, python-format
 msgid "%(count)sm ago"
-msgstr "%(count)sm ago"
+msgstr "%(count)s分前"
 
 #, python-format
 msgid "%(count)sh ago"
-msgstr "%(count)sh ago"
+msgstr "%(count)s時間前"
 
 #, python-format
 msgid "%(count)sd ago"
-msgstr "%(count)sd ago"
+msgstr "%(count)s日前"

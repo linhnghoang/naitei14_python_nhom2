@@ -1,0 +1,80 @@
+/* Custom Admin Styles */
+
+/* Language Chooser Enhancement */
+.language-chooser,
+#language-chooser {
+    display: flex !important;
+    align-items: center;
+    margin-right: 15px;
+}
+
+.language-chooser .dropdown-toggle,
+#language-chooser .dropdown-toggle {
+    color: #fff !important;
+    background: rgba(255,255,255,0.1) !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    border-radius: 6px !important;
+    padding: 5px 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.language-chooser .dropdown-toggle:hover,
+#language-chooser .dropdown-toggle:hover {
+    background: rgba(255,255,255,0.2) !important;
+}
+
+/* Globe icon for language */
+.language-chooser .dropdown-toggle::before,
+#language-chooser .dropdown-toggle::before {
+    content: "🌐";
+    margin-right: 5px;
+}
+
+/* Dropdown menu styling */
+.language-chooser .dropdown-menu,
+#language-chooser .dropdown-menu {
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+    overflow: hidden !important;
+}
+
+.language-chooser .dropdown-item,
+#language-chooser .dropdown-item {
+    padding: 10px 15px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.language-chooser .dropdown-item:hover,
+#language-chooser .dropdown-item:hover {
+    background: #f5f5f5 !important;
+}
+
+/* Remove blue background from active/selected language */
+.language-chooser .dropdown-item.active,
+.language-chooser .dropdown-item:active,
+#language-chooser .dropdown-item.active,
+#language-chooser .dropdown-item:active,
+#jazzy-languagemenu .dropdown-item.active,
+#jazzy-languagemenu .dropdown-item:active,
+#jazzy-languagemenu button.active {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: #212529 !important;
+}
+
+/* Remove blue background from navbar icons */
+#jazzy-navbar .nav-link.btn,
+#jazzy-navbar .navbar-nav .nav-link {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: #6c757d !important;
+}
+
+#jazzy-navbar .nav-link.btn:hover,
+#jazzy-navbar .navbar-nav .nav-link:hover {
+    color: #343a40 !important;
+}

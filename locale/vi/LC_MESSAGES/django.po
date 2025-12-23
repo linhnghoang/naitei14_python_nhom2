@@ -1,4 +1,4 @@
-# English translations for Library Management System
+# Vietnamese translations for Library Management System
 # Copyright (C) 2025 Library Management
 # This file is distributed under the same license as the Library Management package.
 #
@@ -9,423 +9,383 @@ msgstr ""
 "POT-Creation-Date: 2025-12-23 00:00+0700\n"
 "PO-Revision-Date: 2025-12-23 00:00+0700\n"
 "Last-Translator: Library Management Team\n"
-"Language-Team: English\n"
-"Language: en\n"
+"Language-Team: Vietnamese\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 # Base template
 msgid "Library Management"
-msgstr "Library Management"
+msgstr "Quản Lý Thư Viện"
 
 msgid "Modern Library Platform"
-msgstr "Modern Library Platform"
+msgstr "Nền Tảng Thư Viện Hiện Đại"
 
 msgid "Trang chủ"
-msgstr "Home"
+msgstr "Trang chủ"
 
 msgid "Sách"
-msgstr "Books"
+msgstr "Sách"
 
 msgid "Tác giả"
-msgstr "Authors"
+msgstr "Tác giả"
 
 msgid "Yêu thích"
-msgstr "Favorites"
+msgstr "Yêu thích"
 
 msgid "Lịch sử mượn"
-msgstr "Borrow History"
+msgstr "Lịch sử mượn"
 
 msgid "Tài khoản"
-msgstr "Account"
+msgstr "Tài khoản"
 
 msgid "Hồ sơ cá nhân"
-msgstr "Profile"
+msgstr "Hồ sơ cá nhân"
 
 msgid "Đăng xuất"
-msgstr "Log out"
+msgstr "Đăng xuất"
 
 msgid "Đăng nhập"
-msgstr "Log in"
+msgstr "Đăng nhập"
 
 msgid "Đăng ký"
-msgstr "Sign up"
+msgstr "Đăng ký"
 
 msgid "Library Management."
-msgstr "Library Management."
+msgstr "Quản Lý Thư Viện."
 
 msgid "Built with Django + Tailwind"
-msgstr "Built with Django + Tailwind"
+msgstr "Xây dựng với Django + Tailwind"
 
 # Login page
 msgid "Đăng nhập | Library Management"
-msgstr "Login | Library Management"
+msgstr "Đăng nhập | Quản Lý Thư Viện"
 
 msgid "Tên đăng nhập"
-msgstr "Username"
+msgstr "Tên đăng nhập"
 
 msgid "vd: ngvan_a"
-msgstr "e.g.: johndoe"
+msgstr "vd: ngvan_a"
 
 msgid "Mật khẩu"
-msgstr "Password"
+msgstr "Mật khẩu"
 
 msgid "Quên mật khẩu?"
-msgstr "Forgot password?"
+msgstr "Quên mật khẩu?"
 
 msgid "Chưa có tài khoản?"
-msgstr "Don't have an account?"
+msgstr "Chưa có tài khoản?"
 
 # Signup page
 msgid "Đăng ký tài khoản | Library Management"
-msgstr "Create Account | Library Management"
+msgstr "Đăng ký tài khoản | Quản Lý Thư Viện"
 
 msgid "Bắt đầu thôi!"
-msgstr "Let's get started!"
+msgstr "Bắt đầu thôi!"
 
 msgid "Email"
 msgstr "Email"
 
 msgid "Xác nhận mật khẩu"
-msgstr "Confirm password"
+msgstr "Xác nhận mật khẩu"
 
 msgid "Đăng ký ngay"
-msgstr "Sign up now"
+msgstr "Đăng ký ngay"
 
 msgid "Đã có tài khoản?"
-msgstr "Already have an account?"
+msgstr "Đã có tài khoản?"
 
 # Signup done
 msgid "Đăng ký thành công | Library Management"
-msgstr "Registration Successful | Library Management"
+msgstr "Đăng ký thành công | Quản Lý Thư Viện"
 
 msgid "Đăng ký thành công"
-msgstr "Registration Successful"
+msgstr "Đăng ký thành công"
 
 msgid "Chúng tôi đã gửi cho bạn một email kích hoạt tài khoản."
-msgstr "We have sent you an account activation email."
-
-#, python-format
-msgid ""
-"\n"
-"    Vui lòng kiểm tra hộp thư <strong>(kể cả mục Spam/Junk)</strong> và nhấp "
-"vào liên kết kích hoạt để hoàn tất.\n"
-"    "
-msgstr ""
-"\n"
-"Please check your mailbox <strong>(including Spam/Junk folder)</strong> and "
-"click the activation link to complete.\n"
-"    "
+msgstr "Chúng tôi đã gửi cho bạn một email kích hoạt tài khoản."
 
 # Activation pages
 msgid "Liên kết không hợp lệ | Library Management"
-msgstr "Invalid Link | Library Management"
+msgstr "Liên kết không hợp lệ | Quản Lý Thư Viện"
 
 msgid "Liên kết kích hoạt không hợp lệ"
-msgstr "Invalid activation link"
+msgstr "Liên kết kích hoạt không hợp lệ"
 
 msgid "Có thể liên kết đã được sử dụng hoặc đã hết hạn."
-msgstr "The link may have been used or has expired."
+msgstr "Có thể liên kết đã được sử dụng hoặc đã hết hạn."
 
 msgid "Đến trang đăng nhập"
-msgstr "Go to login page"
+msgstr "Đến trang đăng nhập"
 
 msgid "Kích hoạt thành công | Library Management"
-msgstr "Activation Successful | Library Management"
+msgstr "Kích hoạt thành công | Quản Lý Thư Viện"
 
 msgid "Tài khoản đã được kích hoạt"
-msgstr "Account has been activated"
-
-#, python-format
-msgid ""
-"\n"
-"    Chào <strong>%(username)s</strong>, tài khoản của bạn đã được kích hoạt "
-"thành công.\n"
-"    "
-msgstr ""
-"\n"
-"Hello <strong>%(username)s</strong>, your account has been successfully "
-"activated.\n"
-"    "
+msgstr "Tài khoản đã được kích hoạt"
 
 msgid "Bạn đã được đăng nhập. Bây giờ bạn có thể sử dụng đầy đủ các chức năng của hệ thống."
-msgstr "You are now logged in. You can now use all the features of the system."
+msgstr "Bạn đã được đăng nhập. Bây giờ bạn có thể sử dụng đầy đủ các chức năng của hệ thống."
 
 msgid "Về trang chính"
-msgstr "Go to homepage"
+msgstr "Về trang chính"
 
 msgid "Bạn sẽ được chuyển hướng về trang chính sau 3 giây..."
-msgstr "You will be redirected to the homepage in 3 seconds..."
+msgstr "Bạn sẽ được chuyển hướng về trang chính sau 3 giây..."
 
 # Profile page
 msgid "Hồ sơ cá nhân | Library Management"
-msgstr "Profile | Library Management"
+msgstr "Hồ sơ cá nhân | Quản Lý Thư Viện"
 
 msgid "Quản lý thông tin tài khoản và cài đặt của bạn"
-msgstr "Manage your account information and settings"
+msgstr "Quản lý thông tin tài khoản và cài đặt của bạn"
 
 msgid "Cập nhật thành công!"
-msgstr "Update successful!"
+msgstr "Cập nhật thành công!"
 
 msgid "Thông tin tài khoản"
-msgstr "Account Information"
+msgstr "Thông tin tài khoản"
 
 msgid "Cập nhật thông tin cá nhân của bạn"
-msgstr "Update your personal information"
+msgstr "Cập nhật thông tin cá nhân của bạn"
 
 msgid "Không thể thay đổi"
-msgstr "Cannot be changed"
+msgstr "Không thể thay đổi"
 
 msgid "Họ"
-msgstr "Last name"
+msgstr "Họ"
 
 msgid "Nguyễn"
-msgstr "Nguyen"
+msgstr "Nguyễn"
 
 msgid "Tên"
-msgstr "First name"
+msgstr "Tên"
 
 msgid "An"
 msgstr "An"
 
 msgid "Đổi mật khẩu"
-msgstr "Change password"
+msgstr "Đổi mật khẩu"
 
 msgid "Lưu thay đổi"
-msgstr "Save changes"
+msgstr "Lưu thay đổi"
 
 # Password change
 msgid "Đổi mật khẩu | Library Management"
-msgstr "Change Password | Library Management"
+msgstr "Đổi mật khẩu | Quản Lý Thư Viện"
 
 msgid "Quay lại hồ sơ"
-msgstr "Back to profile"
+msgstr "Quay lại hồ sơ"
 
 msgid "Mật khẩu hiện tại"
-msgstr "Current password"
+msgstr "Mật khẩu hiện tại"
 
 msgid "MẬT KHẨU MỚI"
-msgstr "NEW PASSWORD"
+msgstr "MẬT KHẨU MỚI"
 
 msgid "Mật khẩu mới"
-msgstr "New password"
+msgstr "Mật khẩu mới"
 
 msgid "Xác nhận mật khẩu mới"
-msgstr "Confirm new password"
+msgstr "Xác nhận mật khẩu mới"
 
 msgid "Yêu cầu mật khẩu"
-msgstr "Password requirements"
+msgstr "Yêu cầu mật khẩu"
 
 msgid "Tối thiểu 8 ký tự"
-msgstr "Minimum 8 characters"
+msgstr "Tối thiểu 8 ký tự"
 
 msgid "Không được giống tên đăng nhập"
-msgstr "Must not be the same as username"
+msgstr "Không được giống tên đăng nhập"
 
 msgid "Cập nhật mật khẩu"
-msgstr "Update password"
+msgstr "Cập nhật mật khẩu"
 
 msgid "Đổi mật khẩu thành công | Library Management"
-msgstr "Password Changed | Library Management"
+msgstr "Đổi mật khẩu thành công | Quản Lý Thư Viện"
 
 msgid "Mật khẩu đã được cập nhật"
-msgstr "Password has been updated"
+msgstr "Mật khẩu đã được cập nhật"
 
 msgid "Bạn đã đổi mật khẩu thành công."
-msgstr "You have successfully changed your password."
+msgstr "Bạn đã đổi mật khẩu thành công."
 
 # Home page
 msgid "Trang chủ | Library"
-msgstr "Home | Library"
+msgstr "Trang chủ | Thư Viện"
 
 msgid "Trang chủ thư viện"
-msgstr "Library Homepage"
+msgstr "Trang chủ thư viện"
 
 msgid "Quản lý sách, độc giả và phiếu mượn."
-msgstr "Manage books, readers, and loan slips."
+msgstr "Quản lý sách, độc giả và phiếu mượn."
 
 msgid "Dashboard demo cho hệ thống quản lý thư viện."
-msgstr "Dashboard demo for library management system."
+msgstr "Dashboard demo cho hệ thống quản lý thư viện."
 
 msgid "+ Thêm sách mới"
-msgstr "+ Add New Book"
+msgstr "+ Thêm sách mới"
 
 msgid "+ Thêm độc giả"
-msgstr "+ Add Reader"
+msgstr "+ Thêm độc giả"
 
 msgid "Tổng số sách"
-msgstr "Total Books"
+msgstr "Tổng số sách"
 
 msgid "+8 so với tuần trước"
-msgstr "+8 from last week"
+msgstr "+8 so với tuần trước"
 
 msgid "Số độc giả"
-msgstr "Total Readers"
+msgstr "Số độc giả"
 
 msgid "Đang hoạt động"
-msgstr "Active"
+msgstr "Đang hoạt động"
 
 msgid "Sách đang được mượn"
-msgstr "Books Being Borrowed"
+msgstr "Sách đang được mượn"
 
 msgid "2 quyển quá hạn"
-msgstr "2 books overdue"
+msgstr "2 quyển quá hạn"
 
 msgid "Phiếu mượn hôm nay"
-msgstr "Today's Loan Slips"
+msgstr "Phiếu mượn hôm nay"
 
 msgid "Cập nhật theo ngày"
-msgstr "Updated daily"
+msgstr "Cập nhật theo ngày"
 
 msgid "Sách mới thêm"
-msgstr "Recently Added Books"
+msgstr "Sách mới thêm"
 
 msgid "Xem tất cả"
-msgstr "View all"
+msgstr "Xem tất cả"
 
 msgid "Lập trình"
-msgstr "Programming"
+msgstr "Lập trình"
 
 msgid "Kỹ năng"
-msgstr "Skills"
+msgstr "Kỹ năng"
 
 msgid "Phiếu mượn gần đây"
-msgstr "Recent Loan Slips"
+msgstr "Phiếu mượn gần đây"
 
 msgid "Xem chi tiết"
-msgstr "View details"
+msgstr "Xem chi tiết"
 
 msgid "Đang mượn"
-msgstr "Borrowing"
+msgstr "Đang mượn"
 
 msgid "Gần tới hạn"
-msgstr "Due soon"
+msgstr "Gần tới hạn"
 
 msgid "Đã trả"
-msgstr "Returned"
+msgstr "Đã trả"
 
 # Admin dashboard
 msgid "Admin – Tổng quan | Library"
-msgstr "Admin – Overview | Library"
+msgstr "Admin – Tổng quan | Thư Viện"
 
 msgid "Dashboard admin cho hệ thống quản lý thư viện."
-msgstr "Admin dashboard for library management system."
+msgstr "Dashboard admin cho hệ thống quản lý thư viện."
 
 msgid "Library Admin"
-msgstr "Library Admin"
+msgstr "Quản Trị Thư Viện"
 
 msgid "Bảng điều khiển quản lý thư viện"
-msgstr "Library Management Dashboard"
+msgstr "Bảng điều khiển quản lý thư viện"
 
 msgid "Về trang người dùng"
-msgstr "Go to user page"
+msgstr "Về trang người dùng"
 
 msgid "Admin"
-msgstr "Admin"
+msgstr "Quản trị"
 
 msgid "Tổng quan"
-msgstr "Overview"
+msgstr "Tổng quan"
 
 msgid "Người dùng"
-msgstr "Users"
+msgstr "Người dùng"
 
 msgid "Danh mục"
-msgstr "Categories"
+msgstr "Danh mục"
 
 msgid "Yêu cầu mượn"
-msgstr "Borrow Requests"
+msgstr "Yêu cầu mượn"
 
 msgid "Thống kê"
-msgstr "Statistics"
+msgstr "Thống kê"
 
 # Borrow history
 msgid "Lịch sử mượn sách"
-msgstr "Book Borrow History"
+msgstr "Lịch sử mượn sách"
 
 msgid "Danh sách các yêu cầu mượn sách của:"
-msgstr "List of book borrow requests from:"
+msgstr "Danh sách các yêu cầu mượn sách của:"
 
 msgid "Quay lại trang chủ"
-msgstr "Back to homepage"
+msgstr "Quay lại trang chủ"
 
 msgid "Chưa có thông tin sách"
-msgstr "No book information yet"
+msgstr "Chưa có thông tin sách"
 
 msgid "Tạo lúc"
-msgstr "Created at"
+msgstr "Tạo lúc"
 
 msgid "Đang chờ duyệt"
-msgstr "Pending approval"
+msgstr "Đang chờ duyệt"
 
 msgid "Hủy yêu cầu"
-msgstr "Cancel request"
+msgstr "Hủy yêu cầu"
 
 msgid "Đã được chấp nhận"
-msgstr "Approved"
+msgstr "Đã được chấp nhận"
 
 msgid "Bị từ chối"
-msgstr "Rejected"
+msgstr "Bị từ chối"
 
 msgid "Đã hủy"
-msgstr "Cancelled"
+msgstr "Đã hủy"
 
 msgid "Quá hạn"
-msgstr "Overdue"
+msgstr "Quá hạn"
 
 msgid "Lý do từ chối"
-msgstr "Rejection reason"
+msgstr "Lý do từ chối"
 
 msgid "Bạn chưa có yêu cầu mượn sách nào."
-msgstr "You don't have any borrow requests yet."
+msgstr "Bạn chưa có yêu cầu mượn sách nào."
 
 msgid "Hãy chọn một cuốn sách và tạo yêu cầu mượn đầu tiên."
-msgstr "Choose a book and create your first borrow request."
+msgstr "Hãy chọn một cuốn sách và tạo yêu cầu mượn đầu tiên."
 
 # Borrow request form
 msgid "Mượn sách"
-msgstr "Borrow Book"
-
-#, python-format
-msgid ""
-"\n"
-"            Bạn đang tạo yêu cầu mượn cho\n"
-"            <span class=\"font-medium text-slate-900\">\n"
-"                %(book_title)s\n"
-"            </span>\n"
-"            "
-msgstr ""
-"\n"
-"You are creating a borrow request for\n"
-"<span class=\"font-medium text-slate-900\">\n"
-"%(book_title)s\n"
-"</span>\n"
-"            "
+msgstr "Mượn sách"
 
 msgid "Ngày mượn"
-msgstr "Borrow date"
+msgstr "Ngày mượn"
 
 msgid "Ngày bắt đầu mượn sách."
-msgstr "Start date for borrowing the book."
+msgstr "Ngày bắt đầu mượn sách."
 
 msgid "Ngày trả dự kiến"
-msgstr "Expected return date"
+msgstr "Ngày trả dự kiến"
 
 msgid "Ngày bạn sẽ trả lại sách cho thư viện."
-msgstr "The date you will return the book to the library."
+msgstr "Ngày bạn sẽ trả lại sách cho thư viện."
 
 msgid "Số lượng"
-msgstr "Quantity"
+msgstr "Số lượng"
 
 msgid "Số bản bạn muốn mượn (tối đa theo tồn kho)."
-msgstr "Number of copies you want to borrow (maximum based on stock)."
+msgstr "Số bản bạn muốn mượn (tối đa theo tồn kho)."
 
 msgid "Hủy"
-msgstr "Cancel"
+msgstr "Hủy"
 
 msgid "Gửi yêu cầu"
-msgstr "Submit request"
+msgstr "Gửi yêu cầu"
 
 # ==========================================
 # CATALOG APP TRANSLATIONS
@@ -433,577 +393,577 @@ msgstr "Submit request"
 
 # Models - Author
 msgid "Author"
-msgstr "Author"
+msgstr "Tác giả"
 
 msgid "Authors"
-msgstr "Authors"
+msgstr "Tác giả"
 
 msgid "Name"
-msgstr "Name"
+msgstr "Tên"
 
 msgid "Biography"
-msgstr "Biography"
+msgstr "Tiểu sử"
 
 msgid "Birth date"
-msgstr "Birth date"
+msgstr "Ngày sinh"
 
 msgid "Death date"
-msgstr "Death date"
+msgstr "Ngày mất"
 
 msgid "Created at"
-msgstr "Created at"
+msgstr "Ngày tạo"
 
 # Models - Publisher
 msgid "Publisher"
-msgstr "Publisher"
+msgstr "Nhà xuất bản"
 
 msgid "Publishers"
-msgstr "Publishers"
+msgstr "Nhà xuất bản"
 
 msgid "Description"
-msgstr "Description"
+msgstr "Mô tả"
 
 msgid "Founded year"
-msgstr "Founded year"
+msgstr "Năm thành lập"
 
 msgid "Website"
 msgstr "Website"
 
 # Models - Category
 msgid "Category"
-msgstr "Category"
+msgstr "Danh mục"
 
 msgid "Categories"
-msgstr "Categories"
+msgstr "Danh mục"
 
 msgid "Slug"
-msgstr "Slug"
+msgstr "Đường dẫn"
 
 msgid "Parent category"
-msgstr "Parent category"
+msgstr "Danh mục cha"
 
 # Models - Book
 msgid "Book"
-msgstr "Book"
+msgstr "Sách"
 
 msgid "Books"
-msgstr "Books"
+msgstr "Sách"
 
 msgid "Title"
-msgstr "Title"
+msgstr "Tiêu đề"
 
 msgid "ISBN-13"
 msgstr "ISBN-13"
 
 msgid "Publish year"
-msgstr "Publish year"
+msgstr "Năm xuất bản"
 
 msgid "Pages"
-msgstr "Pages"
+msgstr "Số trang"
 
 msgid "Cover URL"
-msgstr "Cover URL"
+msgstr "URL ảnh bìa"
 
 msgid "Language code"
-msgstr "Language code"
+msgstr "Mã ngôn ngữ"
 
 msgid "Updated at"
-msgstr "Updated at"
+msgstr "Cập nhật lúc"
 
 # Models - BookAuthor
 msgid "Book Author"
-msgstr "Book Author"
+msgstr "Tác giả sách"
 
 msgid "Book Authors"
-msgstr "Book Authors"
+msgstr "Tác giả sách"
 
 msgid "Author order"
-msgstr "Author order"
+msgstr "Thứ tự tác giả"
 
 # Models - BookCategory
 msgid "Book Category"
-msgstr "Book Category"
+msgstr "Danh mục sách"
 
 msgid "Book Categories"
-msgstr "Book Categories"
+msgstr "Danh mục sách"
 
 # Models - BookItem
 msgid "Book Item"
-msgstr "Book Item"
+msgstr "Bản sách"
 
 msgid "Book Items"
-msgstr "Book Items"
+msgstr "Bản sách"
 
 msgid "Barcode"
-msgstr "Barcode"
+msgstr "Mã vạch"
 
 msgid "Status"
-msgstr "Status"
+msgstr "Trạng thái"
 
 msgid "Location code"
-msgstr "Location code"
+msgstr "Mã vị trí"
 
 msgid "Available"
-msgstr "Available"
+msgstr "Có sẵn"
 
 msgid "Reserved"
-msgstr "Reserved"
+msgstr "Đã đặt trước"
 
 msgid "Loaned"
-msgstr "Loaned"
+msgstr "Đang mượn"
 
 msgid "Lost"
-msgstr "Lost"
+msgstr "Đã mất"
 
 msgid "Damaged"
-msgstr "Damaged"
+msgstr "Hư hỏng"
 
 # Models - UserFavorite
 msgid "User"
-msgstr "User"
+msgstr "Người dùng"
 
 msgid "User Favorite"
-msgstr "User Favorite"
+msgstr "Sách yêu thích"
 
 msgid "User Favorites"
-msgstr "User Favorites"
+msgstr "Sách yêu thích"
 
 # Models - FollowAuthor
 msgid "Follow Author"
-msgstr "Follow Author"
+msgstr "Theo dõi tác giả"
 
 msgid "Follow Authors"
-msgstr "Follow Authors"
+msgstr "Theo dõi tác giả"
 
 # Models - FollowPublisher
 msgid "Follow Publisher"
-msgstr "Follow Publisher"
+msgstr "Theo dõi NXB"
 
 msgid "Follow Publishers"
-msgstr "Follow Publishers"
+msgstr "Theo dõi NXB"
 
 # Models - BookComment
 msgid "Book Comment"
-msgstr "Book Comment"
+msgstr "Bình luận sách"
 
 msgid "Book Comments"
-msgstr "Book Comments"
+msgstr "Bình luận sách"
 
 msgid "Content"
-msgstr "Content"
+msgstr "Nội dung"
 
 msgid "Is deleted"
-msgstr "Is deleted"
+msgstr "Đã xóa"
 
 # Models - BookRating
 msgid "Book Rating"
-msgstr "Book Rating"
+msgstr "Đánh giá sách"
 
 msgid "Book Ratings"
-msgstr "Book Ratings"
+msgstr "Đánh giá sách"
 
 msgid "Rating"
-msgstr "Rating"
+msgstr "Đánh giá"
 
 msgid "Review"
-msgstr "Review"
+msgstr "Nhận xét"
 
 # Models - BorrowRequest
 msgid "Borrow Request"
-msgstr "Borrow Request"
+msgstr "Yêu cầu mượn"
 
 msgid "Borrow Requests"
-msgstr "Borrow Requests"
+msgstr "Yêu cầu mượn"
 
 msgid "Book item"
-msgstr "Book item"
+msgstr "Bản sách"
 
 msgid "Requested from"
-msgstr "Requested from"
+msgstr "Ngày mượn"
 
 msgid "Duration"
-msgstr "Duration"
+msgstr "Thời hạn"
 
 msgid "Requested to"
-msgstr "Requested to"
+msgstr "Ngày trả"
 
 msgid "Decision at"
-msgstr "Decision at"
+msgstr "Ngày quyết định"
 
 msgid "Pending"
-msgstr "Pending"
+msgstr "Chờ duyệt"
 
 msgid "Approved"
-msgstr "Approved"
+msgstr "Đã duyệt"
 
 msgid "Rejected"
-msgstr "Rejected"
+msgstr "Từ chối"
 
 msgid "Returned"
-msgstr "Returned"
+msgstr "Đã trả"
 
 msgid "Overdue"
-msgstr "Overdue"
+msgstr "Quá hạn"
 
 msgid "1 Week"
-msgstr "1 Week"
+msgstr "1 Tuần"
 
 msgid "2 Weeks"
-msgstr "2 Weeks"
+msgstr "2 Tuần"
 
 msgid "1 Month"
-msgstr "1 Month"
+msgstr "1 Tháng"
 
 msgid "3 Months"
-msgstr "3 Months"
+msgstr "3 Tháng"
 
 msgid "6 Months"
-msgstr "6 Months"
+msgstr "6 Tháng"
 
 # Models - BorrowRequestItem
 msgid "Borrow Request Item"
-msgstr "Borrow Request Item"
+msgstr "Chi tiết yêu cầu mượn"
 
 msgid "Borrow Request Items"
-msgstr "Borrow Request Items"
+msgstr "Chi tiết yêu cầu mượn"
 
 msgid "Request"
-msgstr "Request"
+msgstr "Yêu cầu"
 
 msgid "Quantity"
-msgstr "Quantity"
+msgstr "Số lượng"
 
 # Models - Loan
 msgid "Loan"
-msgstr "Loan"
+msgstr "Phiếu mượn"
 
 msgid "Loans"
-msgstr "Loans"
+msgstr "Phiếu mượn"
 
 msgid "Request item"
-msgstr "Request item"
+msgstr "Chi tiết yêu cầu"
 
 msgid "Approved from"
-msgstr "Approved from"
+msgstr "Duyệt từ ngày"
 
 msgid "Due date"
-msgstr "Due date"
+msgstr "Ngày đến hạn"
 
 msgid "Returned at"
-msgstr "Returned at"
+msgstr "Ngày trả"
 
 msgid "Borrowed"
-msgstr "Borrowed"
+msgstr "Đang mượn"
 
 # Models - MailQueue
 msgid "Mail Queue"
-msgstr "Mail Queue"
+msgstr "Hàng đợi email"
 
 msgid "Type"
-msgstr "Type"
+msgstr "Loại"
 
 msgid "To user"
-msgstr "To user"
+msgstr "Đến người dùng"
 
 msgid "To admin"
-msgstr "To admin"
+msgstr "Đến quản trị"
 
 msgid "To email"
-msgstr "To email"
+msgstr "Đến email"
 
 msgid "Subject"
-msgstr "Subject"
+msgstr "Tiêu đề"
 
 msgid "Body"
-msgstr "Body"
+msgstr "Nội dung"
 
 msgid "Reference type"
-msgstr "Reference type"
+msgstr "Loại tham chiếu"
 
 msgid "Reference ID"
-msgstr "Reference ID"
+msgstr "ID tham chiếu"
 
 msgid "Scheduled at"
-msgstr "Scheduled at"
+msgstr "Lên lịch lúc"
 
 msgid "Sent at"
-msgstr "Sent at"
+msgstr "Gửi lúc"
 
 msgid "Error"
-msgstr "Error"
+msgstr "Lỗi"
 
 msgid "Borrow accepted"
-msgstr "Borrow accepted"
+msgstr "Chấp nhận mượn"
 
 msgid "Borrow rejected"
-msgstr "Borrow rejected"
+msgstr "Từ chối mượn"
 
 msgid "Account activation"
-msgstr "Account activation"
+msgstr "Kích hoạt tài khoản"
 
 msgid "Return reminder admin"
-msgstr "Return reminder admin"
+msgstr "Nhắc nhở trả sách"
 
 msgid "Queued"
-msgstr "Queued"
+msgstr "Đang chờ"
 
 msgid "Sent"
-msgstr "Sent"
+msgstr "Đã gửi"
 
 msgid "Failed"
-msgstr "Failed"
+msgstr "Thất bại"
 
 msgid "Cancelled"
-msgstr "Cancelled"
+msgstr "Đã hủy"
 
 # Admin
 msgid "Library Management System"
-msgstr "Library Management System"
+msgstr "Hệ thống Quản lý Thư viện"
 
 msgid "Welcome to Library Management"
-msgstr "Welcome to Library Management"
+msgstr "Chào mừng đến với Quản lý Thư viện"
 
 msgid "Basic Information"
-msgstr "Basic Information"
+msgstr "Thông tin cơ bản"
 
 msgid "Hierarchy"
-msgstr "Hierarchy"
+msgstr "Phân cấp"
 
 msgid "Select a parent category to create a subcategory hierarchy."
-msgstr "Select a parent category to create a subcategory hierarchy."
+msgstr "Chọn danh mục cha để tạo phân cấp danh mục con."
 
 msgid "%(count)s books"
-msgstr "%(count)s books"
+msgstr "%(count)s sách"
 
 msgid "%(count)s subcategories"
-msgstr "%(count)s subcategories"
+msgstr "%(count)s danh mục con"
 
 msgid "No subcategories"
-msgstr "No subcategories"
+msgstr "Không có danh mục con"
 
 msgid "Subcategories"
-msgstr "Subcategories"
+msgstr "Danh mục con"
 
 msgid "Cannot set parent to a descendant category."
-msgstr "Cannot set parent to a descendant category."
+msgstr "Không thể đặt danh mục con làm danh mục cha."
 
 msgid "Clear parent category (make top-level)"
-msgstr "Clear parent category (make top-level)"
+msgstr "Xóa danh mục cha (đưa lên cấp cao nhất)"
 
 msgid "Successfully cleared parent for %(count)s categories."
-msgstr "Successfully cleared parent for %(count)s categories."
+msgstr "Đã xóa danh mục cha cho %(count)s danh mục."
 
 msgid "Set as subcategories of first selected"
-msgstr "Set as subcategories of first selected"
+msgstr "Đặt làm danh mục con của danh mục đầu tiên"
 
 msgid "Please select at least 2 categories (first will be parent, others will become subcategories)."
-msgstr "Please select at least 2 categories (first will be parent, others will become subcategories)."
+msgstr "Vui lòng chọn ít nhất 2 danh mục (danh mục đầu tiên sẽ là cha, các danh mục khác sẽ thành con)."
 
 msgid "Cannot set %(parent)s as parent for %(child)s - would create circular relationship."
-msgstr "Cannot set %(parent)s as parent for %(child)s - would create circular relationship."
+msgstr "Không thể đặt %(parent)s làm cha của %(child)s - sẽ tạo vòng lặp."
 
 msgid "Successfully set %(parent)s as parent for %(count)s categories."
-msgstr "Successfully set %(parent)s as parent for %(count)s categories."
+msgstr "Đã đặt %(parent)s làm cha cho %(count)s danh mục."
 
 msgid "Dates"
-msgstr "Dates"
+msgstr "Ngày tháng"
 
 msgid "Additional Info"
-msgstr "Additional Info"
+msgstr "Thông tin bổ sung"
 
 msgid "Publication Details"
-msgstr "Publication Details"
+msgstr "Thông tin xuất bản"
 
 msgid "Media"
-msgstr "Media"
+msgstr "Phương tiện"
 
 msgid "Timestamps"
-msgstr "Timestamps"
+msgstr "Thời gian"
 
 msgid "Items"
-msgstr "Items"
+msgstr "Bản sách"
 
 msgid "Book Information"
-msgstr "Book Information"
+msgstr "Thông tin sách"
 
 msgid "Item Details"
-msgstr "Item Details"
+msgstr "Chi tiết bản sách"
 
 msgid "Return selected books"
-msgstr "Return selected books"
+msgstr "Trả sách đã chọn"
 
 msgid "%(count)s books returned successfully."
-msgstr "%(count)s books returned successfully."
+msgstr "%(count)s sách đã được trả thành công."
 
 msgid "Mark selected books as Lost"
-msgstr "Mark selected books as Lost"
+msgstr "Đánh dấu sách đã chọn là Mất"
 
 msgid "%(count)s books marked as lost."
-msgstr "%(count)s books marked as lost."
+msgstr "%(count)s sách đã được đánh dấu là mất."
 
 # Admin Templates
 msgid "Books Management"
-msgstr "Books Management"
+msgstr "Quản lý Sách"
 
 msgid "Categories Management"
-msgstr "Categories Management"
+msgstr "Quản lý Danh mục"
 
 msgid "Authors Management"
-msgstr "Authors Management"
+msgstr "Quản lý Tác giả"
 
 msgid "Publishers Management"
-msgstr "Publishers Management"
+msgstr "Quản lý Nhà xuất bản"
 
 msgid "Export to Excel"
-msgstr "Export to Excel"
+msgstr "Xuất ra Excel"
 
 msgid "Export Excel"
-msgstr "Export Excel"
+msgstr "Xuất Excel"
 
 # Validation messages
 msgid "New requests can only be Pending, Approved, or Rejected."
-msgstr "New requests can only be Pending, Approved, or Rejected."
+msgstr "Yêu cầu mới chỉ có thể là Chờ duyệt, Đã duyệt, hoặc Từ chối."
 
 msgid "Book item is required for approval."
-msgstr "Book item is required for approval."
+msgstr "Cần có bản sách để duyệt."
 
 msgid "Book item %(barcode)s is not available (Status: %(status)s)."
-msgstr "Book item %(barcode)s is not available (Status: %(status)s)."
+msgstr "Bản sách %(barcode)s không khả dụng (Trạng thái: %(status)s)."
 
 msgid "Cannot edit a request that has already been returned."
-msgstr "Cannot edit a request that has already been returned."
+msgstr "Không thể chỉnh sửa yêu cầu đã được trả."
 
 msgid "Approved requests can only be changed to Returned, Lost, or Overdue."
-msgstr "Approved requests can only be changed to Returned, Lost, or Overdue."
+msgstr "Yêu cầu đã duyệt chỉ có thể chuyển sang Đã trả, Mất, hoặc Quá hạn."
 
 msgid "Only approved, overdue, or lost requests can be returned."
-msgstr "Only approved, overdue, or lost requests can be returned."
+msgstr "Chỉ có thể trả các yêu cầu đã duyệt, quá hạn, hoặc mất."
 
 #, python-format
 msgid "Request #%(id)s by %(user)s"
-msgstr "Request #%(id)s by %(user)s"
+msgstr "Yêu cầu #%(id)s của %(user)s"
 
 # Admin Dashboard
 msgid "Total Books"
-msgstr "Total Books"
+msgstr "Tổng số sách"
 
 msgid "Active Users"
-msgstr "Active Users"
+msgstr "Người dùng hoạt động"
 
 msgid "Pending Requests"
-msgstr "Pending Requests"
+msgstr "Yêu cầu đang chờ"
 
 msgid "Overdue Loans"
-msgstr "Overdue Loans"
+msgstr "Sách quá hạn"
 
 msgid "Library Statistics"
-msgstr "Library Statistics"
+msgstr "Thống kê thư viện"
 
 msgid "Period:"
-msgstr "Period:"
+msgstr "Kỳ:"
 
 msgid "This Month"
-msgstr "This Month"
+msgstr "Tháng này"
 
 msgid "This Year"
-msgstr "This Year"
+msgstr "Năm nay"
 
 msgid "Year:"
-msgstr "Year:"
+msgstr "Năm:"
 
 msgid "Month:"
-msgstr "Month:"
+msgstr "Tháng:"
 
 msgid "Books by Category (total)"
-msgstr "Books by Category (total)"
+msgstr "Số lượng sách theo thể loại (tổng)"
 
 msgid "Loan Trends Over Time"
-msgstr "Loan Trends Over Time"
+msgstr "Xu hướng mượn theo thời gian"
 
 msgid "Borrow Request Status"
-msgstr "Borrow Request Status"
+msgstr "Trạng thái yêu cầu mượn sách"
 
 msgid "Book Languages in Library"
-msgstr "Book Languages in Library"
+msgstr "Ngôn ngữ sách trong thư viện"
 
 msgid "Quick Actions"
-msgstr "Quick Actions"
+msgstr "Thao tác nhanh"
 
 msgid "User Management"
-msgstr "User Management"
+msgstr "Quản lý người dùng"
 
 msgid "Category Management"
-msgstr "Category Management"
+msgstr "Quản lý thể loại sách"
 
 msgid "Author Management"
-msgstr "Author Management"
+msgstr "Quản lý tác giả"
 
 msgid "Publisher Management"
-msgstr "Publisher Management"
+msgstr "Quản lý nhà xuất bản"
 
 msgid "Book Management"
-msgstr "Book Management"
+msgstr "Quản lý sách"
 
 msgid "Borrow Request Management"
-msgstr "Borrow Request Management"
+msgstr "Quản lý yêu cầu mượn sách"
 
 msgid "Export Excel Data"
-msgstr "Export Excel Data"
+msgstr "Xuất dữ liệu Excel"
 
 msgid "Export Books Excel"
-msgstr "Export Books Excel"
+msgstr "Xuất Excel Sách"
 
 msgid "Export Categories Excel"
-msgstr "Export Categories Excel"
+msgstr "Xuất Excel Thể loại"
 
 msgid "Export Authors Excel"
-msgstr "Export Authors Excel"
+msgstr "Xuất Excel Tác giả"
 
 msgid "Export Publishers Excel"
-msgstr "Export Publishers Excel"
+msgstr "Xuất Excel Nhà XB"
 
 msgid "Recent Activity"
-msgstr "Recent Activity"
+msgstr "Hoạt động gần đây"
 
 msgid "Loading recent activity..."
-msgstr "Loading recent activity..."
+msgstr "Đang tải hoạt động gần đây..."
 
 # Recent Activity API strings
 #, python-format
 msgid "Category: %(name)s"
-msgstr "Category: %(name)s"
+msgstr "Danh mục: %(name)s"
 
 #, python-format
 msgid "Slug: %(slug)s"
-msgstr "Slug: %(slug)s"
+msgstr "Đường dẫn: %(slug)s"
 
 #, python-format
 msgid "Books: %(count)s"
-msgstr "Books: %(count)s"
+msgstr "Sách: %(count)s"
 
 #, python-format
 msgid "Children: %(count)s"
-msgstr "Children: %(count)s"
+msgstr "Danh mục con: %(count)s"
 
 msgid "Recently"
-msgstr "Recently"
+msgstr "Gần đây"
 
 #, python-format
 msgid "Publisher: %(name)s"
-msgstr "Publisher: %(name)s"
+msgstr "Nhà xuất bản: %(name)s"
 
 #, python-format
 msgid "Founded: %(year)s"
-msgstr "Founded: %(year)s"
+msgstr "Năm thành lập: %(year)s"
 
 msgid "Unknown"
-msgstr "Unknown"
+msgstr "Không rõ"
 
 msgid "Yes"
-msgstr "Yes"
+msgstr "Có"
 
 msgid "No"
-msgstr "No"
+msgstr "Không"
 
 #, python-format
 msgid "Website: %(status)s"
@@ -1011,33 +971,33 @@ msgstr "Website: %(status)s"
 
 #, python-format
 msgid "Author: %(name)s"
-msgstr "Author: %(name)s"
+msgstr "Tác giả: %(name)s"
 
 #, python-format
 msgid "Born: %(date)s"
-msgstr "Born: %(date)s"
+msgstr "Ngày sinh: %(date)s"
 
 #, python-format
 msgid "New book: %(title)s"
-msgstr "New book: %(title)s"
+msgstr "Sách mới: %(title)s"
 
 #, python-format
 msgid "Year: %(year)s"
-msgstr "Year: %(year)s"
+msgstr "Năm: %(year)s"
 
 # Time ago strings
 #, python-format
 msgid "%(count)ss ago"
-msgstr "%(count)ss ago"
+msgstr "%(count)s giây trước"
 
 #, python-format
 msgid "%(count)sm ago"
-msgstr "%(count)sm ago"
+msgstr "%(count)s phút trước"
 
 #, python-format
 msgid "%(count)sh ago"
-msgstr "%(count)sh ago"
+msgstr "%(count)s giờ trước"
 
 #, python-format
 msgid "%(count)sd ago"
-msgstr "%(count)sd ago"
+msgstr "%(count)s ngày trước"

@@ -5,6 +5,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django.db.models import Count, Q, Min, Max
 from django.db.models.functions import ExtractMonth, ExtractDay
 from datetime import date, timedelta
@@ -142,12 +143,13 @@ def admin_activity_api(request):
         activities.append(
             {
                 "timestamp": timezone.now(),
-                "message": f"Category: {cat.name}",
+                "message": _("Category: %(name)s") % {"name": cat.name},
                 "details": (
-                    f"Slug: {cat.slug} • Books: {cat.books_count} • "
-                    f"Children: {cat.children_count}"
+                    _("Slug: %(slug)s") % {"slug": cat.slug} + " • " +
+                    _("Books: %(count)s") % {"count": cat.books_count} + " • " +
+                    _("Children: %(count)s") % {"count": cat.children_count}
                 ),
-                "ago": "Recently",
+                "ago": _("Recently"),
                 "type": "category",
             }
         )
@@ -158,14 +160,16 @@ def admin_activity_api(request):
         .order_by("-created_at")[:3]
     )
     for pub in recent_publishers:
+        founded_str = pub.founded_year or _("Unknown")
+        website_str = _("Yes") if pub.website else _("No")
         activities.append(
             {
                 "timestamp": pub.created_at,
-                "message": f"Publisher: {pub.name}",
+                "message": _("Publisher: %(name)s") % {"name": pub.name},
                 "details": (
-                    f"Founded: {pub.founded_year or 'Unknown'} • "
-                    f"Books: {pub.books_count} • "
-                    f"Website: {'Yes' if pub.website else 'No'}"
+                    _("Founded: %(year)s") % {"year": founded_str} + " • " +
+                    _("Books: %(count)s") % {"count": pub.books_count} + " • " +
+                    _("Website: %(status)s") % {"status": website_str}
                 ),
                 "ago": time_ago(pub.created_at),
                 "type": "publisher",
@@ -178,13 +182,14 @@ def admin_activity_api(request):
         .order_by("-created_at")[:3]
     )
     for author in recent_authors:
+        born_str = author.birth_date or _("Unknown")
         activities.append(
             {
                 "timestamp": author.created_at,
-                "message": f"Author: {author.name}",
+                "message": _("Author: %(name)s") % {"name": author.name},
                 "details": (
-                    f"Born: {author.birth_date or 'Unknown'} • "
-                    f"Books: {author.books_count}"
+                    _("Born: %(date)s") % {"date": born_str} + " • " +
+                    _("Books: %(count)s") % {"count": author.books_count}
                 ),
                 "ago": time_ago(author.created_at),
                 "type": "author",
@@ -194,13 +199,15 @@ def admin_activity_api(request):
     # Recent books
     recent_books = Book.objects.order_by("-created_at")[:4]
     for book in recent_books:
+        publisher_str = book.publisher or "-"
+        year_str = book.publish_year or "-"
         activities.append(
             {
                 "timestamp": book.created_at,
-                "message": f"New book: {book.title}",
+                "message": _("New book: %(title)s") % {"title": book.title},
                 "details": (
-                    f"Publisher: {book.publisher or '-'} • "
-                    f"Year: {book.publish_year or '-'}"
+                    _("Publisher: %(name)s") % {"name": publisher_str} + " • " +
+                    _("Year: %(year)s") % {"year": year_str}
                 ),
                 "ago": time_ago(book.created_at),
                 "type": "book",

@@ -3,6 +3,7 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.db import models
 from django.forms import Textarea
+from django.utils.translation import gettext_lazy as _
 from .models import (
     Author,
     Publisher,
@@ -16,9 +17,9 @@ from .models import (
 
 
 # Custom Admin Site Configuration
-admin.site.site_header = "Library Management System"
-admin.site.site_title = "Library Admin"
-admin.site.index_title = "Welcome to Library Management"
+admin.site.site_header = _("Library Management System")
+admin.site.site_title = _("Library Admin")
+admin.site.index_title = _("Welcome to Library Management")
 
 
 @admin.register(Category)
@@ -34,12 +35,12 @@ class CategoryAdmin(admin.ModelAdmin):
     actions = ["make_parent_categories", "clear_parent_categories"]
 
     fieldsets = (
-        ("Basic Information", {"fields": ("name", "slug", "description")}),
+        (_("Basic Information"), {"fields": ("name", "slug", "description")}),
         (
-            "Hierarchy",
+            _("Hierarchy"),
             {
                 "fields": ("parent",),
-                "description": (
+                "description": _(
                     "Select a parent category to create a "
                     "subcategory hierarchy."
                 ),
@@ -50,22 +51,23 @@ class CategoryAdmin(admin.ModelAdmin):
     def books_count(self, obj):
         count = obj.books.count()
         return format_html(
-            '<span style="color: #007cba; font-weight: bold;">{} books</span>', count
+            '<span style="color: #007cba; font-weight: bold;">{}</span>',
+            _("%(count)s books") % {"count": count}
         )
 
-    books_count.short_description = "Books"
+    books_count.short_description = _("Books")
     books_count.admin_order_field = "books_count"
 
     def children_count(self, obj):
         count = obj.children.count()
         if count > 0:
             return format_html(
-                '<span style="color: blue; font-weight: bold;">{} subcategories</span>',
-                count,
+                '<span style="color: blue; font-weight: bold;">{}</span>',
+                _("%(count)s subcategories") % {"count": count}
             )
-        return "No subcategories"
+        return _("No subcategories")
 
-    children_count.short_description = "Subcategories"
+    children_count.short_description = _("Subcategories")
     children_count.admin_order_field = "children_count"
 
     def get_queryset(self, request):
@@ -83,28 +85,28 @@ class CategoryAdmin(admin.ModelAdmin):
                 if parent.pk == obj.pk:
                     from django.core.exceptions import ValidationError
 
-                    raise ValidationError("Cannot set parent to a descendant category.")
+                    raise ValidationError(_("Cannot set parent to a descendant category."))
                 parent = parent.parent
         super().save_model(request, obj, form, change)
 
-    @admin.action(description="Clear parent category (make top-level)")
+    @admin.action(description=_("Clear parent category (make top-level)"))
     def clear_parent_categories(self, request, queryset):
         """Action to make selected categories top-level by clearing their parent."""
         count = queryset.update(parent=None)
         self.message_user(
             request,
-            f"Successfully cleared parent for {count} categories.",
+            _("Successfully cleared parent for %(count)s categories.") % {"count": count},
             level="success",
         )
 
-    @admin.action(description="Set as subcategories of first selected")
+    @admin.action(description=_("Set as subcategories of first selected"))
     def make_parent_categories(self, request, queryset):
         """Action to set the first selected category as parent for others."""
         categories = list(queryset)
         if len(categories) < 2:
             self.message_user(
                 request,
-                (
+                _(
                     "Please select at least 2 categories (first will be "
                     "parent, others will become subcategories)."
                 ),
@@ -122,11 +124,10 @@ class CategoryAdmin(admin.ModelAdmin):
                 if temp_parent.pk == child.pk:
                     self.message_user(
                         request,
-                        (
-                            f"Cannot set {parent_category.name} as parent "
-                            f"for {child.name} - would create circular "
-                            f"relationship."
-                        ),
+                        _(
+                            "Cannot set %(parent)s as parent for %(child)s - "
+                            "would create circular relationship."
+                        ) % {"parent": parent_category.name, "child": child.name},
                         level="error",
                     )
                     return
@@ -139,10 +140,9 @@ class CategoryAdmin(admin.ModelAdmin):
 
         self.message_user(
             request,
-            (
-                f"Successfully set {parent_category.name} as parent for "
-                f"{len(children)} categories."
-            ),
+            _(
+                "Successfully set %(parent)s as parent for %(count)s categories."
+            ) % {"parent": parent_category.name, "count": len(children)},
             level="success",
         )
 
@@ -152,18 +152,24 @@ class BookAuthorInline(admin.TabularInline):
     model = BookAuthor
     extra = 1
     autocomplete_fields = ["author"]
+    verbose_name = _("Author")
+    verbose_name_plural = _("Authors")
 
 
 class BookCategoryInline(admin.TabularInline):
     model = BookCategory
     extra = 1
     autocomplete_fields = ["category"]
+    verbose_name = _("Category")
+    verbose_name_plural = _("Categories")
 
 
 class BookItemInline(admin.TabularInline):
     model = BookItem
     extra = 1
     readonly_fields = ["created_at"]
+    verbose_name = _("Book Item")
+    verbose_name_plural = _("Book Items")
 
 
 @admin.register(Author)
@@ -182,9 +188,9 @@ class AuthorAdmin(admin.ModelAdmin):
     list_per_page = 25
 
     fieldsets = (
-        ("Basic Information", {"fields": ("name", "biography")}),
+        (_("Basic Information"), {"fields": ("name", "biography")}),
         (
-            "Dates",
+            _("Dates"),
             {
                 "fields": ("birth_date", "death_date", "created_at"),
                 "classes": ("collapse",),
@@ -195,9 +201,9 @@ class AuthorAdmin(admin.ModelAdmin):
     def books_count(self, obj):
         count = obj.books.count()
         url = reverse("admin:catalog_book_changelist") + f"?authors__id__exact={obj.id}"
-        return format_html('<a href="{}">{} books</a>', url, count)
+        return format_html('<a href="{}">{}</a>', url, _("%(count)s books") % {"count": count})
 
-    books_count.short_description = "Books"
+    books_count.short_description = _("Books")
 
 
 @admin.register(Publisher)
@@ -215,9 +221,9 @@ class PublisherAdmin(admin.ModelAdmin):
     date_hierarchy = "created_at"
     list_per_page = 25
     fieldsets = (
-        ("Basic Information", {"fields": ("name", "description")}),
+        (_("Basic Information"), {"fields": ("name", "description")}),
         (
-            "Additional Info",
+            _("Additional Info"),
             {
                 "fields": ("founded_year", "website", "created_at"),
                 "classes": ("collapse",),
@@ -232,16 +238,16 @@ class PublisherAdmin(admin.ModelAdmin):
             )
         return "-"
 
-    website_link.short_description = "Website"
+    website_link.short_description = _("Website")
 
     def books_count(self, obj):
         count = obj.books.count()
         url = (
             reverse("admin:catalog_book_changelist") + f"?publisher__id__exact={obj.id}"
         )
-        return format_html('<a href="{}">{} books</a>', url, count)
+        return format_html('<a href="{}">{}</a>', url, _("%(count)s books") % {"count": count})
 
-    books_count.short_description = "Books"
+    books_count.short_description = _("Books")
 
 
 @admin.register(Book)
@@ -271,9 +277,9 @@ class BookAdmin(admin.ModelAdmin):
     inlines = [BookAuthorInline, BookCategoryInline, BookItemInline]
 
     fieldsets = (
-        ("Basic Information", {"fields": ("title", "description", "isbn13")}),
+        (_("Basic Information"), {"fields": ("title", "description", "isbn13")}),
         (
-            "Publication Details",
+            _("Publication Details"),
             {
                 "fields": (
                     "publisher",
@@ -283,9 +289,9 @@ class BookAdmin(admin.ModelAdmin):
                 )
             },
         ),
-        ("Media", {"fields": ("cover_url",), "classes": ("collapse",)}),
+        (_("Media"), {"fields": ("cover_url",), "classes": ("collapse",)}),
         (
-            "Timestamps",
+            _("Timestamps"),
             {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
         ),
     )
@@ -297,7 +303,7 @@ class BookAdmin(admin.ModelAdmin):
     def items_count(self, obj):
         return obj.items.count()
 
-    items_count.short_description = "Items"
+    items_count.short_description = _("Items")
 
 
 @admin.register(BookItem)
@@ -316,15 +322,15 @@ class BookItemAdmin(admin.ModelAdmin):
     list_per_page = 25
 
     fieldsets = (
-        ("Book Information", {"fields": ("book",)}),
-        ("Item Details", {"fields": ("barcode", "status", "location_code")}),
-        ("Timestamps", {"fields": ("created_at",), "classes": ("collapse",)}),
+        (_("Book Information"), {"fields": ("book",)}),
+        (_("Item Details"), {"fields": ("barcode", "status", "location_code")}),
+        (_("Timestamps"), {"fields": ("created_at",), "classes": ("collapse",)}),
     )
 
     def book_title(self, obj):
         return obj.book.title
 
-    book_title.short_description = "Book"
+    book_title.short_description = _("Book")
 
     def status_colored(self, obj):
         colors = {
@@ -341,7 +347,7 @@ class BookItemAdmin(admin.ModelAdmin):
             obj.get_status_display(),
         )
 
-    status_colored.short_description = "Status"
+    status_colored.short_description = _("Status")
 
 
 # Register the through models for direct management if needed
@@ -401,7 +407,7 @@ class BorrowRequestAdmin(admin.ModelAdmin):
         obj.admin = request.user
         super().save_model(request, obj, form, change)
 
-    @admin.action(description="Return selected books")
+    @admin.action(description=_("Return selected books"))
     def return_books(self, request, queryset):
         updated_count = 0
         for borrow_request in queryset:
@@ -414,10 +420,12 @@ class BorrowRequestAdmin(admin.ModelAdmin):
                 borrow_request.save()
                 updated_count += 1
         self.message_user(
-            request, f"{updated_count} books returned successfully.", messages.SUCCESS
+            request,
+            _("%(count)s books returned successfully.") % {"count": updated_count},
+            messages.SUCCESS
         )
 
-    @admin.action(description="Mark selected books as Lost")
+    @admin.action(description=_("Mark selected books as Lost"))
     def mark_books_as_lost(self, request, queryset):
         updated_count = 0
         for borrow_request in queryset:
@@ -429,7 +437,9 @@ class BorrowRequestAdmin(admin.ModelAdmin):
                 borrow_request.save()
                 updated_count += 1
         self.message_user(
-            request, f"{updated_count} books marked as lost.", messages.SUCCESS
+            request,
+            _("%(count)s books marked as lost.") % {"count": updated_count},
+            messages.SUCCESS
         )
 
     def get_form(self, request, obj=None, **kwargs):
