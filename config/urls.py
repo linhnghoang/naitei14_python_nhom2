@@ -29,6 +29,8 @@ def home_redirect(request):
 urlpatterns = [
     path("", home_redirect, name="home"),
     path("i18n/", include("django.conf.urls.i18n")),
+    path("accounts/", include("accounts.urls")),
+    path("accounts/", include("allauth.urls")),
     # Place API endpoints BEFORE the admin.urls to avoid 404 from
     # admin's resolver
     path(
