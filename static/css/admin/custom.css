@@ -1,0 +1,464 @@
+/* Custom Admin Styles */
+
+/* ============================================
+   RESPONSIVE ADMIN STYLES
+   ============================================ */
+
+/* ---- Mobile-First Base Styles ---- */
+
+/* Make tables horizontally scrollable on mobile */
+.card-body,
+.table-responsive-sm,
+#changelist {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Results table wrapper for horizontal scroll */
+#changelist .results {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#changelist table {
+    min-width: 600px;
+}
+
+/* ---- Mobile Styles (< 768px) ---- */
+@media (max-width: 767.98px) {
+    /* Content wrapper padding */
+    .content-wrapper {
+        padding: 10px !important;
+    }
+
+    .content-wrapper > .content {
+        padding: 0 !important;
+    }
+
+    .container-fluid {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    /* Page header - stack title and breadcrumbs */
+    .content-wrapper .content.border-bottom .row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .content-wrapper .content.border-bottom h1 {
+        font-size: 1.2rem !important;
+        border-right: none !important;
+        padding-right: 0 !important;
+        margin-right: 0 !important;
+        margin-bottom: 5px;
+    }
+
+    /* Breadcrumbs */
+    .breadcrumb {
+        font-size: 0.75rem;
+        flex-wrap: wrap;
+        padding: 0;
+        margin: 0;
+    }
+
+    /* Object tools (Add button, Export button) */
+    .object-tools {
+        display: flex !important;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 15px !important;
+        padding: 0 !important;
+    }
+
+    .object-tools li {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .object-tools a {
+        padding: 8px 14px !important;
+        font-size: 13px !important;
+    }
+
+    /* Changelist form */
+    #changelist-form {
+        overflow-x: auto;
+    }
+
+    /* Changelist filters - stack vertically */
+    #changelist-filter {
+        position: relative !important;
+        width: 100% !important;
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    #changelist-filter h2 {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    #changelist-filter h3 {
+        font-size: 13px;
+        margin: 10px 0 5px;
+    }
+
+    #changelist-filter ul {
+        margin-bottom: 10px;
+    }
+
+    /* Date hierarchy */
+    .xfull {
+        flex-wrap: wrap !important;
+    }
+
+    .xfull span {
+        margin: 2px !important;
+    }
+
+    /* Tables */
+    #changelist table {
+        font-size: 13px;
+    }
+
+    #changelist table th,
+    #changelist table td {
+        padding: 8px 10px !important;
+        white-space: nowrap;
+    }
+
+    /* Checkbox column */
+    #changelist table .action-checkbox-column,
+    #changelist table td:first-child {
+        width: 40px !important;
+        min-width: 40px !important;
+    }
+
+    /* Action dropdown */
+    #changelist .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 0;
+    }
+
+    #changelist .actions select {
+        min-width: 150px;
+        max-width: 100%;
+    }
+
+    #changelist .actions label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    /* Pagination */
+    .paginator {
+        font-size: 13px;
+        padding: 10px 0;
+    }
+
+    .paginator a,
+    .paginator span {
+        padding: 5px 8px;
+    }
+
+    /* Form pages (add/edit) */
+    .form-row {
+        flex-direction: column !important;
+    }
+
+    .form-row > div {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+
+    fieldset .form-row {
+        padding: 10px;
+    }
+
+    /* Form inputs */
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="number"],
+    input[type="url"],
+    input[type="date"],
+    textarea,
+    select {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .vTextField,
+    .vURLField,
+    .vIntegerField {
+        width: 100% !important;
+    }
+
+    /* Inline admin forms */
+    .inline-group .tabular td {
+        display: block;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .inline-group .tabular th {
+        display: none;
+    }
+
+    .inline-group .tabular td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    /* Submit buttons row */
+    .submit-row {
+        display: flex !important;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 15px !important;
+    }
+
+    .submit-row input,
+    .submit-row a,
+    .submit-row button {
+        flex: 1 1 auto;
+        min-width: 120px;
+        text-align: center;
+        padding: 12px 15px !important;
+    }
+
+    .submit-row .deletelink-box {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    /* Cards */
+    .card {
+        margin-bottom: 15px;
+    }
+
+    .card-header {
+        padding: 12px 15px;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    /* Related widget wrapper */
+    .related-widget-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .related-widget-wrapper select {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    /* Tab navigation (form tabs) */
+    .nav-tabs-custom > .nav-tabs {
+        flex-wrap: wrap;
+    }
+
+    .nav-tabs-custom > .nav-tabs > li {
+        flex: 0 0 auto;
+    }
+
+    .nav-tabs-custom > .nav-tabs > li > a {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+
+    /* Help text */
+    .help,
+    .helptext {
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    /* Error list */
+    .errorlist {
+        font-size: 12px;
+    }
+
+    /* Sidebar collapsed by default on mobile */
+    body.sidebar-mini .main-sidebar {
+        margin-left: -250px;
+    }
+
+    body.sidebar-mini.sidebar-open .main-sidebar {
+        margin-left: 0;
+    }
+
+    /* Navbar adjustments */
+    .main-header.navbar {
+        padding: 0 10px;
+    }
+
+    .main-header .navbar-nav .nav-link {
+        padding: 10px 8px;
+    }
+
+    /* Filter dropdown selects */
+    #changelist-filter select,
+    .admin-filter select {
+        width: 100%;
+        max-width: 100%;
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    /* Search box */
+    #changelist-search {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    #changelist-search #searchbar {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    #changelist-search input[type="submit"] {
+        flex: 0 0 auto;
+    }
+}
+
+/* ---- Small tablets (576px - 767px) ---- */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .content-wrapper .content.border-bottom h1 {
+        font-size: 1.4rem !important;
+    }
+
+    #changelist table {
+        font-size: 14px;
+    }
+
+    .submit-row input,
+    .submit-row a,
+    .submit-row button {
+        flex: 0 1 auto;
+        min-width: 150px;
+    }
+}
+
+/* ---- Tablets (768px - 991px) ---- */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    #changelist-filter {
+        position: relative !important;
+        width: 100% !important;
+        margin-bottom: 20px;
+    }
+
+    .form-row {
+        flex-wrap: wrap;
+    }
+
+    .form-row > div {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+/* ---- Desktop fixes ---- */
+@media (min-width: 992px) {
+    #changelist table {
+        min-width: auto;
+    }
+}
+
+/* ============================================
+   END RESPONSIVE STYLES
+   ============================================ */
+
+/* Language Chooser Enhancement */
+.language-chooser,
+#language-chooser {
+    display: flex !important;
+    align-items: center;
+    margin-right: 15px;
+}
+
+.language-chooser .dropdown-toggle,
+#language-chooser .dropdown-toggle {
+    color: #fff !important;
+    background: rgba(255,255,255,0.1) !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    border-radius: 6px !important;
+    padding: 5px 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.language-chooser .dropdown-toggle:hover,
+#language-chooser .dropdown-toggle:hover {
+    background: rgba(255,255,255,0.2) !important;
+}
+
+/* Globe icon for language */
+.language-chooser .dropdown-toggle::before,
+#language-chooser .dropdown-toggle::before {
+    content: "🌐";
+    margin-right: 5px;
+}
+
+/* Dropdown menu styling */
+.language-chooser .dropdown-menu,
+#language-chooser .dropdown-menu {
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+    overflow: hidden !important;
+}
+
+.language-chooser .dropdown-item,
+#language-chooser .dropdown-item {
+    padding: 10px 15px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.language-chooser .dropdown-item:hover,
+#language-chooser .dropdown-item:hover {
+    background: #f5f5f5 !important;
+}
+
+/* Remove blue background from active/selected language */
+.language-chooser .dropdown-item.active,
+.language-chooser .dropdown-item:active,
+#language-chooser .dropdown-item.active,
+#language-chooser .dropdown-item:active,
+#jazzy-languagemenu .dropdown-item.active,
+#jazzy-languagemenu .dropdown-item:active,
+#jazzy-languagemenu button.active {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: #212529 !important;
+}
+
+/* Remove blue background from navbar icons */
+#jazzy-navbar .nav-link.btn,
+#jazzy-navbar .navbar-nav .nav-link {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: #6c757d !important;
+}
+
+#jazzy-navbar .nav-link.btn:hover,
+#jazzy-navbar .navbar-nav .nav-link:hover {
+    color: #343a40 !important;
+}

@@ -1,0 +1,44 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet" href="{% static 'css/admin/changelist.css' %}">
+{% endblock %}
+
+{% block content_title %}
+{% trans "Categories Management" %}
+{% endblock %}
+
+{% block result_list %}
+{{ block.super }}
+{% endblock %}
+
+{% block object-tools-items %}
+{{ block.super }}
+<a href="{% url 'admin_export_categories_excel' %}?{{ request.GET.urlencode }}"
+   class="exportlink"
+   title="{% trans 'Export to Excel' %}">
+    {% trans "Export Excel" %}
+</a>
+{% endblock %}
+
+{% block extrajs %}
+{{ block.super }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add icons to action buttons if not present
+    const actionSelect = document.querySelector('select[name="action"]');
+    if (actionSelect) {
+        Array.from(actionSelect.options).forEach(option => {
+            if (option.value.includes('clear_parent')) {
+                option.text = '🔼 ' + option.text;
+            } else if (option.value.includes('make_parent')) {
+                option.text = '👥 ' + option.text;
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

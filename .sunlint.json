@@ -1,0 +1,37 @@
+{
+    "extends": "@sun/sunlint/recommended",
+    "include": [
+        "src/**",
+        "lib/**"
+    ],
+    "exclude": [
+        "**/*.test.*",
+        "**/*.generated.*"
+    ],
+    "languages": {
+        "typescript": {
+            "include": [
+                "**/*.ts",
+                "**/*.tsx"
+            ],
+            "exclude": [
+                "**/*.d.ts"
+            ]
+        }
+    },
+    "testPatterns": {
+        "include": [
+            "**/*.test.*",
+            "**/*.spec.*"
+        ],
+        "rules": {
+            "C006": "off"
+        }
+    },
+    "rules": {
+        "C019": "error",
+        "C006": "warn",
+        "S005": "error"
+    },
+    "maxFilesForAI": 50
+}

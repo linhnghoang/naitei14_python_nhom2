@@ -1,0 +1,302 @@
+/**
+ * Admin Dashboard Styles
+ * Styles for the main admin dashboard (index.html)
+ */
+
+/* CSS Variables */
+:root {
+    --admin-primary: #007cba;
+    --admin-primary-dark: #005a87;
+    --admin-primary-light: #00a8e8;
+    --admin-success: #28a745;
+    --admin-success-dark: #218838;
+    --admin-gray-100: #f8f9fa;
+    --admin-gray-600: #666;
+    --admin-gray-800: #333;
+    --admin-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --admin-shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.15);
+    --admin-shadow-xl: 0 10px 30px rgba(0, 0, 0, 0.3);
+    --admin-radius-md: 6px;
+    --admin-radius-lg: 8px;
+    --admin-radius-xl: 10px;
+    --admin-transition: 0.2s ease;
+}
+
+/* Layout wrapper for the dashboard */
+.admin-dashboard {
+    display: grid;
+    grid-template-columns: 5fr 1.2fr;
+    gap: 16px;
+    align-items: start;
+}
+
+@media (max-width: 1200px) {
+    .admin-dashboard {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Dashboard Stats Cards */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    background: #fff;
+    border-radius: var(--admin-radius-lg);
+    padding: 24px;
+    box-shadow: var(--admin-shadow);
+    border-left: 4px solid var(--admin-primary);
+    transition: transform var(--admin-transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--admin-shadow-lg);
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--admin-primary);
+    margin: 0;
+}
+
+.stat-label {
+    color: var(--admin-gray-600);
+    margin: 5px 0 0 0;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.stat-icon {
+    float: right;
+    font-size: 24px;
+    color: var(--admin-primary);
+    opacity: 0.7;
+}
+
+/* Quick Actions Sidebar */
+.quick-actions {
+    background: #fff;
+    border-radius: var(--admin-radius-lg);
+    padding: 20px 16px;
+    margin: 20px 0;
+    box-shadow: var(--admin-shadow);
+}
+
+.quick-actions h3 {
+    margin-top: 0;
+    color: var(--admin-gray-800);
+    border-bottom: 2px solid var(--admin-primary);
+    padding-bottom: 10px;
+    font-size: 16px;
+}
+
+.action-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    background: var(--admin-primary);
+    color: #fff !important;
+    text-decoration: none;
+    padding: 12px 16px;
+    border-radius: var(--admin-radius-md);
+    text-align: left;
+    transition: background var(--admin-transition),
+                transform var(--admin-transition),
+                box-shadow var(--admin-transition);
+    width: 100%;
+    min-height: 42px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.action-button:hover {
+    background: var(--admin-primary-dark);
+    color: #fff !important;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: var(--admin-shadow-lg);
+}
+
+.action-button:link,
+.action-button:visited,
+.action-button:active,
+.action-button:focus {
+    color: #fff !important;
+}
+
+/* Export Buttons */
+.export-section {
+    margin-top: 10px;
+}
+
+.export-section .action-button.export-btn {
+    background: var(--admin-success);
+    border: none;
+    box-shadow: var(--admin-shadow);
+}
+
+.export-section .action-button.export-btn:hover {
+    background: var(--admin-success-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--admin-shadow-lg);
+}
+
+.export-section .action-button.export-btn i {
+    font-size: 18px;
+    color: #fff;
+}
+
+/* Recent Activity */
+.recent-activity {
+    background: #fff;
+    border-radius: var(--admin-radius-lg);
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: var(--admin-shadow);
+}
+
+.recent-activity h3 {
+    margin-top: 0;
+    color: var(--admin-gray-800);
+    border-bottom: 2px solid var(--admin-primary);
+    padding-bottom: 10px;
+}
+
+.activity-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-time {
+    color: var(--admin-gray-600);
+    font-size: 12px;
+}
+
+/* Statistics Section */
+.statistics {
+    background: #fff;
+    border-radius: var(--admin-radius-lg);
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: var(--admin-shadow);
+}
+
+.statistics h3 {
+    margin-top: 0;
+    color: var(--admin-gray-800);
+    border-bottom: 2px solid var(--admin-primary);
+    padding-bottom: 10px;
+}
+
+.stats-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.chart-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: var(--admin-radius-lg);
+    padding: 20px;
+    min-height: 320px;
+}
+
+.chart-card canvas {
+    cursor: zoom-in;
+}
+
+/* Modal for Expanded Charts */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+}
+
+.modal-content {
+    background: #fff;
+    width: 95vw;
+    max-width: 1100px;
+    border-radius: var(--admin-radius-xl);
+    box-shadow: var(--admin-shadow-xl);
+    padding: 16px 16px 8px 16px;
+    position: relative;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Button Styles */
+.btn {
+    background: var(--admin-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--admin-radius-md);
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background var(--admin-transition);
+}
+
+.btn:hover {
+    background: var(--admin-primary-dark);
+}
+
+.btn.secondary {
+    background: #6c757d;
+}
+
+.btn.secondary:hover {
+    background: #5a6268;
+}

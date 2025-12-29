@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Trang chủ | Library" %}{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+  <div>
+    <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-2">
+      {% trans "Trang chủ thư viện" %}
+    </h1>
+    <p class="text-sm md:text-base text-slate-600 max-w-xl">
+      {% trans "Quản lý sách, độc giả và phiếu mượn." %}
+      {% trans "Dashboard demo cho hệ thống quản lý thư viện." %}
+    </p>
+  </div>
+
+  <div class="flex flex-wrap gap-2 mt-4 md:mt-0">
+    <button
+      class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">
+      <span>{% trans "+ Thêm sách mới" %}</span>
+    </button>
+    <button
+      class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition">
+      <span>{% trans "+ Thêm độc giả" %}</span>
+    </button>
+  </div>
+</section>
+
+<!-- STATS CARDS -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+    <p class="text-xs font-medium text-slate-500 mb-1">{% trans "Tổng số sách" %}</p>
+    <p class="text-2xl font-semibold text-slate-900">123</p>
+    <p class="text-xs text-emerald-600 mt-1">{% trans "+8 so với tuần trước" %}</p>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+    <p class="text-xs font-medium text-slate-500 mb-1">{% trans "Số độc giả" %}</p>
+    <p class="text-2xl font-semibold text-slate-900">45</p>
+    <p class="text-xs text-slate-500 mt-1">{% trans "Đang hoạt động" %}</p>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+    <p class="text-xs font-medium text-slate-500 mb-1">{% trans "Sách đang được mượn" %}</p>
+    <p class="text-2xl font-semibold text-slate-900">27</p>
+    <p class="text-xs text-orange-500 mt-1">{% trans "2 quyển quá hạn" %}</p>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+    <p class="text-xs font-medium text-slate-500 mb-1">{% trans "Phiếu mượn hôm nay" %}</p>
+    <p class="text-2xl font-semibold text-slate-900">5</p>
+    <p class="text-xs text-slate-500 mt-1">{% trans "Cập nhật theo ngày" %}</p>
+  </div>
+</section>
+
+<!-- LATEST SECTION -->
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+  <!-- Sách mới thêm -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-sm font-semibold text-slate-800">{% trans "Sách mới thêm" %}</h2>
+      <button class="text-xs text-blue-600 hover:underline">{% trans "Xem tất cả" %}</button>
+    </div>
+    <ul class="space-y-2 text-sm">
+      <li class="flex justify-between">
+        <span class="text-slate-700">Clean Code</span>
+        <span class="text-slate-400">{% trans "Lập trình" %}</span>
+      </li>
+      <li class="flex justify-between">
+        <span class="text-slate-700">The Pragmatic Programmer</span>
+        <span class="text-slate-400">{% trans "Lập trình" %}</span>
+      </li>
+      <li class="flex justify-between">
+        <span class="text-slate-700">Atomic Habits</span>
+        <span class="text-slate-400">{% trans "Kỹ năng" %}</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Phiếu mượn gần đây -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-sm font-semibold text-slate-800">{% trans "Phiếu mượn gần đây" %}</h2>
+      <button class="text-xs text-blue-600 hover:underline">{% trans "Xem chi tiết" %}</button>
+    </div>
+
+    <div class="space-y-2 text-sm">
+      <div class="flex justify-between">
+        <div>
+          <p class="text-slate-700">Nguyễn Văn A</p>
+          <p class="text-xs text-slate-400">“Clean Code”</p>
+        </div>
+        <span class="text-xs px-2 py-1 rounded-full bg-emerald-50 text-emerald-700">
+          {% trans "Đang mượn" %}
+        </span>
+      </div>
+
+      <div class="flex justify-between">
+        <div>
+          <p class="text-slate-700">Trần Thị B</p>
+          <p class="text-xs text-slate-400">“Atomic Habits”</p>
+        </div>
+        <span class="text-xs px-2 py-1 rounded-full bg-orange-50 text-orange-700">
+          {% trans "Gần tới hạn" %}
+        </span>
+      </div>
+
+      <div class="flex justify-between">
+        <div>
+          <p class="text-slate-700">Lê Văn C</p>
+          <p class="text-xs text-slate-400">“Python Crash Course”</p>
+        </div>
+        <span class="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-600">
+          {% trans "Đã trả" %}
+        </span>
+      </div>
+    </div>
+  </div>
+
+</section>
+{% endblock %}

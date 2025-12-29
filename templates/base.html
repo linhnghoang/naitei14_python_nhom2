@@ -1,0 +1,298 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}{% trans "Library Management" %}{% endblock %}</title>
+
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="bg-slate-100 text-slate-900 antialiased">
+  <!-- TOP BAR -->
+  <header class="border-b border-slate-200 bg-white/80 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-6">
+      <!-- Logo -->
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white text-sm font-bold">
+          LM
+        </div>
+        <div>
+          <div class="font-semibold text-slate-900">
+            {% trans "Library Management" %}
+          </div>
+          <div class="text-xs text-slate-500">
+            {% trans "Modern Library Platform" %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobileMenuButton" type="button" class="sm:hidden p-2 rounded-lg hover:bg-slate-100 text-slate-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      <!-- NAVBAR (Desktop) -->
+      <nav class="hidden sm:flex items-center gap-4 text-sm">
+        <div class="flex items-center gap-3">
+
+          <a href="{% url 'library_management:home' %}"
+            class="px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-800">
+            {% trans "Trang chủ" %}
+          </a>
+
+          <a href="#" class="px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-800">
+            {% trans "Sách" %}
+          </a>
+
+          <a href="#" class="px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-800">
+            {% trans "Tác giả" %}
+          </a>
+
+          {% if user.is_authenticated %}
+          <a href="#" class="px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-800">
+            {% trans "Yêu thích" %}
+          </a>
+
+          <a href="{% url 'library_management:borrow_history' %}"
+            class="px-3 py-1.5 rounded-full hover:bg-slate-100 text-slate-800">
+            {% trans "Lịch sử mượn" %}
+          </a>
+          {% endif %}
+        </div>
+
+        <details class="relative ml-4 group">
+          <summary
+            class="flex items-center gap-2 cursor-pointer px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 list-none select-none">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 003 12c0-1.605.42-3.113 1.157-4.418" />
+            </svg>
+            {{ LANGUAGE_CODE|upper }}
+            <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor"
+              stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </summary>
+
+          <div
+            class="absolute right-0 mt-2 w-32 bg-white border border-slate-200 rounded-xl shadow-lg py-1 text-sm z-20">
+            <form action="/i18n/setlang/" method="post">
+              {% csrf_token %}
+              <button name="language" value="vi" type="submit" class="w-full text-left px-3 py-2 hover:bg-slate-50 flex items-center gap-2">
+                <span>🇻🇳</span> Tiếng Việt
+              </button>
+            </form>
+
+            <form action="/i18n/setlang/" method="post" class="border-t border-slate-100">
+              {% csrf_token %}
+              <button name="language" value="en" type="submit" class="w-full text-left px-3 py-2 hover:bg-slate-50 flex items-center gap-2">
+                <span>🇬🇧</span> English
+              </button>
+            </form>
+
+            <form action="/i18n/setlang/" method="post" class="border-t border-slate-100">
+              {% csrf_token %}
+              <button name="language" value="ja" type="submit" class="w-full text-left px-3 py-2 hover:bg-slate-50 flex items-center gap-2">
+                <span>🇯🇵</span> 日本語
+              </button>
+            </form>
+          </div>
+        </details>
+
+
+
+        {% if user.is_authenticated %}
+        <div class="flex items-center gap-3 ml-6">
+          <div class="relative">
+            <button id="accountMenuButton" type="button"
+              class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 font-medium hover:bg-slate-200">
+              {% trans "Tài khoản" %}
+            </button>
+
+            <div id="accountMenu"
+              class="absolute right-0 mt-2 w-44 bg-white border border-slate-200 rounded-xl shadow-lg py-1 text-sm hidden z-20">
+              <a href="{% url 'accounts:profile' %}" class="block px-3 py-2 hover:bg-slate-50">
+                {% trans "Hồ sơ cá nhân" %}
+              </a>
+
+              <form method="post" action="{% url 'logout' %}" class="border-t border-slate-100">
+                {% csrf_token %}
+                <button type="submit" class="w-full text-left px-3 py-2 hover:bg-slate-50">
+                  {% trans "Đăng xuất" %}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        {% else %}
+        <div class="flex items-center gap-3 ml-6">
+          <a href="{% url 'login' %}"
+            class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 font-medium hover:bg-slate-200">
+            {% trans "Đăng nhập" %}
+          </a>
+          <a href="{% url 'accounts:signup' %}"
+            class="px-3 py-1.5 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-700">
+            {% trans "Đăng ký" %}
+          </a>
+        </div>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="mobileMenu" class="fixed inset-0 z-50 hidden sm:hidden">
+    <!-- Backdrop -->
+    <div id="mobileMenuBackdrop" class="absolute inset-0 bg-black/50"></div>
+
+    <!-- Menu Panel -->
+    <div class="absolute right-0 top-0 h-full w-72 max-w-[80vw] bg-white shadow-xl transform transition-transform">
+      <div class="flex items-center justify-between p-4 border-b border-slate-200">
+        <span class="font-semibold text-slate-900">{% trans "Menu" %}</span>
+        <button id="closeMobileMenu" type="button" class="p-2 rounded-lg hover:bg-slate-100 text-slate-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <nav class="p-4 space-y-2">
+        <a href="{% url 'library_management:home' %}" class="block px-4 py-2.5 rounded-lg hover:bg-slate-100 text-slate-800 font-medium">
+          {% trans "Trang chủ" %}
+        </a>
+        <a href="#" class="block px-4 py-2.5 rounded-lg hover:bg-slate-100 text-slate-800">
+          {% trans "Sách" %}
+        </a>
+        <a href="#" class="block px-4 py-2.5 rounded-lg hover:bg-slate-100 text-slate-800">
+          {% trans "Tác giả" %}
+        </a>
+
+        {% if user.is_authenticated %}
+        <a href="#" class="block px-4 py-2.5 rounded-lg hover:bg-slate-100 text-slate-800">
+          {% trans "Yêu thích" %}
+        </a>
+        <a href="{% url 'library_management:borrow_history' %}" class="block px-4 py-2.5 rounded-lg hover:bg-slate-100 text-slate-800">
+          {% trans "Lịch sử mượn" %}
+        </a>
+
+        <hr class="my-3 border-slate-200">
+
+        <a href="{% url 'accounts:profile' %}" class="block px-4 py-2.5 rounded-lg hover:bg-slate-100 text-slate-800">
+          {% trans "Hồ sơ cá nhân" %}
+        </a>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="w-full text-left px-4 py-2.5 rounded-lg hover:bg-slate-100 text-red-600">
+            {% trans "Đăng xuất" %}
+          </button>
+        </form>
+        {% else %}
+        <hr class="my-3 border-slate-200">
+        <a href="{% url 'login' %}" class="block px-4 py-2.5 rounded-lg hover:bg-slate-100 text-slate-800 font-medium">
+          {% trans "Đăng nhập" %}
+        </a>
+        <a href="{% url 'accounts:signup' %}" class="block px-4 py-2.5 rounded-lg bg-blue-600 text-white text-center font-medium hover:bg-blue-700">
+          {% trans "Đăng ký" %}
+        </a>
+        {% endif %}
+      </nav>
+
+      <!-- Language Switcher in Mobile Menu -->
+      <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-200 bg-slate-50">
+        <p class="text-xs text-slate-500 mb-2">{% trans "Ngôn ngữ" %}</p>
+        <div class="flex gap-2">
+          <form action="/i18n/setlang/" method="post">
+            {% csrf_token %}
+            <button name="language" value="vi" type="submit" class="px-3 py-1.5 text-sm rounded-lg border border-slate-200 hover:bg-white">
+              🇻🇳 VI
+            </button>
+          </form>
+          <form action="/i18n/setlang/" method="post">
+            {% csrf_token %}
+            <button name="language" value="en" type="submit" class="px-3 py-1.5 text-sm rounded-lg border border-slate-200 hover:bg-white">
+              🇬🇧 EN
+            </button>
+          </form>
+          <form action="/i18n/setlang/" method="post">
+            {% csrf_token %}
+            <button name="language" value="ja" type="submit" class="px-3 py-1.5 text-sm rounded-lg border border-slate-200 hover:bg-white">
+              🇯🇵 JA
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="{% block main_classes %}max-w-6xl mx-auto px-4 py-8{% endblock %}">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-200 mt-8">
+    <div class="max-w-6xl mx-auto px-4 py-4 text-xs sm:text-sm text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <span>&copy; 2025 {% trans "Library Management." %}</span>
+      <span>{% trans "Built with Django + Tailwind" %}</span>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Account dropdown menu
+      const btn = document.getElementById('accountMenuButton');
+      const menu = document.getElementById('accountMenu');
+
+      if (btn && menu) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          menu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', function () {
+          menu.classList.add('hidden');
+        });
+
+        menu.addEventListener('click', function (e) {
+          e.stopPropagation();
+        });
+      }
+
+      // Mobile menu
+      const mobileMenuBtn = document.getElementById('mobileMenuButton');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const closeMobileMenu = document.getElementById('closeMobileMenu');
+      const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
+
+      function openMobileMenu() {
+        mobileMenu.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMobileMenuFn() {
+        mobileMenu.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', openMobileMenu);
+      }
+
+      if (closeMobileMenu) {
+        closeMobileMenu.addEventListener('click', closeMobileMenuFn);
+      }
+
+      if (mobileMenuBackdrop) {
+        mobileMenuBackdrop.addEventListener('click', closeMobileMenuFn);
+      }
+    });
+  </script>
+</body>
+
+</html>

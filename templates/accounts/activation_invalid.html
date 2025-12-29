@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+{% trans "Liên kết không hợp lệ | Library Management" %}
+{% endblock %}
+
+{% block content %}
+<div class="space-y-4 max-w-xl">
+  <h1 class="text-xl sm:text-2xl font-semibold text-slate-900">
+    {% trans "Liên kết kích hoạt không hợp lệ" %}
+  </h1>
+
+  <p class="text-sm sm:text-base text-slate-600">
+    {% trans "Có thể liên kết đã được sử dụng hoặc đã hết hạn." %}
+  </p>
+
+  <p class="text-sm sm:text-base text-slate-600">
+    {% trans "Nếu bạn chưa kích hoạt được tài khoản, hãy thử đăng nhập. Nếu vẫn không vào được, hãy liên hệ quản trị
+    viên." %}
+  </p>
+
+  <a href="{% url 'login' %}"
+    class="inline-flex px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+    {% trans "Đến trang đăng nhập" %}
+  </a>
+</div>
+{% endblock %}

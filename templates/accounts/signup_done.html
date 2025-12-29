@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Đăng ký thành công | Library Management" %}
+{% endblock %}
+
+{% block content %}
+<div class="space-y-4 max-w-xl">
+
+  <h1 class="text-xl sm:text-2xl font-semibold text-slate-900">
+    {% trans "Đăng ký thành công" %}
+  </h1>
+
+  <p class="text-sm sm:text-base text-slate-600">
+    {% trans "Chúng tôi đã gửi cho bạn một email kích hoạt tài khoản." %}
+  </p>
+
+  <p class="text-sm sm:text-base text-slate-600">
+    {% blocktrans %}
+    Vui lòng kiểm tra hộp thư <strong>(kể cả mục Spam/Junk)</strong> và nhấp vào liên kết kích hoạt để hoàn tất.
+    {% endblocktrans %}
+  </p>
+
+</div>
+{% endblock %}

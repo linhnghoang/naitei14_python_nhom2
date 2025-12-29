@@ -1,0 +1,136 @@
+{% extends "admin/base_site.html" %}
+{% load admin_urls static i18n %}
+
+{% block title %}Dashboard | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2"></script>
+<link rel="stylesheet" href="{% static 'css/admin/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <div class="left-col">
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <i class="fa-solid fa-book stat-icon"></i>
+                <p class="stat-number" id="books-count">-</p>
+                <p class="stat-label">{% trans "Total Books" %}</p>
+            </div>
+
+            <div class="stat-card">
+                <i class="fa-solid fa-users stat-icon"></i>
+                <p class="stat-number" id="users-count">-</p>
+                <p class="stat-label">{% trans "Active Users" %}</p>
+            </div>
+
+            <div class="stat-card">
+                <i class="fa-solid fa-clock stat-icon"></i>
+                <p class="stat-number" id="pending-requests">-</p>
+                <p class="stat-label">{% trans "Pending Requests" %}</p>
+            </div>
+
+            <div class="stat-card">
+                <i class="fa-solid fa-exclamation-triangle stat-icon"></i>
+                <p class="stat-number" id="overdue-loans">-</p>
+                <p class="stat-label">{% trans "Overdue Loans" %}</p>
+            </div>
+        </div>
+
+        <div class="statistics">
+            <h3><i class="fa-solid fa-chart-simple"></i> {% trans "Library Statistics" %}</h3>
+            <div class="stats-controls">
+                <label><strong>{% trans "Period:" %}</strong></label>
+                <select id="stats-period">
+                    <option value="month">{% trans "This Month" %}</option>
+                    <option value="year">{% trans "This Year" %}</option>
+                </select>
+                <label><strong>{% trans "Year:" %}</strong></label>
+                <input type="number" id="stats-year" min="2000" max="2999" style="width: 100px;">
+                <label id="label-month"><strong>{% trans "Month:" %}</strong></label>
+                <input type="number" id="stats-month" min="1" max="12" style="width: 70px;">
+            </div>
+            <div class="stats-grid">
+                <div class="chart-card">
+                    <h4>{% trans "Books by Category (total)" %}</h4>
+                    <canvas id="booksPerCategoryChart" height="160"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h4>{% trans "Loan Trends Over Time" %}</h4>
+                    <canvas id="loansOverTimeChart" height="160"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h4>{% trans "Borrow Request Status" %}</h4>
+                    <canvas id="loanStatusChart" height="160"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h4>{% trans "Book Languages in Library" %}</h4>
+                    <canvas id="languageChart" height="160"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <aside class="right-col">
+        <div class="quick-actions">
+            <h3>⚡ {% trans "Quick Actions" %}</h3>
+            <div class="action-grid">
+                <a href="{% url 'admin:auth_user_changelist' %}" class="action-button">
+                    👥 {% trans "User Management" %}
+                </a>
+                <a href="{% url 'admin:catalog_category_changelist' %}" class="action-button">
+                    🏷️ {% trans "Category Management" %}
+                </a>
+                <a href="{% url 'admin:catalog_author_changelist' %}" class="action-button">
+                    ✍️ {% trans "Author Management" %}
+                </a>
+                <a href="{% url 'admin:catalog_publisher_changelist' %}" class="action-button">
+                    🏢 {% trans "Publisher Management" %}
+                </a>
+                <a href="{% url 'admin:catalog_book_changelist' %}" class="action-button">
+                    📚 {% trans "Book Management" %}
+                </a>
+                <a href="{% url 'admin:catalog_borrowrequest_changelist' %}" class="action-button">
+                    📝 {% trans "Borrow Request Management" %}
+                </a>
+            </div>
+
+            <h3 style="margin-top: 25px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+                📊 {% trans "Export Excel Data" %}
+            </h3>
+            <div class="action-grid export-section">
+                <a href="{% url 'admin-export-books' %}" class="action-button export-btn">
+                    {% trans "Export Books Excel" %}
+                </a>
+                <a href="{% url 'admin_export_categories_excel' %}" class="action-button export-btn">
+                    {% trans "Export Categories Excel" %}
+                </a>
+                <a href="{% url 'admin_export_authors_excel' %}" class="action-button export-btn">
+                    {% trans "Export Authors Excel" %}
+                </a>
+                <a href="{% url 'admin_export_publishers_excel' %}" class="action-button export-btn">
+                    {% trans "Export Publishers Excel" %}
+                </a>
+            </div>
+        </div>
+        <div class="recent-activity">
+            <h3>🕒 {% trans "Recent Activity" %}</h3>
+            <div id="recent-activity-list">
+                <p>{% trans "Loading recent activity..." %}</p>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<script src="{% static 'js/admin/dashboard.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    AdminDashboard.init(
+        '{% url "admin-stats-api" %}',
+        '{% url "admin-activity-api" %}'
+    );
+});
+</script>
+{% endblock %}
